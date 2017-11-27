@@ -16,16 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using ElectronNET.API;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using SethCS.Exceptions;
 
 namespace MeditationLogger.Gui
 {
@@ -38,6 +32,7 @@ namespace MeditationLogger.Gui
 
         public static IWebHost BuildWebHost( string[] args )
         {
+            ArgumentChecker.IsNotNull( args, nameof( args ) );
             return WebHost.CreateDefaultBuilder( args )
                 .UseElectron( args )
                 .UseStartup<Startup>()
