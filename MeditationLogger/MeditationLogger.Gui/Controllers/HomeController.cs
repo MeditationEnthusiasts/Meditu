@@ -16,10 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MeditationLogger.Api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeditationLogger.Gui.Controllers
@@ -31,7 +29,15 @@ namespace MeditationLogger.Gui.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            Log log1 = new Log();
+            log1.Comments = "Hello World1";
+
+            Log log2 = new Log();
+            log2.Comments = "Hello World2";
+
+            List<Log> logs = new List<Log>() { log1, log2 };
+
+            return View( logs );
         }
     }
 }

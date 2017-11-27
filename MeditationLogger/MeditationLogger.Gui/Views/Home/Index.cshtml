@@ -1,4 +1,7 @@
-﻿
+﻿@using MeditationLogger.Api;
+
+@model IList<Log>
+
 @{
     Layout = null;
 }
@@ -12,5 +15,11 @@
 </head>
 <body>
     <p>Hello World!</p>
+    <ul>
+        @foreach( Log log in Model )
+        {
+            <li>@log.Comments</li>
+        }
+    </ul>
 </body>
 </html>
