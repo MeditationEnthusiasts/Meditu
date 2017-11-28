@@ -17,6 +17,8 @@
 //
 
 using System;
+using System.Text;
+using SethCS.Exceptions;
 
 namespace MeditationLogger.Api
 {
@@ -129,5 +131,119 @@ namespace MeditationLogger.Api
         public decimal? Longitude { get; set; }
 
         // ---------------- Functions ----------------
+
+        /// <summary>
+        /// Ensures this Log object is valid.
+        /// </summary>
+        public void Validate()
+        {
+            bool success = true;
+            StringBuilder errorString = new StringBuilder();
+            errorString.AppendLine( "Validation errors found with Log object." );
+
+            if( this.Id < 0 )
+            {
+                success = false;
+                errorString.AppendLine( "\t-ID can not be zero or less" );
+            }
+
+            if( this.EndTime < this.StartTime )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Log End Time is less than the start time." );
+            }
+
+            if( this.Comments == null )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Comments can not be null" );
+            }
+
+            if( this.Technique == null )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Technique can not be null" );
+            }
+
+            if( ( this.Latitude == null ) && ( this.Longitude != null ) )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Latitude set on log, but not longitude" );
+            }
+
+            if( ( this.Longitude == null ) && ( this.Latitude != null ) )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Longitude set on long, but not latitude" );
+            }
+
+            if( success == false )
+            {
+                throw new ValidationException( errorString.ToString() );
+            }
+        }
+
+        /// <summary>
+        /// Returns true if ALL properties match.
+        /// </summary>
+        /// <param name="obj">A <see cref="Log"/> or <see cref="IReadOnlyLog"/> object.</param>
+        public override bool Equals( object obj )
+        {
+            Log other = obj as Log;
+            if( other == null )
+            {
+                return false;
+            }
+
+            return
+                ( this.Id == other.Id ) &&
+                ( this.StartTime == other.StartTime ) &&
+                ( this.EndTime == other.EndTime ) &&
+                ( this.Guid == other.Guid ) &&
+                ( this.EditTime == other.EditTime ) &&
+                ( this.Comments == other.Comments ) &&
+                ( this.Technique == other.Technique ) &&
+                ( this.Latitude == other.Latitude ) &&
+                ( this.Longitude == other.Longitude );
+        }
+
+        public override int GetHashCode()
+        {
+            return
+                this.Id.GetHashCode() +
+                this.StartTime.GetHashCode() +
+                this.EndTime.GetHashCode() +
+                this.Guid.GetHashCode() +
+                this.EditTime.GetHashCode() +
+                ( ( this.Comments != null ) ? this.Comments.GetHashCode() : 0 ) +
+                ( ( this.Technique != null ) ? this.Technique.GetHashCode() : 0 ) +
+                ( this.Latitude.HasValue ? this.Latitude.Value.GetHashCode() : 0 ) +
+                ( this.Longitude.HasValue ? this.Longitude.Value.GetHashCode() : 0 );
+        }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine( "Id: " + this.Id );
+            builder.AppendLine( "Guid: " + this.Guid );
+            builder.AppendLine( "Start Time: " + this.StartTime.ToString() );
+            builder.AppendLine( "End Time: " + this.EndTime.ToString() );
+            builder.AppendLine( "Edit Time: " + this.EditTime.ToString() );
+            builder.AppendLine( "Comments: " + ( this.Comments ?? "[null]" ) );
+            builder.AppendLine( "Technique: " + ( this.Technique ?? "[null]" ) );
+            builder.AppendLine( "Latitude: " + ( this.Latitude.HasValue ? this.Latitude.Value.ToString() : "[null]" ) );
+            builder.AppendLine( "Longitude: " + ( this.Longitude.HasValue ? this.Longitude.Value.ToString() : "[null]" ) );
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Creates a deep copy of this class.
+        /// </summary>
+        public Log Clone()
+        {
+            return (Log)this.MemberwiseClone();
+        }
     }
 }
