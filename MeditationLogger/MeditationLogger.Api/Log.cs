@@ -30,6 +30,9 @@ namespace MeditationLogger.Api
     {
         // ---------------- Fields ----------------
 
+        private string comments;
+        private string technique;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace MeditationLogger.Api
         /// </summary>
         public Log()
         {
-            this.Id = -1;
+            this.Id = 0;
 
             // Fun fact!  DateTime.MinValue seems to return local time, not UTC time.
             this.EndTime = DateTime.MinValue.ToUniversalTime();
@@ -111,12 +114,40 @@ namespace MeditationLogger.Api
         /// <summary>
         /// The comments the user wrote about the session.
         /// </summary>
-        public string Comments { get; set; }
+        public string Comments
+        {
+            get
+            {
+                return this.comments;
+            }
+            set
+            {
+                ArgumentChecker.IsNotNull( value, nameof( Comments ) );
+
+                // By default, LiteDB calls trim on strings when saving to the database.
+                // We should do the same.
+                this.comments = value.Trim();
+            }
+        }
 
         /// <summary>
         /// The Technique of the session.
         /// </summary>
-        public string Technique { get; set; }
+        public string Technique
+        {
+            get
+            {
+                return this.technique;
+            }
+            set
+            {
+                ArgumentChecker.IsNotNull( value, nameof( Technique ) );
+
+                // By default, LiteDB calls trim on strings when saving to the database.
+                // We should do the same.
+                this.technique = value.Trim();
+            }
+        }
 
         /// <summary>
         /// The latitude of where the session took place.
@@ -184,7 +215,7 @@ namespace MeditationLogger.Api
         }
 
         /// <summary>
-        /// Returns true if ALL properties match.
+        /// Returns true if all properties EXCEPT For GUID and ID match.
         /// </summary>
         /// <param name="obj">A <see cref="Log"/> or <see cref="IReadOnlyLog"/> object.</param>
         public override bool Equals( object obj )
@@ -196,10 +227,8 @@ namespace MeditationLogger.Api
             }
 
             return
-                ( this.Id == other.Id ) &&
                 ( this.StartTime == other.StartTime ) &&
                 ( this.EndTime == other.EndTime ) &&
-                ( this.Guid == other.Guid ) &&
                 ( this.EditTime == other.EditTime ) &&
                 ( this.Comments == other.Comments ) &&
                 ( this.Technique == other.Technique ) &&
@@ -210,10 +239,8 @@ namespace MeditationLogger.Api
         public override int GetHashCode()
         {
             return
-                this.Id.GetHashCode() +
                 this.StartTime.GetHashCode() +
                 this.EndTime.GetHashCode() +
-                this.Guid.GetHashCode() +
                 this.EditTime.GetHashCode() +
                 ( ( this.Comments != null ) ? this.Comments.GetHashCode() : 0 ) +
                 ( ( this.Technique != null ) ? this.Technique.GetHashCode() : 0 ) +

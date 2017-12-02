@@ -70,7 +70,7 @@ namespace MeditationLogger.Api
             this.startTimeBucket = new List<int>( 24 );
             for( int i = 0; i < 24; ++i )
             {
-                this.startTimeBucket[i] = 0;
+                this.startTimeBucket.Add( 0 );
             }
 
             this.StartTimeBucket = this.startTimeBucket.AsReadOnly();
@@ -177,7 +177,7 @@ namespace MeditationLogger.Api
             lock( this.list )
             {
                 this.ResetStateNoLock();
-                IOrderedEnumerable<Log> logs = col.FindAll().OrderBy( l => l.StartTime );
+                IOrderedEnumerable<Log> logs = col.FindAll().OrderByDescending( l => l.StartTime );
                 foreach( Log log in logs )
                 {
                     this.AddLogNoLock( log );
@@ -213,8 +213,20 @@ namespace MeditationLogger.Api
 
             lock( this.list )
             {
-                BsonValue id = this.col.Insert( log );
+                this.col.Insert( log );
                 this.AddLogNoLock( log );
+
+                // Sort by date.
+                // Calling OrderByDecending and then clear on a list will clear the IOrderedEnumerable
+                // that is returned by OrderByDecending.  So, we need to create a new list >_>.
+                // There needs to be a better way to do this...
+
+                List<Log> logs = new List<Log>( this.list.OrderByDescending( l => l.StartTime ) );
+                this.list.Clear();
+                foreach( Log l in logs )
+                {
+                    this.list.Add( l );
+                }
             }
 
             return log.Guid;
@@ -253,7 +265,11 @@ namespace MeditationLogger.Api
         {
             this.ClearCacheNoLock();
 
-            this.startTimeBucket.Clear();
+            for( int i = 0; i < this.startTimeBucket.Count; ++i )
+            {
+                this.startTimeBucket[i] = 0;
+            }
+
             this.techniques.Clear();
 
             this.TotalSessions = 0;
@@ -273,17 +289,15 @@ namespace MeditationLogger.Api
 
             ++this.startTimeBucket[log.StartTime.Hour];
 
-            string techniqueKey = log.Technique.Trim();
+            string techniqueKey = log.Technique.ToLower(); // Already Trimed in Log.
             techniqueKey = techniqueKey.NormalizeWhiteSpace();
 
-            if( this.techniques.ContainsKey( techniqueKey ) )
-            {
-                ++this.techniques[techniqueKey];
-            }
-            else
+            if( this.techniques.ContainsKey( techniqueKey ) == false )
             {
                 this.techniques[techniqueKey] = 0;
             }
+
+            ++this.techniques[techniqueKey];
         }
     }
 }

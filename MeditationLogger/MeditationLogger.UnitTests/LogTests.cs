@@ -50,8 +50,7 @@ namespace MeditationLogger.UnitTests
 
             // Comments can not be null.
             Log badLog = uut.Clone();
-            badLog.Comments = null;
-            Assert.ThrowsException<ValidationException>( () => badLog.Validate() );
+            Assert.ThrowsException<ArgumentNullException>( () => { badLog.Comments = null; } );
 
             // Start time can not be after end time.
             badLog = uut.Clone();
@@ -74,6 +73,10 @@ namespace MeditationLogger.UnitTests
             badLog.Latitude = 1;
             badLog.Longitude = null;
             Assert.ThrowsException<ValidationException>( () => badLog.Validate() );
+
+            // Technique can not be null.
+            badLog = uut.Clone();
+            Assert.ThrowsException<ArgumentNullException>( () => { badLog.Technique = null; } );
         }
 
         [TestMethod]
@@ -113,16 +116,18 @@ namespace MeditationLogger.UnitTests
             Assert.AreNotEqual( log1.GetHashCode(), log2.GetHashCode() );
             log2 = log1.Clone();
 
+            // GUID not included in Equals check.
             log2.Guid = Guid.NewGuid();
-            Assert.AreNotEqual( log1, log2 );
-            Assert.AreNotEqual( log2, log1 );
-            Assert.AreNotEqual( log1.GetHashCode(), log2.GetHashCode() );
+            Assert.AreEqual( log1, log2 );
+            Assert.AreEqual( log2, log1 );
+            Assert.AreEqual( log1.GetHashCode(), log2.GetHashCode() );
             log2 = log1.Clone();
 
+            // ID not included in Equals check.
             log2.Id = log1.Id + 1;
-            Assert.AreNotEqual( log1, log2 );
-            Assert.AreNotEqual( log2, log1 );
-            Assert.AreNotEqual( log1.GetHashCode(), log2.GetHashCode() );
+            Assert.AreEqual( log1, log2 );
+            Assert.AreEqual( log2, log1 );
+            Assert.AreEqual( log1.GetHashCode(), log2.GetHashCode() );
             log2 = log1.Clone();
 
             log2.Latitude = log1.Latitude + 1;
@@ -148,6 +153,20 @@ namespace MeditationLogger.UnitTests
             Assert.AreNotEqual( log2, log1 );
             Assert.AreNotEqual( log1.GetHashCode(), log2.GetHashCode() );
             log2 = log1.Clone();
+        }
+
+        [TestMethod]
+        public void TrimTest()
+        {
+            string whitespace = "       Hello There    " + Environment.NewLine;
+            const string noWs = "Hello There";
+
+            Log log = new Log();
+            log.Comments = whitespace;
+            log.Technique = whitespace;
+
+            Assert.AreEqual( noWs, log.Comments );
+            Assert.AreEqual( noWs, log.Technique );
         }
 
         // ---------------- Test Helpers ----------------
