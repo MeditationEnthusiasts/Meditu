@@ -205,7 +205,7 @@ namespace MeditationLogger.Api
             if( ( this.Longitude == null ) && ( this.Latitude != null ) )
             {
                 success = false;
-                errorString.AppendLine( "\t-Longitude set on long, but not latitude" );
+                errorString.AppendLine( "\t-Longitude set on log, but not latitude" );
             }
 
             if( success == false )

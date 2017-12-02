@@ -3,17 +3,8 @@
 @model IList<Log>
 
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
     <p>Hello World!</p>
     <ul>
         @foreach( Log log in Model )
@@ -21,5 +12,4 @@
             <li>@log.Comments</li>
         }
     </ul>
-</body>
-</html>
+

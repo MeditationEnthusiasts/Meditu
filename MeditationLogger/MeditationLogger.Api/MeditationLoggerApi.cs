@@ -17,8 +17,6 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MeditationLogger.Api
 {
@@ -43,6 +41,8 @@ namespace MeditationLogger.Api
         {
             this.currentSession = null;
             this.currentState = ApiState.Idle;
+            this.LogBook = new LogBook();
+            this.LogBook.OpenDb( dbPath );
         }
 
         // ---------------- Properties ----------------
@@ -64,13 +64,15 @@ namespace MeditationLogger.Api
             }
         }
 
+        public LogBook LogBook { get; private set; }
+
         // ---------------- Functions ----------------
 
         /// <summary>
         /// Starts a session.
         /// </summary>
         /// <exception cref="InvalidOperationException">If we are already started.</exception>
-        public void Start()
+        public void Start( StartSessionParams startParams )
         {
             if( this.currentState != ApiState.Idle )
             {
@@ -100,16 +102,22 @@ namespace MeditationLogger.Api
         /// Current session returns to null.
         /// </summary>
         /// <exception cref="InvalidOperationException">If there is no current session, or we are not stopped.</exception>
-        public void SaveSession()
+        public void SaveSession( SaveSessionParams saveParams )
         {
             if( this.currentState != ApiState.Stopped )
             {
                 throw new InvalidOperationException( "Session not started, can not save." );
             }
-
-            this.currentSession.EditTime = DateTime.UtcNow;
+            saveParams.Validate();
 
             // Save Session!
+            this.currentSession.EditTime = DateTime.UtcNow;
+            this.currentSession.Latitude = saveParams.Latitude;
+            this.currentSession.Longitude = saveParams.Longitude;
+            this.currentSession.Technique = saveParams.Technique;
+            this.currentSession.Comments = saveParams.Comments;
+
+            this.LogBook.AddLogToDb( this.currentSession );
 
             this.currentSession = null;
             this.currentState = ApiState.Idle;
@@ -128,6 +136,7 @@ namespace MeditationLogger.Api
 
         public void Dispose()
         {
+            this.LogBook?.Dispose();
         }
 
         // ---------------- Helper Classes ----------------
