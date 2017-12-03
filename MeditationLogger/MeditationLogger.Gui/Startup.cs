@@ -55,10 +55,15 @@ namespace MeditationLogger.Gui
                 } 
             );
 
+            app.UseStaticFiles();
+
             lifetime.ApplicationStarted.Register( this.ApplicationStarted );
             lifetime.ApplicationStopped.Register( this.ApplicationStopped );
 
-            this.Bootstrap();
+            if( HybridSupport.IsElectronActive )
+            {
+                this.ElectronBootstrap();
+            }
         }
 
         private void ApplicationStarted()
@@ -92,17 +97,19 @@ namespace MeditationLogger.Gui
             this.api?.Dispose();
         }
 
-        private async void Bootstrap()
+        private async void ElectronBootstrap()
         {
-            var options = new BrowserWindowOptions
-            {
-                WebPreferences = new WebPreferences
+            var browserWindow = await Electron.WindowManager.CreateWindowAsync( 
+                new BrowserWindowOptions
                 {
-                    WebSecurity = false
+                    Width = 1152,
+                    Height = 864,
+                    Show = false
                 }
-            };
+            );
 
-            await Electron.WindowManager.CreateWindowAsync( options );
+            browserWindow.OnReadyToShow += () => browserWindow.Show();
+            browserWindow.SetTitle( "Meditation Logger" );
         }
     }
 }

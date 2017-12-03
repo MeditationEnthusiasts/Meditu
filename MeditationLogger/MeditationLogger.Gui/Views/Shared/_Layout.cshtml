@@ -2,13 +2,97 @@
 
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width" />
+    <meta content="en-us" http-equiv="Content-Language" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>Title</title>
 
+    <!-- #### CSS #### -->
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="/static/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- FONTAWESOME STYLES-->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!--CUSTOM BASIC STYLES-->
+    <link href="/static/css/basic.css" rel="stylesheet" />
+
+    <!--CUSTOM MAIN STYLES-->
+    <link href="/static/css/custom.css" rel="stylesheet" />
+
+    <!-- GOOGLE FONTS-->
+    <link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h1>Layout</h1>
-    @RenderBody()
+    <div id="wrapper">
+        <!-- Top row -->
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+            <!-- Top-left -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <h1 id="main-title" style="padding:0.5em;">Seth Hendrick's Website!</h1>
+        </nav>
+
+        <!-- Side Bar -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="/Home"><img class="image avatar" src="/img/logo.png" width="240" height="240" /></a>
+                    </li>
+                    <li>
+                        <a href="/Home"><i class="fa fa-home"></i>Home</a>
+                    </li>
+                    <li>
+                        <a href="/atom.xml"><i class="fa fa-rss"></i>ATOM Feed</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-users"></i>Follow Us!<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="https://twitter.com/xmeditator"><i class="fa fa-twitter"></i>Twitter</a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/meditationenthusiasts"><i class="fa fa-github"></i>GitHub</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Page -->
+        <div id="page-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-sec">
+        <div>
+            Visit Meditation Enthusiasts: <a href="https://www.meditationenthuisasts.org">https://www.meditationenthuisasts.org</a>
+        </div>
+        <div>
+            &copy; @DateTime.Now.Year <a href="https://shendrick.net">Seth Hendrick</a> | Design By : <a href="http://www.binarytheme.com/" target="_blank">BinaryTheme.com</a> |
+            <span>Page generated on @(DateTime.UtcNow.ToString( "R" ))</span>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -AT THE BOTTOM TO REDUCE THE LOAD TIME-->
+    <!-- JQUERY SCRIPTS -->
+    <script src="./static/js/jquery-1.10.2.js" onload="window.$ = window.jQuery = module.exports;"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="/static/js/bootstrap.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="/static/js/jquery.metisMenu.js"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="/static/js/custom.js"></script>
 </body>
 </html>

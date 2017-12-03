@@ -178,6 +178,7 @@ namespace MeditationLogger.Api
             {
                 this.ResetStateNoLock();
                 IOrderedEnumerable<Log> logs = col.FindAll().OrderByDescending( l => l.StartTime );
+
                 foreach( Log log in logs )
                 {
                     this.AddLogNoLock( log );
