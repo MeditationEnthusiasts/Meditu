@@ -70,9 +70,23 @@
 
         <!-- Main Page -->
         <div id="page-wrapper">
-            @RenderBody()
+            <article id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-head-line">Page Title</h1>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div>
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </article>
         </div>
-    </div>
 
     <!-- Footer -->
     <div id="footer-sec">
