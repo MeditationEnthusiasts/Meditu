@@ -29,6 +29,8 @@ namespace MeditationLogger.Gui.Controllers
     /// </summary>
     public class AboutController : Controller
     {
+        // ---------------- Functions ----------------
+
         public IActionResult Index()
         {
             ViewData["Title"] = "About Meditation Logger";
@@ -44,7 +46,7 @@ namespace MeditationLogger.Gui.Controllers
         public IActionResult Credits()
         {
             ViewData["Title"] = "Credits";
-            return View();
+            return View( CreditsInfo.AllCredits );
         }
     }
 }
