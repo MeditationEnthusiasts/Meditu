@@ -16,29 +16,35 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
-using MeditationLogger.Api;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeditationLogger.Gui.Controllers
 {
     /// <summary>
-    /// The main home page of the app.
+    /// Controller for the about page.
     /// </summary>
-    public class HomeController : Controller
+    public class AboutController : Controller
     {
         public IActionResult Index()
         {
-            Log log1 = new Log();
-            log1.Comments = "Hello World1";
+            ViewData["Title"] = "About Meditation Logger";
+            return View();
+        }
 
-            Log log2 = new Log();
-            log2.Comments = "Hello World2";
+        public IActionResult License()
+        {
+            ViewData["Title"] = "License Information";
+            return View();
+        }
 
-            List<Log> logs = new List<Log>() { log1, log2 };
-
-            ViewData["Title"] = "Meditation Enthusiasts Logger";
-            return View( logs );
+        public IActionResult Credits()
+        {
+            ViewData["Title"] = "Credits";
+            return View();
         }
     }
 }
