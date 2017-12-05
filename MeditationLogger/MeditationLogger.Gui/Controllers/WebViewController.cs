@@ -20,29 +20,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MeditationLogger.Gui.Controllers
 {
-    /// <summary>
-    /// Controller for the about page.
-    /// </summary>
-    public class AboutController : Controller
+    public class WebViewController : Controller
     {
-        // ---------------- Functions ----------------
-
-        public IActionResult Index()
+        public IActionResult Index( string url )
         {
-            ViewData["Title"] = "About Meditation Logger";
+            ViewData["url"] = url;
             return View();
-        }
-
-        public IActionResult License()
-        {
-            ViewData["Title"] = "License Information";
-            return View();
-        }
-
-        public IActionResult Credits()
-        {
-            ViewData["Title"] = "Credits";
-            return View( CreditsInfo.AllCredits );
         }
     }
 }

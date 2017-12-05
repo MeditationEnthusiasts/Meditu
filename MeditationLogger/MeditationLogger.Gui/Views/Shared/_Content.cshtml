@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div id="wrapper">
+    <!-- Top row -->
+    <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+        <!-- Top-left -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <h1 id="main-title" style="padding:0.5em;">Meditation Enthusiasts Logger</h1>
+    </nav>
+
+    <!-- Side Bar -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li>
+                    <a href="/Home"><img class="image avatar" src="/img/logo.png" width="240" height="240" /></a>
+                </li>
+                <li>
+                    <a href="/Home"><i class="fa fa-home"></i>Home</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-info-circle"></i>About<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="/About"><i class="fa fa-info" aria-hidden="true"></i>App Info</a>
+                        </li>
+                        <li>
+                            <a href="/About/License"><i class="fa fa-file-text" aria-hidden="true"></i>Licence</a>
+                        </li>
+                        <li>
+                            <a href="/About/Credits"><i class="fa fa-file-text-o" aria-hidden="true"></i>Credits</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-users"></i>Follow Us!<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="/WebView?url=https://twitter.com/xmeditator"><i class="fa fa-twitter"></i>Twitter</a>
+                        </li>
+                        <li>
+                            <a href="/WebView?url=https://github.com/meditationenthusiasts"><i class="fa fa-github"></i>GitHub</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Page -->
+    <div id="page-wrapper">
+        <article id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-head-line">@ViewData["Title"]</h1>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-sec">
+        <div>
+            Visit Meditation Enthusiasts: <a href="/WebView?url=https://www.meditationenthuisasts.org">https://www.meditationenthuisasts.org</a>
+        </div>
+        <div>
+            &copy; @DateTime.Now.Year <a href="/WebView?url=https://shendrick.net">Seth Hendrick</a> | Design By : <a href="/WebView?url=http://www.binarytheme.com/">BinaryTheme.com</a> |
+            <span>Page generated on @(DateTime.UtcNow.ToString( "R" ))</span>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -AT THE BOTTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="/static/js/jquery-1.10.2.js" onload="window.$ = window.jQuery = module.exports;"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/static/js/bootstrap.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/static/js/jquery.metisMenu.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/static/js/custom.js"></script>
