@@ -24,8 +24,8 @@
     </div>
     <div class="panel-body">
         <p><strong>Purpose: </strong>@info.Purpose</p>
-        <p><strong>Project URL: </strong><a href="/WebView?url=@info.Url">@info.Url</a></p>
-        <p><strong>Code: </strong><a href="/WebView?url=@info.CodeUrl">@info.CodeUrl</a></p>
+        <p><strong>Project URL: </strong><a href="@WebHelpers.ExternalUrl(info.Url, @Context.Request.Path)">@info.Url</a></p>
+        <p><strong>Code: </strong><a href="@WebHelpers.ExternalUrl(info.CodeUrl, @Context.Request.Path)">@info.CodeUrl</a></p>
         <div class="panel panel-default">
             <div class="panel-heading" style="overflow:hidden;">
                 <span class="panel-title" style="float:left;">@info.License</span>
@@ -33,7 +33,7 @@
             </div>
             <div id="license@(id)" class="panel-collapse in" style="height: auto">
                 <div class="panel-body">
-                    <p><strong>License URL: </strong><a href="/WebView?url=@info.LicenseUrl">@info.LicenseUrl</a></p>
+                    <p><strong>License URL: </strong><a href="@WebHelpers.ExternalUrl(info.LicenseUrl, @Context.Request.Path)">@info.LicenseUrl</a></p>
                     @Html.Raw( @info.LicenseText )
                 </div>
             </div>

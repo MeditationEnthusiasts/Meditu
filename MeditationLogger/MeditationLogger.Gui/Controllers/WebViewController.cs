@@ -22,8 +22,9 @@ namespace MeditationLogger.Gui.Controllers
 {
     public class WebViewController : Controller
     {
-        public IActionResult Index( string url )
+        public IActionResult Index( string url, string original )
         {
+            ViewData["original"] = original;
             ViewData["url"] = url;
             return View();
         }
