@@ -7,7 +7,14 @@
 
 <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
     <div>
-        <a href="@ViewData["original"]" class="btn btn-inverse"><i class="fa fa-backward" aria-hidden="true"></i> Back To Meditation Logger</a>
+        <span style="float:left;">
+            <a href="@ViewData["original"]" class="btn btn-inverse"><i class="fa fa-backward" aria-hidden="true"></i> Back To Meditation Logger</a>
+        </span>
+        <span style="float:right;padding:1em;">
+            <button id="OpenInBrowserButton" class="btn btn-primary">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> Open in Browser <noscript>(Requires JS)</noscript>
+            </button>
+        </span>
     </div>
 </nav>
 
@@ -15,3 +22,17 @@
     <webview src="@ViewData["url"]" autosize="on" minwidth="600" minheight="800" style="width:100%;height:100%">
     </webview>
 </div>
+
+<script>
+    var openButton = document.getElementById("OpenInBrowserButton");
+    openButton.addEventListener(
+        "click",
+        function () {
+            var data = {
+                Url: '@ViewData["url"]'
+            };
+            postRequest('/WebView/Open', data);
+        },
+        false
+    );
+</script>
