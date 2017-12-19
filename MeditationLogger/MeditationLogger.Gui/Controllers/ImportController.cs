@@ -29,18 +29,24 @@ namespace MeditationLogger.Gui.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Title"] = "Import from XML file";
             return View();
         }
 
         [HttpPost]
-        public IActionResult UploadXml( IFormFile file )
+        public IActionResult UploadXml( List<IFormFile> files )
         {
             try
             {
-                IList<Log> logs;
-                using( Stream stream = file.OpenReadStream() )
+                ViewData["Title"] = "Logs Imported";
+
+                List<Log> logs = new List<Log>();
+                foreach( IFormFile file in files )
                 {
-                    logs = XmlLoader.ParseLogbookFromStream( stream );
+                    using( Stream stream = file.OpenReadStream() )
+                    {
+                        logs.AddRange( XmlLoader.ParseLogbookFromStream( stream ) );
+                    }
                 }
 
                 return View( logs );
