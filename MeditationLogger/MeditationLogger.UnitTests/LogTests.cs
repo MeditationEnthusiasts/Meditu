@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Xml;
 using MeditationLogger.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SethCS.Exceptions;
@@ -167,6 +168,42 @@ namespace MeditationLogger.UnitTests
 
             Assert.AreEqual( noWs, log.Comments );
             Assert.AreEqual( noWs, log.Technique );
+        }
+
+        [TestMethod]
+        public void XmlTestWithOutLatitudeLongitude()
+        {
+            Log log = new Log();
+            this.InitLog( log );
+            log.Latitude = null;
+            log.Longitude = null;
+
+            XmlDocument doc = new XmlDocument();
+
+            XmlNode rootNode = doc.CreateElement( "logbook" );
+
+            log.ToXml( doc, rootNode );
+
+            Log copiedLog = Log.FromXml( rootNode.FirstChild );
+
+            Assert.AreEqual( log, copiedLog );
+        }
+
+        [TestMethod]
+        public void XmlTestWithLatitudeLongitude()
+        {
+            Log log = new Log();
+            this.InitLog( log );
+
+            XmlDocument doc = new XmlDocument();
+
+            XmlNode rootNode = doc.CreateElement( "logbook" );
+
+            log.ToXml( doc, rootNode );
+
+            Log copiedLog = Log.FromXml( rootNode.FirstChild );
+
+            Assert.AreEqual( log, copiedLog );
         }
 
         // ---------------- Test Helpers ----------------

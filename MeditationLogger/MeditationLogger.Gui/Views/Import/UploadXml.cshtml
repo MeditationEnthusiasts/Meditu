@@ -1,0 +1,14 @@
+﻿@using MeditationLogger.Api;
+
+@{
+    Layout = "_Content";
+}
+
+@model IList<Log>
+
+<ul>
+    @foreach( Log log in Model )
+    {
+        <li>@log.StartTime.ToLongDateString() @log.Technique</li>
+    }
+</ul>

@@ -1,0 +1,34 @@
+﻿@using MeditationLogger.Api;
+
+@{
+    Layout = "_Content";
+}
+
+<p>This page allows you to import XML data from another LogBook.</p>
+
+<p>To get the XML data in the first place, in the other Meditation Logger Application, go to the Export page and download it as XML.</p>
+
+<p>Before importing, please note the following:</p>
+
+<ul>
+    <li>Any logs in the XML file with the same Globally Unique Identifier (GUID) and the same &quot;edit time&quot; as what is already in the database will be ignored.</li>
+    <li>Any logs in the XML file that does not contain an GUID will be imported.  A new GUID will be generated and saved with the log to the database.</li>
+    <li>Any logs in the XML file that contains a GUID that is not already in the database will be imported.</li>
+    <li>Any logs in the XML file with the same GUID but a newer &quot;edit time&quot; will replace the log in the database.  The log in the database's edit time will be updated.</li>
+</ul>
+
+<p>To begin, select the XML file to upload.</p>
+
+<form method="post" enctype="multipart/form-data" action="/Import/UploadXml">
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>Upload one XML file using this form:</p>
+            <input class="form-control" type="file" name="files" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Import" class="btn btn-info" />
+        </div>
+    </div>
+</form>

@@ -18,7 +18,9 @@
 
 using System;
 using System.Text;
+using System.Xml;
 using SethCS.Exceptions;
+using SethCS.Extensions;
 
 namespace MeditationLogger.Api
 {
@@ -29,6 +31,8 @@ namespace MeditationLogger.Api
     public class Log
     {
         // ---------------- Fields ----------------
+
+        public const string XmlElementName = "log";
 
         private string comments;
         private string technique;
@@ -45,6 +49,72 @@ namespace MeditationLogger.Api
         /// Yeah, we're not using SQLite, but maybe someday we'll support multiple databases?
         /// </summary>
         public static readonly DateTime MaxTime = new DateTime( 5000, 1, 1, 0, 0, 0 ).ToUniversalTime(); // Year 5000 is good enough.
+
+        public static Log FromXml( XmlNode node )
+        {
+            if( node.Name.ToLower() != XmlElementName )
+            {
+                throw new ArgumentException( "Node name must be " + XmlElementName, nameof( node ) );
+            }
+
+            Log log = new Log();
+
+            foreach( XmlAttribute attr in node.Attributes )
+            {
+                switch( attr.Name.ToLower() )
+                {
+                    case "guid":
+                        log.Guid = Guid.Parse( attr.Value );
+                        break;
+
+                    case "edittime":
+                        log.EditTime = DateTime.Parse( attr.Value );
+                        break;
+
+                    case "starttime":
+                        log.StartTime = DateTime.Parse( attr.Value );
+                        break;
+
+                    case "endtime":
+                        log.EndTime = DateTime.Parse( attr.Value );
+                        break;
+
+                    case "technique":
+                        log.Technique = attr.Value;
+                        break;
+
+                    case "comments":
+                        log.Comments = attr.Value;
+                        break;
+
+                    case "latitude":
+                        if( string.IsNullOrEmpty( attr.Value ) )
+                        {
+                            log.Latitude = null;
+                        }
+                        else
+                        {
+                            log.Latitude = decimal.Parse( attr.Value );
+                        }
+                        break;
+
+                    case "longitude":
+                        if( string.IsNullOrEmpty( attr.Value ) )
+                        {
+                            log.Longitude = null;
+                        }
+                        else
+                        {
+                            log.Longitude = decimal.Parse( attr.Value );
+                        }
+                        break;
+
+                }
+            }
+
+            log.Validate();
+            return log;
+        }
 
         /// <summary>
         /// Constructor.  Set everything to default values.
@@ -271,6 +341,68 @@ namespace MeditationLogger.Api
         public Log Clone()
         {
             return (Log)this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// Appends this Log to the given XML document.
+        /// </summary>
+        public void ToXml( XmlDocument doc, XmlNode parentNode )
+        {
+            this.Validate();
+
+            XmlNode logNode = doc.CreateElement( XmlElementName );
+
+            // Add attributes
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "Guid" );
+                attr.Value = this.Guid.ToString();
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "EditTime" );
+                attr.Value = this.EditTime.ToTimeStampString();
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "StartTime" );
+                attr.Value = this.StartTime.ToTimeStampString();
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "EndTime" );
+                attr.Value = this.EndTime.ToTimeStampString();
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "Comments" );
+                attr.Value = this.Comments;
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "Technique" );
+                attr.Value = this.Technique;
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "Latitude" );
+                attr.Value = this.Latitude.HasValue ? this.Latitude.ToString() : string.Empty;
+                logNode.Attributes.Append( attr );
+            }
+
+            {
+                XmlAttribute attr = doc.CreateAttribute( "Longitude" );
+                attr.Value = this.Longitude.HasValue ? this.Longitude.ToString() : string.Empty;
+                logNode.Attributes.Append( attr );
+            }
+
+            parentNode.AppendChild( logNode );
         }
     }
 }

@@ -45,6 +45,8 @@ namespace MeditationLogger.Api
     {
         // ---------------- Fields ----------------
 
+        public const string XmlElementName = "logbook";
+
         /// <summary>
         /// Table of logs whose key is the guid of the logs.
         /// Useful for quick lookups to see if a log exists.
