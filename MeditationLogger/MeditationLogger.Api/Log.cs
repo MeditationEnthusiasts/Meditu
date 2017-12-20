@@ -19,6 +19,7 @@
 using System;
 using System.Text;
 using System.Xml;
+using LiteDB;
 using SethCS.Exceptions;
 using SethCS.Extensions;
 
@@ -121,8 +122,6 @@ namespace MeditationLogger.Api
         /// </summary>
         public Log()
         {
-            this.Id = 0;
-
             // Fun fact!  DateTime.MinValue seems to return local time, not UTC time.
             this.EndTime = DateTime.MinValue.ToUniversalTime();
 
@@ -162,6 +161,7 @@ namespace MeditationLogger.Api
         /// <summary>
         /// How long the session lasted.
         /// </summary>
+        [BsonIgnore]
         public TimeSpan Duration
         {
             get

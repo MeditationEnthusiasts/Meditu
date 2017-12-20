@@ -227,10 +227,11 @@ namespace MeditationLogger.Api
                         return false;
                     }
                 }
-                
+
                 Log savedLog = this.col.FindOne( l => l.Guid == log.Guid );
                 if ( savedLog == null )
                 {
+                    this.col.Insert( log );
                     this.AddLogNoLock( log );
                 }
                 else
@@ -240,6 +241,9 @@ namespace MeditationLogger.Api
                     this.logTable[log.Guid] = log;
                     this.UpdateShortcutProperties( log );
                 }
+
+                this.SortCache();
+
                 return true;
             }
         }
@@ -264,17 +268,7 @@ namespace MeditationLogger.Api
                 this.col.Insert( log );
                 this.AddLogNoLock( log );
 
-                // Sort by date.
-                // Calling OrderByDecending and then clear on a list will clear the IOrderedEnumerable
-                // that is returned by OrderByDecending.  So, we need to create a new list >_>.
-                // There needs to be a better way to do this...
-
-                List<Log> logs = new List<Log>( this.list.OrderByDescending( l => l.StartTime ) );
-                this.list.Clear();
-                foreach( Log l in logs )
-                {
-                    this.list.Add( l );
-                }
+                this.SortCache();
             }
 
             return log.Guid;
@@ -320,6 +314,21 @@ namespace MeditationLogger.Api
         protected override Log CloneInstructions( Log original )
         {
             return original.Clone();
+        }
+
+        private void SortCache()
+        {
+            // Sort by date.
+            // Calling OrderByDecending and then clear on a list will clear the IOrderedEnumerable
+            // that is returned by OrderByDecending.  So, we need to create a new list >_>.
+            // There needs to be a better way to do this...
+
+            List<Log> logs = new List<Log>( this.list.OrderByDescending( l => l.StartTime ) );
+            this.list.Clear();
+            foreach( Log l in logs )
+            {
+                this.list.Add( l );
+            }
         }
 
         private void AddLogNoLock( Log log )
