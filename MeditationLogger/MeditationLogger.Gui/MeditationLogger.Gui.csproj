@@ -9,7 +9,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
+    <ProjectReference Include="..\..\SethCS\SethCS\LibSethCS.Core.csproj" />
     <ProjectReference Include="..\MeditationLogger.Api\MeditationLogger.Api.csproj" />
   </ItemGroup>
   <ItemGroup>

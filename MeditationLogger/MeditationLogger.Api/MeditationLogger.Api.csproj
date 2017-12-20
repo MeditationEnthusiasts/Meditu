@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
+    <ProjectReference Include="..\..\SethCS\SethCS\LibSethCS.Core.csproj" />
   </ItemGroup>
 
 </Project>
