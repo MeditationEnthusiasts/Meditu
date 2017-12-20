@@ -79,6 +79,7 @@ namespace MeditationLogger.Gui
                 Console.WriteLine( "Database Location: " + dbLocation );
 
                 ApiBridge.CreateInstance( dbLocation );
+                ApiBridge.Instance.LogBook.Refresh();
             }
             catch( Exception e )
             {

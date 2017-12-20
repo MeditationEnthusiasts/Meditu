@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using LiteDB;
 using SethCS.Collections;
 using SethCS.Extensions;
@@ -200,6 +201,50 @@ namespace MeditationLogger.Api
         }
 
         /// <summary>
+        /// Imports the given log into the database.
+        /// - If the passed in log's GUID already exists, and the Edit Time is earlier
+        ///   than the saved version, nothing happens.
+        /// - If the passed in log's GUID already exists, but the Edit Time is later
+        ///   than the saved version, the log in the database gets overwritten with this log.
+        /// - If the passed in log's GUID exits in cache, but does not exist in the database,
+        ///   the log will be added to the database.
+        /// </summary>
+        /// <returns>
+        /// True if the log was imported, false if the log was not imported.
+        /// This returns false if the log already exists.
+        /// </returns>
+        public bool ImportLog( Log log )
+        {
+            log.Validate();
+            log = log.Clone();
+
+            lock( this.list )
+            {
+                if ( this.logTable.ContainsKey( log.Guid ) )
+                {
+                    if ( this.logTable[log.Guid].EditTime >= log.EditTime )
+                    {
+                        return false;
+                    }
+                }
+                
+                Log savedLog = this.col.FindOne( l => l.Guid == log.Guid );
+                if ( savedLog == null )
+                {
+                    this.AddLogNoLock( log );
+                }
+                else
+                {
+                    log.Id = savedLog.Id;
+                    this.col.Update( log );
+                    this.logTable[log.Guid] = log;
+                    this.UpdateShortcutProperties( log );
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Adds the given log to the database.
         /// </summary>
         /// <param name="log">
@@ -244,6 +289,32 @@ namespace MeditationLogger.Api
             {
                 this.ResetStateNoLock();
             }
+        }
+
+        public XmlDocument ToXml()
+        {
+            XmlDocument doc = new XmlDocument();
+
+            // Create declaration.
+            XmlDeclaration dec = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
+
+            // Add declaration to document.
+            XmlElement root = doc.DocumentElement;
+            doc.InsertBefore( dec, root );
+
+            XmlElement logbookNode = doc.CreateElement( XmlElementName );
+
+            lock( this.list )
+            {
+                foreach ( Log log in this.list )
+                {
+                    log.ToXml( doc, logbookNode );
+                }
+            }
+
+            doc.InsertAfter( logbookNode, dec );
+
+            return doc;
         }
 
         protected override Log CloneInstructions( Log original )

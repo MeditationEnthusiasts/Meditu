@@ -4,11 +4,13 @@
     Layout = "_Content";
 }
 
-@model IList<Log>
+@model IDictionary<Log, string>
 
 <ul>
-    @foreach( Log log in Model )
+    @foreach( KeyValuePair<Log, string> logPair in Model )
     {
-        <li>@log.StartTime.ToLongDateString() @log.Technique</li>
+        Log log = logPair.Key;
+        string message = logPair.Value;
+        <li>@log.StartTime.ToLongDateString() @log.Technique - @message</li>
     }
 </ul>

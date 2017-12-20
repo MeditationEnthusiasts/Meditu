@@ -49,7 +49,28 @@ namespace MeditationLogger.Gui.Controllers
                     }
                 }
 
-                return View( logs );
+                Dictionary<Log, string> logStatus = new Dictionary<Log, string>();
+                foreach( Log log in logs )
+                {
+                    try
+                    {
+                        bool success = ApiBridge.Instance.LogBook.ImportLog( log );
+                        if ( success )
+                        {
+                            logStatus.Add( log, "Log imported!" );
+                        }
+                        else
+                        {
+                            logStatus.Add( log, "Log already exists, not imported." );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        logStatus.Add( log, "Error, could not import: " + e.Message );
+                    }
+                }
+
+                return View( logStatus );
             }
             catch( Exception err )
             {
