@@ -102,38 +102,31 @@
                     durationElement,
                     {
                         // The type of chart we want to create
-                        type: 'line',
+                        type: 'bar',
 
                         // The data for our dataset
                         data: {
                                 labels: [
                                     @foreach(Log log in Model.Reverse())
                                     {
-                                        @:new Date(@log.StartTime.Year, @log.StartTime.Month, @log.StartTime.Day, @log.StartTime.Hour, @log.StartTime.Minute, @log.StartTime.Second, @log.StartTime.Millisecond),
+                                        @:'@log.StartTime.ToString("MM/dd/yyyy")',
                                     }  
                                 ],
                                 datasets: [{
-                                    label: '',
+                                    backgroundColor: 'rgb(75, 192, 192)',
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    label: 'Duration (Minutes)',
                                     data: [
                                         @foreach(Log log in Model.Reverse())
                                         {
                                             @:@log.Duration.TotalMinutes,
                                         }
-                                    ],
-                                    lineTension: 0
+                                    ]
                                 }]
                         },
                         // Configuration options go here
                         options: {
-                            scales: {
-                                xAxes: [{
-                                    type: 'time',
-                                    distribution: 'linear',
-                                    time:{
-                                        unit: 'day'
-                                    }
-                                }],
-                            }
+ 
                         }
                     }
                 );
