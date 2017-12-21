@@ -1,0 +1,56 @@
+@using System.Globalization;
+@using System.IO;
+@using System.Linq;
+@using MeditationLogger.Api;
+
+@model LogBook;
+
+@{
+    Layout = "_Content";
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+}
+
+@if(Model.TotalSessions == 0)
+{
+    <p>No Sessions, yet.</p>
+}
+else
+{
+    @foreach( Log log in Model )
+    {
+        string technique = textInfo.ToTitleCase(log.Technique);
+        @if (string.IsNullOrEmpty(technique))
+        {
+            technique = "None";
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3><strong>@log.StartTime.ToLocalTime().ToString("G")</strong> - @technique</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p><strong>Duration: </strong>@log.Duration.ToString(@"hh\:mm\:ss")</p>
+                        <p><strong>Comments:</strong></p>
+                        @if (string.IsNullOrEmpty(log.Comments))
+                        {
+                            <p>None.</p>
+                        }
+                        else
+                        {
+                            @using(StringReader reader = new StringReader(log.Comments))
+                            {
+                                string line = reader.ReadLine();
+                                while(line != null)
+                                {
+                                    <p>@line</p>
+                                    line = reader.ReadLine();
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
