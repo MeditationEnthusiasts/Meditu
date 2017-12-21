@@ -81,7 +81,7 @@
                     // Must use ToList() as IReadOnlyList doesn't implement IndexOf.
                     int hour = @Model.StartTimeBucket.ToList().IndexOf(Model.StartTimeBucket.Max());
                     DateTime time = new DateTime(2000, 1, 1, hour, 0, 0);
-                    <h4>@time.ToLocalTime().ToString("hh:mm tt")</h4>
+                    <h4>@time.ToString("hh:mm tt")</h4>
                 }
             }
         </div>

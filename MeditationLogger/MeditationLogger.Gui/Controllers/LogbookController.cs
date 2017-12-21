@@ -38,5 +38,11 @@ namespace MeditationLogger.Gui.Controllers
             ViewData["Title"] = "The places you have meditated!";
             return View( ApiBridge.Instance.LogBook );
         }
+
+        public IActionResult GraphView()
+        {
+            ViewData["Title"] = "Logbook - Graph View";
+            return View( ApiBridge.Instance.LogBook );
+        }
     }
 }

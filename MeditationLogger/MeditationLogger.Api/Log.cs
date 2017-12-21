@@ -123,7 +123,7 @@ namespace MeditationLogger.Api
         public Log()
         {
             // Fun fact!  DateTime.MinValue seems to return local time, not UTC time.
-            this.EndTime = DateTime.MinValue.ToUniversalTime();
+            this.EndTime = DateTime.MinValue;
 
             // Make start time ahead of end time,
             // this will make the log in an invalid state, as the
@@ -132,7 +132,7 @@ namespace MeditationLogger.Api
 
             this.Guid = Guid.NewGuid();
 
-            this.EditTime = DateTime.MinValue.ToUniversalTime();
+            this.EditTime = DateTime.MinValue;
             this.Comments = string.Empty;
             this.Technique = string.Empty;
             this.Latitude = null;
@@ -148,13 +148,15 @@ namespace MeditationLogger.Api
 
         /// <summary>
         /// When the session starts
-        /// (UTC, the UI must convert it to local time).
+        /// The time is in local time
+        /// (database saves to UTC, and retrieves to local time).
         /// </summary>
         public DateTime StartTime { get; set; }
 
         /// <summary>
         /// When the session ends
-        /// (UTC, the UI must convert it to local time).
+        /// The time is in local time.
+        /// (database saves to UTC, and retrieves to local time).
         /// </summary>
         public DateTime EndTime { get; set; }
 
@@ -177,7 +179,8 @@ namespace MeditationLogger.Api
 
         /// <summary>
         /// The last time this log was edited.
-        /// (UTC, the UI must convert it to local time).
+        /// The time is in local time.
+        /// (database saves to UTC, and retrieves to local time).
         /// </summary>
         public DateTime EditTime { get; set; }
 

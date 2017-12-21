@@ -110,7 +110,7 @@ namespace MeditationLogger.Api
         /// So if index 0 has 2 in it, then there were 2 sessions that started
         /// between 12AM - 1AM.
         /// 
-        /// Note: Like our <see cref="Log"/> object, this is based on UTC.
+        /// Note: Like our <see cref="Log"/> object, this is based on local time.
         /// </summary>
         public IReadOnlyList<int> StartTimeBucket { get; private set; }
 

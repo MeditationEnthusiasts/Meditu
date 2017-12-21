@@ -1,0 +1,66 @@
+@using System;
+@using System.Globalization;
+@using System.Linq;
+@using MeditationLogger.Api;
+
+@model LogBook;
+
+@{
+    Layout = "_Content";
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+}
+
+@section scripts {
+     <script type="text/javascript" src="/static/js/moment.min.js"></script>
+     <script type="text/javascript" src="/static/js/Chart.min.js"></script>
+     <script type="text/javascript">
+        window.onload=function()
+        {
+            // Create start time chart
+            {
+                var startTimeElement = document.getElementById('starttime').getContext('2d');
+                var chart = new Chart(
+                    startTimeElement,
+                    {
+                        // The type of chart we want to create
+                        type: 'bar',
+
+                        // The data for our dataset
+                        data: {
+                            labels: [
+                                @for(
+                                    DateTime time = new DateTime(2000, 1, 1, 0, 0, 0);
+                                    time < new DateTime(2000, 1, 2, 0, 0, 0);
+                                    time += new TimeSpan(1, 0, 0)
+                                )
+                                {
+                                    // No need for ToLocalTime(), as Logbook
+                                    // uses local time to begin with since our database
+                                    // retrieves from UTC time.
+                                    @:'@(time.ToString("hh:mm tt"))',
+                                }
+                            ],
+                            datasets: [{
+                                label: "Times Started",
+                                backgroundColor: 'rgb(255, 99, 132)',
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: [
+                                    @foreach(int count in Model.StartTimeBucket)
+                                    {
+                                        @:@(count),
+                                    }
+                                ],
+                            }]
+                        },
+
+                        // Configuration options go here
+                        options: {}
+                    }
+                );
+            }
+        }
+</script>
+}
+
+<h2>Times Started</h2>
+<canvas id="starttime"></canvas>
