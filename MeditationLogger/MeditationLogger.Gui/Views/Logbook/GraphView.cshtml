@@ -96,6 +96,48 @@
                     }
                 );
             }
+            {
+                var durationElement = document.getElementById('duration').getContext('2d');
+                var chart = new Chart(
+                    durationElement,
+                    {
+                        // The type of chart we want to create
+                        type: 'line',
+
+                        // The data for our dataset
+                        data: {
+                                labels: [
+                                    @foreach(Log log in Model.Reverse())
+                                    {
+                                        @:new Date(@log.StartTime.Year, @log.StartTime.Month, @log.StartTime.Day, @log.StartTime.Hour, @log.StartTime.Minute, @log.StartTime.Second, @log.StartTime.Millisecond),
+                                    }  
+                                ],
+                                datasets: [{
+                                    label: '',
+                                    data: [
+                                        @foreach(Log log in Model.Reverse())
+                                        {
+                                            @:@log.Duration.TotalMinutes,
+                                        }
+                                    ],
+                                    lineTension: 0
+                                }]
+                        },
+                        // Configuration options go here
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    type: 'time',
+                                    distribution: 'linear',
+                                    time:{
+                                        unit: 'day'
+                                    }
+                                }],
+                            }
+                        }
+                    }
+                );
+            }
         }
 </script>
 }
@@ -105,3 +147,6 @@
 
 <h2>Techniques</h2>
 <canvas id="techniques"></canvas>
+
+<h2>Duration</h2>
+<canvas id="duration"></canvas>
