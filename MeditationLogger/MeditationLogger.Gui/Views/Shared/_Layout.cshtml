@@ -27,6 +27,8 @@
     <!-- GOOGLE FONTS-->
     <link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />
 
+    @RenderSection("extrahead", required: false)
+
 </head>
 <body>
     @RenderBody()
@@ -42,5 +44,8 @@
     <script src="/static/js/custom.js"></script>
     <!-- Common JS -->
     <script src="/static/js/meditationlogger.js"></script>
+
+    <!-- Page-specific scripts -->
+    @RenderSection("scripts", required: false)
 </body>
 </html>

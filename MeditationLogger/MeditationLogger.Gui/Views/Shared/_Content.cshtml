@@ -4,6 +4,14 @@
     Layout = "_Layout";
 }
 
+@section scripts{
+    @RenderSection("scripts", required: false)
+}
+
+@section extrahead{
+    @RenderSection("extrahead", required: false)
+}
+
 <div id="wrapper">
     <!-- Top row -->
     <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
@@ -40,6 +48,9 @@
                         </li>
                         <li>
                             <a href="/Logbook/CalendarView"><i class="fa fa-calendar" aria-hidden="true"></i>Calendar View</a>
+                        </li>
+                        <li>
+                            <a href="/Logbook/MapView"><i class="fa fa-map-marker" aria-hidden="true"></i>Map View</a>
                         </li>
                     </ul>
                 </li>
