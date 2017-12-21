@@ -58,9 +58,50 @@
                     }
                 );
             }
+
+            // Create Technique Chart
+            {
+                var techniquesElement = document.getElementById('techniques').getContext('2d');
+                var chart = new Chart(
+                    techniquesElement,
+                    {
+                        // The type of chart we want to create
+                        type: 'doughnut',
+
+                        // The data for our dataset
+                        data: {
+                            labels: [
+                                @foreach(KeyValuePair<string, int> technique in Model.Techniques)
+                                {
+                                    @:'@(textInfo.ToTitleCase(technique.Key))',
+                                }
+                            ],
+                            datasets: [{
+                                label: "Times Started",
+                                backgroundColor: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Pink', 'Black', 'Orange'],
+                                borderColor: 'White',
+                                hoverBackgroundColor : 'White',
+                                hoverBorderColor :['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Pink', 'Black', 'Orange'],
+                                data: [
+                                    @foreach(KeyValuePair<string, int> technique in Model.Techniques)
+                                    {
+                                        @:@(Model.Techniques[technique.Key]),
+                                    }
+                                ],
+                            }]
+                        },
+
+                        // Configuration options go here
+                        options: Chart.defaults.doughnut
+                    }
+                );
+            }
         }
 </script>
 }
 
 <h2>Times Started</h2>
 <canvas id="starttime"></canvas>
+
+<h2>Techniques</h2>
+<canvas id="techniques"></canvas>
