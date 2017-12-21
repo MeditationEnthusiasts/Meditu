@@ -20,11 +20,11 @@
     -webkit-border-radius:5px;
     margin-bottom:40px;
 }
-    .main-box a,.main-box a:hover {
-        color:#fff;
-        text-decoration:none;
+.main-box a,.main-box a:hover {
+    color:#fff;
+    text-decoration:none;
 
-    }
+}
 .mb-dull {
     background-color:#8F8F2C;
 }
@@ -34,11 +34,11 @@
 .mb-pink {
     background-color:#FF2F71;
 }
-    .main-box h5 {
-        font-size:16px;
-        font-weight:800;
-        text-transform:uppercase;
-    }
+.main-box h5 {
+    font-size:16px;
+    font-weight:800;
+    text-transform:uppercase;
+}
 /*==============================================
     CHAT WINDOW  STYLES    
     =============================================*/

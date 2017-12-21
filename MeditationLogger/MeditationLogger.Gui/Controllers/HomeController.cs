@@ -29,16 +29,8 @@ namespace MeditationLogger.Gui.Controllers
     {
         public IActionResult Index()
         {
-            Log log1 = new Log();
-            log1.Comments = "Hello World1";
-
-            Log log2 = new Log();
-            log2.Comments = "Hello World2";
-
-            List<Log> logs = new List<Log>() { log1, log2 };
-
             ViewData["Title"] = "Meditation Enthusiasts Logger";
-            return View( logs );
+            return View( ApiBridge.Instance.LogBook );
         }
     }
 }

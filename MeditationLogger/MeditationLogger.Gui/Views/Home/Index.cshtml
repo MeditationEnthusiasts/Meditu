@@ -1,16 +1,89 @@
-﻿@using MeditationLogger.Api;
+﻿@using System.Globalization;
+@using System.Linq;
+@using MeditationLogger.Api;
 
-@model IList<Log>
+@model LogBook;
 
 @{
     Layout = "_Content";
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
 }
-    <p>Hello World!</p>
-    <ul>
-        @foreach( Log log in Model )
-        {
-            <li>@log.Comments</li>
-        }
-    </ul>
 
-    <p>@Context.Request.Path</p>
+<!-- First Row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="main-box" style="background-color:greenyellow">
+            <h3>Total Time:</h3>
+            <h4>@Model.TotalTime.ToString()</h4>
+        </div>
+    </div>
+</div>
+
+<!-- Second Row -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="main-box" style="background-color:tomato">
+            <h3>Total Sessions:</h3>
+            <h4>@Model.TotalSessions</h4>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="main-box" style="background-color:yellow">
+            <h3>Longest Session:</h3>
+            <h4>@Model.LongestTime.ToString()</h4>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="main-box" style="background-color:lightblue">
+            <h3>Last Session:</h3>
+            @{
+                if( Model.TotalSessions == 0 )
+                {
+                    <h4>Nothing Yet...</h4>
+                }
+                else
+                {
+                    <h4>@Model[0].StartTime.ToLocalTime().ToString( "MM-dd-yyyy  HH:mm" )</h4>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Third Row -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="main-box" style="background-color:lightseagreen">
+            <h3>Favorite Technique:</h3>
+            @{
+                if( Model.TotalSessions == 0 )
+                {
+                    <h4>Nothing Yet...</h4>
+                }
+                else
+                {
+                    string technique = @Model.Techniques.FirstOrDefault( x => x.Value == Model.Techniques.Values.Max() ).Key;
+                    <h4>@textInfo.ToTitleCase(technique)</h4>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="main-box" style="background-color:violet">
+            <h3>Favorite Time:</h3>
+            @{
+                if( Model.TotalSessions == 0 )
+                {
+                    <h4>Nothing Yet...</h4>
+                }
+                else
+                {
+                    // Must use ToList() as IReadOnlyList doesn't implement IndexOf.
+                    int hour = @Model.StartTimeBucket.ToList().IndexOf(Model.StartTimeBucket.Max());
+                    DateTime time = new DateTime(2000, 1, 1, hour, 0, 0);
+                    <h4>@time.ToLocalTime().ToString("hh:mm tt")</h4>
+                }
+            }
+        </div>
+    </div>
+</div>
