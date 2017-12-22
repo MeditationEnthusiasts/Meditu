@@ -44,5 +44,11 @@ namespace MeditationLogger.Gui.Controllers
             ViewData["Title"] = "Logbook - Graph View";
             return View( ApiBridge.Instance.LogBook );
         }
+
+        public IActionResult CalendarView()
+        {
+            ViewData["Title"] = "Logbook - Calendar View";
+            return View( ApiBridge.Instance.LogBook );
+        }
     }
 }

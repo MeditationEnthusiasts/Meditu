@@ -1,0 +1,65 @@
+@using System;
+@using System.Globalization;
+@using System.Linq;
+@using MeditationLogger.Api;
+
+@model LogBook;
+
+@{
+    Layout = "_Content";
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+}
+
+@section extrahead{
+    <link rel="stylesheet" href="/static/css/fullcalendar.min.css" />
+    <link rel="stylesheet" href="/static/css/fullcalendar.print.min.css" media="print" />
+
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript" src="/static/js/moment.min.js"></script>
+    <script type="text/javascript" src="/static/js/fullcalendar.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultDate: '@(DateTime.Now.ToString( "yyyy-MM-dd" ))',
+                navLinks: true, // can click day/week names to navigate views
+                editable: false,
+                eventLimit: false, // allow "more" link when too many events
+                eventResizeStart: function () {},
+                eventDragStart: function () {},
+                viewDisplay: function () {},
+                viewDestroy: function (view, element) {},
+                events: [
+                    @foreach(Log log in Model)
+                    {
+                        @:{
+                            @:title: '@(log.Technique.Replace( '\n', ' ' ).Replace( "\r", String.Empty ))',
+                            @:start: '@(log.StartTime.ToLocalTime().ToString( "O" ))',
+                            @:end: '@(log.EndTime.ToLocalTime().ToString( "O" ))',
+                            @:comments: '@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))',
+                            @:id: @(log.Id)
+                        @:},
+                    }
+                ]
+            });
+        });
+</script>
+}
+
+ <noscript>
+     <p>Java Script required for calendar view :(</p>
+</noscript>
+
+<div id="calendar"></div>
