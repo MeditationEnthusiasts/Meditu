@@ -1,0 +1,48 @@
+<noscript>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                Without Javascript, you can not set a duration.  The timer will only count up,
+                even if you set a duration.
+            </div>
+        </div>
+    </div>
+</noscript>
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Session Options
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <form action="/Meditate/Start" method="POST">
+                        <label>Duration</label>
+                        <select class="form-control" style="float:left;" name="hour">
+                            @for(int i = 0; i <=24; ++i)
+                            {
+                                <option>@i</option>
+                            }
+                        </select>:
+                        <select class="form-control" style="float:left;" name="minute">
+                            @for(int i = 0; i <=59; ++i)
+                            {
+                                <option>@i</option>
+                            }
+                        </select>
+                        
+                        <p>Set both to '0' for no time limit (timer will count up until "stop" is pressed instead).</p>
+
+                        <input class="btn btn-primary" type="submit" value="Start Meditating!"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>

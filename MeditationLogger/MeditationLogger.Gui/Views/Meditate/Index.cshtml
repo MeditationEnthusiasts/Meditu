@@ -1,3 +1,7 @@
+@using MeditationLogger.Api;
+@using MeditationLogger.Gui.Controllers;
+
+@model MeditateModel
 
 @{
     Layout = "_Layout";
@@ -13,12 +17,49 @@
     </div>
 </nav>
 
-<!-- Main Page -->
-
 <article id="page-inner">
+
+@if(string.IsNullOrEmpty(Model.InfoMessage) == false)
+{
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-primary">Start Meditating!</button>
+            <div class="alert alert-info alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                @Model.InfoMessage
+            </div>
         </div>
     </div>
+}
+
+@if(string.IsNullOrEmpty(Model.ErrorMessage) == false)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+            @Model.ErrorMessage
+            </div>
+        </div>
+    </div>
+}
+
+@{
+if(Model.ApiState == ApiState.Idle)
+{
+    @Html.Partial("~/Views/Meditate/Idle.cshtml", Model)
+}
+else if (Model.ApiState == ApiState.Started)
+{
+    @Html.Partial("~/Views/Meditate/Started.cshtml", Model)
+}
+else if (Model.ApiState == ApiState.Stopped)
+{
+    @Html.Partial("~/Views/Meditate/Stopped.cshtml", Model)
+}
+else
+{
+    <p>How did we get here? <a href="/Meditate">Go Back!</a></p>
+}
+}
+
 </article>

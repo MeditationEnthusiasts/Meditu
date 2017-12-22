@@ -31,6 +31,8 @@ namespace MeditationLogger.Api
 
         private ApiState currentState;
 
+        private object currentStateLock;
+
         // ---------------- Constructor ----------------
 
         /// <summary>
@@ -43,6 +45,8 @@ namespace MeditationLogger.Api
             this.currentState = ApiState.Idle;
             this.LogBook = new LogBook();
             this.LogBook.OpenDb( dbPath );
+
+            this.currentStateLock = new object();
         }
 
         // ---------------- Properties ----------------
@@ -64,6 +68,38 @@ namespace MeditationLogger.Api
             }
         }
 
+        public ApiState CurrentState
+        {
+            get
+            {
+                lock( this.currentStateLock )
+                {
+                    return this.currentState;
+                }
+            }
+            private set
+            {
+                lock( this.currentStateLock )
+                {
+                    this.currentState = value;
+                }
+            }
+        }
+
+        public TimeSpan TimeRemaining
+        {
+            get
+            {
+                if ( this.CurrentState != ApiState.Started )
+                {
+                    throw new InvalidOperationException( "Session not started!" );
+                }
+
+                DateTime now = DateTime.Now;
+                return now - this.CurrentSession.StartTime;
+            }
+        }
+
         public LogBook LogBook { get; private set; }
 
         // ---------------- Functions ----------------
@@ -74,13 +110,14 @@ namespace MeditationLogger.Api
         /// <exception cref="InvalidOperationException">If we are already started.</exception>
         public void Start( StartSessionParams startParams )
         {
-            if( this.currentState != ApiState.Idle )
+            if( this.CurrentState != ApiState.Idle )
             {
                 throw new InvalidOperationException( "Already started!" );
             }
 
             this.currentSession = new Log();
-            this.currentSession.StartTime = DateTime.UtcNow;
+            this.currentSession.StartTime = DateTime.Now;
+            this.CurrentState = ApiState.Started;
         }
 
         /// <summary>
@@ -89,12 +126,13 @@ namespace MeditationLogger.Api
         /// <exception cref="InvalidOperationException">If we are not started.</exception>
         public void Stop()
         {
-            if( this.currentState != ApiState.Started )
+            if( this.CurrentState != ApiState.Started )
             {
                 throw new InvalidOperationException( "Session not started, can not stop." );
             }
 
-            this.currentSession.EndTime = DateTime.UtcNow;
+            this.currentSession.EndTime = DateTime.Now;
+            this.CurrentState = ApiState.Idle;
         }
 
         /// <summary>
@@ -104,14 +142,14 @@ namespace MeditationLogger.Api
         /// <exception cref="InvalidOperationException">If there is no current session, or we are not stopped.</exception>
         public void SaveSession( SaveSessionParams saveParams )
         {
-            if( this.currentState != ApiState.Stopped )
+            if( this.CurrentState != ApiState.Stopped )
             {
                 throw new InvalidOperationException( "Session not started, can not save." );
             }
             saveParams.Validate();
 
             // Save Session!
-            this.currentSession.EditTime = DateTime.UtcNow;
+            this.currentSession.EditTime = DateTime.Now;
             this.currentSession.Latitude = saveParams.Latitude;
             this.currentSession.Longitude = saveParams.Longitude;
             this.currentSession.Technique = saveParams.Technique;
@@ -125,7 +163,7 @@ namespace MeditationLogger.Api
 
         public void CancelSession()
         {
-            if( this.currentState != ApiState.Stopped )
+            if( this.CurrentState != ApiState.Stopped )
             {
                 throw new InvalidOperationException( "Session not started, can not clear." );
             }
@@ -140,12 +178,12 @@ namespace MeditationLogger.Api
         }
 
         // ---------------- Helper Classes ----------------
+    }
 
-        enum ApiState
-        {
-            Idle,
-            Started,
-            Stopped
-        }
+    public enum ApiState
+    {
+        Idle,
+        Started,
+        Stopped
     }
 }

@@ -1,0 +1,11 @@
+@using MeditationLogger.Gui.Controllers;
+
+@model MeditateModel
+
+<div class="row">
+    <div class="col-md-12">
+        <span id="hour">@Model.TimeRemaining.Value.Hours.ToString("D2")</span>:
+        <span id="minute">@Model.TimeRemaining.Value.Minutes.ToString("D2")</span>:
+        <span id="second">@Model.TimeRemaining.Value.Seconds.ToString("D2")</span>
+    </div>
+</div>
