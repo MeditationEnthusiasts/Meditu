@@ -21,21 +21,22 @@
             <div class="panel-body">
                 <div class="form-group">
                     <form action="/Meditate/Start" method="POST">
-                        <label>Duration</label>
+                        <label>Hours:</label>
                         <select class="form-control" style="float:left;" name="hour">
                             @for(int i = 0; i <=24; ++i)
                             {
-                                <option>@i</option>
+                                <option>@i.ToString("D2")</option>
                             }
-                        </select>:
+                        </select>
+                        <label>Minutes:</label>
                         <select class="form-control" style="float:left;" name="minute">
                             @for(int i = 0; i <=59; ++i)
                             {
-                                <option>@i</option>
+                                <option>@i.ToString("D2")</option>
                             }
                         </select>
                         
-                        <p>Set both to '0' for no time limit (timer will count up until "stop" is pressed instead).</p>
+                        <p>Set both to '0' for no time limit (timer will count up until "stop" is pressed).</p>
 
                         <input class="btn btn-primary" type="submit" value="Start Meditating!"/>
                     </form>

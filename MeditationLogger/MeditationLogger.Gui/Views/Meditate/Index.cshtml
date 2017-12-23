@@ -8,7 +8,6 @@
 }
 
 <!-- Top row -->
-
 <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
     <div>
         <span style="float:left;">
@@ -51,6 +50,11 @@ if(Model.ApiState == ApiState.Idle)
 else if (Model.ApiState == ApiState.Started)
 {
     @Html.Partial("~/Views/Meditate/Started.cshtml", Model)
+    // Workaround for the fact that partial's can't have sections.
+    // We need to have an HTML and a JS partial views and load them both here.
+    @section scripts {
+        @Html.Partial("~/Views/Meditate/StartedScripts.cshtml", Model)
+    }
 }
 else if (Model.ApiState == ApiState.Stopped)
 {

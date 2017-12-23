@@ -27,7 +27,7 @@ namespace MeditationLogger.Api
     {
         // ---------------- Fields ----------------
 
-        private Log currentSession;
+        private Session currentSession;
 
         private ApiState currentState;
 
@@ -55,7 +55,7 @@ namespace MeditationLogger.Api
         /// Returns a COPY of the current session.       
         /// </summary>
         /// <exception cref="InvalidOperationException">If a session is not started yet.</exception>
-        public Log CurrentSession
+        public Session CurrentSession
         {
             get
             {
@@ -86,20 +86,6 @@ namespace MeditationLogger.Api
             }
         }
 
-        public TimeSpan TimeRemaining
-        {
-            get
-            {
-                if ( this.CurrentState != ApiState.Started )
-                {
-                    throw new InvalidOperationException( "Session not started!" );
-                }
-
-                DateTime now = DateTime.Now;
-                return now - this.CurrentSession.StartTime;
-            }
-        }
-
         public LogBook LogBook { get; private set; }
 
         // ---------------- Functions ----------------
@@ -115,8 +101,9 @@ namespace MeditationLogger.Api
                 throw new InvalidOperationException( "Already started!" );
             }
 
-            this.currentSession = new Log();
-            this.currentSession.StartTime = DateTime.Now;
+            this.currentSession = new Session();
+            this.currentSession.SessionDuration = startParams.Duration;
+            this.currentSession.Log.StartTime = DateTime.Now;
             this.CurrentState = ApiState.Started;
         }
 
@@ -131,7 +118,7 @@ namespace MeditationLogger.Api
                 throw new InvalidOperationException( "Session not started, can not stop." );
             }
 
-            this.currentSession.EndTime = DateTime.Now;
+            this.currentSession.Log.EndTime = DateTime.Now;
             this.CurrentState = ApiState.Idle;
         }
 
@@ -149,25 +136,19 @@ namespace MeditationLogger.Api
             saveParams.Validate();
 
             // Save Session!
-            this.currentSession.EditTime = DateTime.Now;
-            this.currentSession.Latitude = saveParams.Latitude;
-            this.currentSession.Longitude = saveParams.Longitude;
-            this.currentSession.Technique = saveParams.Technique;
-            this.currentSession.Comments = saveParams.Comments;
+            this.currentSession.Log.EditTime = DateTime.Now;
+            this.currentSession.Log.Latitude = saveParams.Latitude;
+            this.currentSession.Log.Longitude = saveParams.Longitude;
+            this.currentSession.Log.Technique = saveParams.Technique;
+            this.currentSession.Log.Comments = saveParams.Comments;
 
-            this.LogBook.AddLogToDb( this.currentSession );
+            this.LogBook.AddLogToDb( this.currentSession.Log );
 
-            this.currentSession = null;
-            this.currentState = ApiState.Idle;
+            this.CancelSession();
         }
 
         public void CancelSession()
         {
-            if( this.CurrentState != ApiState.Stopped )
-            {
-                throw new InvalidOperationException( "Session not started, can not clear." );
-            }
-
             this.currentSession = null;
             this.currentState = ApiState.Idle;
         }

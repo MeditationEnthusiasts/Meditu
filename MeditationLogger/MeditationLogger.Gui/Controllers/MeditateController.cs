@@ -33,14 +33,10 @@ namespace MeditationLogger.Gui.Controllers
         /// Info message, if any.
         /// </summary>
         public string InfoMessage { get;set; }
+
+        public Session Session{ get; set; }
         
         public ApiState ApiState { get; set; }
-
-        /// <summary>
-        /// Time remaining in the session.
-        /// Null for unlimited time.
-        /// </summary>
-        public TimeSpan? TimeRemaining { get;set; }
     }
 
     public class MeditateController : Controller
@@ -55,7 +51,7 @@ namespace MeditationLogger.Gui.Controllers
             model.ApiState = ApiBridge.Instance.CurrentState;
             if ( model.ApiState == ApiState.Started )
             {
-                model.TimeRemaining = ApiBridge.Instance.TimeRemaining;
+                model.Session = ApiBridge.Instance.CurrentSession;
             }
 
             return View( model );
@@ -79,12 +75,12 @@ namespace MeditationLogger.Gui.Controllers
                 }
                 ApiBridge.Instance.Start( sessionParams );
 
-                model.TimeRemaining = sessionParams.Duration;
                 model.InfoMessage = "Session started!";
+                model.Session = ApiBridge.Instance.CurrentSession;
             }
             catch( Exception e )
             {
-                model.TimeRemaining = ApiBridge.Instance.TimeRemaining;
+                model.Session = ApiBridge.Instance.CurrentSession;
                 model.ErrorMessage = e.Message;
             }
 
@@ -102,10 +98,10 @@ namespace MeditationLogger.Gui.Controllers
                 ApiBridge.Instance.Stop();
 
                 model.InfoMessage = "Session completed!";
+                model.Session = ApiBridge.Instance.CurrentSession;
             }
             catch( Exception e )
             {
-                model.TimeRemaining = ApiBridge.Instance.TimeRemaining;
                 model.ErrorMessage = e.Message;
             }
 
@@ -130,7 +126,6 @@ namespace MeditationLogger.Gui.Controllers
             }
             catch( Exception e )
             {
-                model.TimeRemaining = ApiBridge.Instance.TimeRemaining;
                 model.ErrorMessage = e.Message;
             }
 

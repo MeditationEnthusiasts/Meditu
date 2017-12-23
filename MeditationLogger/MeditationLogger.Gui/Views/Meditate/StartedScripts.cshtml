@@ -1,0 +1,51 @@
+@using MeditationLogger.Api;
+@using MeditationLogger.Gui.Controllers;
+
+@model MeditateModel
+    
+<script type="text/javascript">
+    var ticks = @Model.Session.TimeRemaining.TotalSeconds;
+    var timerText;
+
+    /// <summary>
+    /// Runs when the window is loaded
+    /// </summary>
+    window.onload=function(){
+        timerText = document.getElementById( "timerText" );
+        RefreshDocument();
+    }
+
+    window.setInterval( OnTick, 1000 );
+
+    function pad( num ){
+        if ( num < 10 ){
+            return "0" + num;
+        }
+        else{
+            return "" + num;
+        }
+    }
+
+    function OnTick(){
+        if ( @Model.Session.IsCountingUp.ToString().ToLower() ){
+            ++ticks;
+        }
+        else{
+            --ticks;
+        }
+        RefreshDocument()
+
+        if ( ticks <= 0 ){
+            // Auto POST to Stop (TODO)!
+        }
+    }
+
+    function RefreshDocument(){
+        var count = ticks;
+        var hours = Math.floor( count / 3600 ); // 3600 seconds in an hour
+        count = count - ( hours * 3600 );
+        var minutes = Math.floor( count / 60 ); // 60 seconds in a minute.
+        var seconds = Math.floor( count % 60 );
+        timerText.innerHTML = pad( hours ) + ":" + pad( minutes ) + ":" + pad( seconds );
+    }
+</script>

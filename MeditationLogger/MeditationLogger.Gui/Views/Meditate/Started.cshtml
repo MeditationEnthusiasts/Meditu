@@ -4,8 +4,20 @@
 
 <div class="row">
     <div class="col-md-12">
-        <span id="hour">@Model.TimeRemaining.Value.Hours.ToString("D2")</span>:
-        <span id="minute">@Model.TimeRemaining.Value.Minutes.ToString("D2")</span>:
-        <span id="second">@Model.TimeRemaining.Value.Seconds.ToString("D2")</span>
+        <span id="timerText">
+        @Model.Session.TimeRemaining.Hours.ToString("D2"):@Model.Session.TimeRemaining.Minutes.ToString("D2"):@Model.Session.TimeRemaining.Seconds.ToString("D2")</span>
+    </div>
+</div>
+
+<div class="row">
+    <div span class="col-md-6">
+        <form action="/Meditate/Stop" method="POST">
+            <input class="btn btn-primary" type="submit" value="Stop Meditating!"/>
+        </form>
+    </div>
+    <div span class="col-md-6">
+        <form action="/Meditate/Cancel" method="POST">
+            <input class="btn btn-danger" type="submit" value="Cancel Session"/>
+        </form>
     </div>
 </div>
