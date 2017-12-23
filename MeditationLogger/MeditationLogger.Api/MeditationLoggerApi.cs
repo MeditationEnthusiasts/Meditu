@@ -119,7 +119,7 @@ namespace MeditationLogger.Api
             }
 
             this.currentSession.Log.EndTime = DateTime.Now;
-            this.CurrentState = ApiState.Idle;
+            this.CurrentState = ApiState.Stopped;
         }
 
         /// <summary>

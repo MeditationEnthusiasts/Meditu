@@ -1,0 +1,56 @@
+<noscript>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                You'll be unable to save your location without JavaScript enabled.
+            </div>
+        </div>
+    </div>
+</noscript>
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Save Session
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label>Time Meditated: </label><span>@Model.Session.Log.Duration.TotalMinutes Minutes</span>
+                </div>
+                <form action="/Meditate/Save" method="POST">
+                    <div class="form-group">
+                        <label>Technique:</label>
+                        <input class="form-control" type="text" name="technique"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Comments:</label>
+                        <input class="form-control" type="text" name="comments" rows="3"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Latitude:</label>
+                        <input class="form-control" type="text" name="latitude" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude:</label>
+                        <input class="form-control" type="text" name="longitude" disabled/>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-info">Get Location</button>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Save Session!"/>
+                </form>
+                <form action="/Meditate/Cancel" method="POST">
+                    <div class="form-group">
+                        <input class="btn btn-danger" type="submit" value="Discard Session"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
