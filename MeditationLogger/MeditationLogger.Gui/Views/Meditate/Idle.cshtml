@@ -22,14 +22,14 @@
                 <div class="form-group">
                     <form action="/Meditate/Start" method="POST">
                         <label>Hours:</label>
-                        <select class="form-control" style="float:left;" name="hour">
+                        <select id="hourSelect" class="form-control" name="hour" disabled>
                             @for(int i = 0; i <=24; ++i)
                             {
                                 <option>@i.ToString("D2")</option>
                             }
                         </select>
                         <label>Minutes:</label>
-                        <select class="form-control" style="float:left;" name="minute">
+                        <select id="minuteSelect" class="form-control" name="minute" disabled>
                             @for(int i = 0; i <=59; ++i)
                             {
                                 <option>@i.ToString("D2")</option>
@@ -47,3 +47,13 @@
     <div class="col-md-4">
     </div>
 </div>
+
+<script type="text/javascript">
+    window.onload = function(){
+        var hourSelect = document.getElementById("hourSelect");
+        var minuteSelect = document.getElementById("minuteSelect");
+
+        hourSelect.disabled = false;
+        minuteSelect.disabled = false;
+    };
+</script>

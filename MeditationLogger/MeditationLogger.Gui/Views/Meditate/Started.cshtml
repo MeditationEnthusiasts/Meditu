@@ -2,6 +2,22 @@
 
 @model MeditateModel
 
+<noscript>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                Without JavaScript, the timer will never count up or down.
+                This means that if you want the timer to count down,
+                we won't be able to auto-stop the session for you.
+
+                If you want the timer to count up, it will in the background,
+                but not on this screen. 
+            </div>
+        </div>
+    </div>
+</noscript>
+
 <div class="row">
     <div class="col-md-12">
         <span id="timerText">
