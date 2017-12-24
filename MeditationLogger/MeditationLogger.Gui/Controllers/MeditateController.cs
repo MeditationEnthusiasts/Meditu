@@ -111,7 +111,7 @@ namespace MeditationLogger.Gui.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save( string technique, string comments, double? latitude, double? longitude )
+        public IActionResult Save( string technique, string comments, decimal? latitude, decimal? longitude )
         {
             MeditateModel model = new MeditateModel();
             try
@@ -119,15 +119,8 @@ namespace MeditationLogger.Gui.Controllers
                 SaveSessionParams saveSessionParams = new SaveSessionParams();
                 saveSessionParams.Comments = comments;
                 saveSessionParams.Technique = technique;
-
-                if ( latitude.HasValue )
-                {
-                    saveSessionParams.Latitude = Convert.ToDecimal( latitude.Value );
-                }
-                if ( longitude.HasValue )
-                {
-                    saveSessionParams.Longitude = Convert.ToDecimal( longitude.Value );
-                }
+                saveSessionParams.Latitude = latitude;
+                saveSessionParams.Longitude = longitude;
                 
                 ApiBridge.Instance.SaveSession( saveSessionParams );
                 model.InfoMessage = "Session saved successfully!";
