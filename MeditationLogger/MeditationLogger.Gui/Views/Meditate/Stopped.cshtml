@@ -28,29 +28,120 @@
                     </div>
                     <div class="form-group">
                         <label>Comments:</label>
-                        <input class="form-control" type="text" name="comments" rows="3"/>
+                        <textarea id="comments" class="form-control" rows="10" cols="80" name="comments"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>Latitude:</label>
-                        <input class="form-control" type="text" name="latitude" disabled/>
+                    <div id="locationText">
+                        Location: No Javascript Detected.  Can not save location.
                     </div>
-                    <div class="form-group">
-                        <label>Longitude:</label>
-                        <input class="form-control" type="text" name="longitude" disabled/>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-info">Get Location</button>
-                    </div>
-                    <input class="btn btn-primary" type="submit" value="Save Session!"/>
+                    <input class="btn btn-primary" type="submit" value="Save Session!" id="saveButton"/>
                 </form>
-                <form action="/Meditate/Cancel" method="POST">
-                    <div class="form-group">
-                        <input class="btn btn-danger" type="submit" value="Discard Session"/>
-                    </div>
-                </form>
+                <div class="form-group">
+                    <form action="/Meditate/Cancel" method="POST">
+                        <div class="form-group">
+                            <input class="btn btn-danger" type="submit" value="Discard Session" />
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
     </div>
 </div>
+
+    <script type="text/javascript">
+        var saveButton;
+
+        window.onload = function()
+        {
+            if ( navigator.geolocation )
+            {
+                var locationText = document.getElementById( "locationText" );
+
+                locationText.innerHTML =
+                    '<div class="form-group">' +
+                    '    <label>Latitude:</label>' +
+                    '    <input class="form-control" type="number" id="latitude" name="latitude" readonly="readonly"/>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '    <label>Longitude:</label>' +
+                    '    <input class="form-control" type="number" id="longitude" name="longitude" readonly="readonly"/>' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '    <input id="getLocationButton" class="primary-button pure-button" name="getLocationButton" type="button" onclick="GetLocation()" value="Get Location" />' +
+                    '</div>';
+            }
+            else
+            {
+                locationText.innerHTML = 'Location: Browser does not support saving location.';
+            }
+
+            saveButton = document.getElementById( "saveButton" );
+        }
+
+        function GetLocation()
+        {
+            if ( navigator.geolocation )
+            {
+                var locationButton = document.getElementById( "getLocationButton" );
+                locationButton.value = "Getting Location...";
+
+                // Prevent user from doing something they'll regret doing by disabling the buttons.
+                locationButton.disabled = true;
+                saveButton.disabled = true;
+
+                navigator.geolocation.getCurrentPosition( FillInLocation, HandleLocationError );
+            }
+            else
+            {
+                alert( 'Browser does not support saving location.' );
+            }
+        }
+
+        function FillInLocation( position )
+        {
+            // Once we get the location, set the text boxes.
+            document.getElementById( "latitude" ).value = position.coords.latitude;
+            document.getElementById( "longitude" ).value = position.coords.longitude;
+
+            // Renable the save button, but not the get location button (we already got the location).
+            saveButton.disabled = false;
+            document.getElementById( "getLocationButton" ).value = "Got Location";
+        }
+
+        /// <summary>
+        /// Handles the error for getting the location.
+        /// </summary>
+        /// <param name="errir">The error received</param>
+        function HandleLocationError( error )
+        {
+            var errorMessage;
+            switch( error.code )
+            {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "Access to location was denied.";
+                    break;
+
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Position is not available.  Please try again.";
+                    break;
+
+                case error.TIMEOUT:
+                    errorMesssage = "Timed out trying to get location.  Please try again.";
+                    break;
+
+                default:
+                    errorMessage = "Unknown error when trying to get location, please try again.";
+                    break;
+            }
+
+            alert( errorMessage );
+
+            // Renable the save button, and the get location button in case the user wishes to try again.
+            saveButton.disabled = false;
+
+            var locationButton = document.getElementById( "getLocationButton" );
+            locationButton.value = "Get Location";
+            locationButton.disabled = false;
+        }
+</script>

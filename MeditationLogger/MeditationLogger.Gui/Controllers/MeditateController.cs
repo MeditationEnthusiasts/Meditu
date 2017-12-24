@@ -49,7 +49,8 @@ namespace MeditationLogger.Gui.Controllers
 
             MeditateModel model = new MeditateModel();
             model.ApiState = ApiBridge.Instance.CurrentState;
-            if ( model.ApiState == ApiState.Started )
+
+            if ( model.ApiState != ApiState.Idle )
             {
                 model.Session = ApiBridge.Instance.CurrentSession;
             }
@@ -110,7 +111,7 @@ namespace MeditationLogger.Gui.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save( string technique, string comments, decimal? latitude, decimal? longitude )
+        public IActionResult Save( string technique, string comments, double? latitude, double? longitude )
         {
             MeditateModel model = new MeditateModel();
             try
@@ -118,9 +119,16 @@ namespace MeditationLogger.Gui.Controllers
                 SaveSessionParams saveSessionParams = new SaveSessionParams();
                 saveSessionParams.Comments = comments;
                 saveSessionParams.Technique = technique;
-                saveSessionParams.Latitude = latitude;
-                saveSessionParams.Longitude = longitude;
 
+                if ( latitude.HasValue )
+                {
+                    saveSessionParams.Latitude = Convert.ToDecimal( latitude.Value );
+                }
+                if ( longitude.HasValue )
+                {
+                    saveSessionParams.Longitude = Convert.ToDecimal( longitude.Value );
+                }
+                
                 ApiBridge.Instance.SaveSession( saveSessionParams );
                 model.InfoMessage = "Session saved successfully!";
             }
