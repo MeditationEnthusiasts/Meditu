@@ -5,19 +5,13 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.Gui", "MeditationLogger.Gui\MeditationLogger.Gui.csproj", "{5C64362E-553D-4B76-B735-B0251ADFD8E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibSethCS", "..\SethCS\LibSethCS\LibSethCS.csproj", "{296FE0A3-BAEA-4234-AE51-C01EC3F9C153}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.Api", "MeditationLogger.Api\MeditationLogger.Api.csproj", "{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationLogger.UnitTests", "MeditationLogger.UnitTests\MeditationLogger.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.UnitTests", "MeditationLogger.UnitTests\MeditationLogger.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS.Core", "..\SethCS\SethCS\LibSethCS.Core.csproj", "{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\SethCS\SethCS\SethCS.projitems*{296fe0a3-baea-4234-ae51-c01ec3f9c153}*SharedItemsImports = 4
-		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -27,10 +21,6 @@ Global
 		{5C64362E-553D-4B76-B735-B0251ADFD8E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C64362E-553D-4B76-B735-B0251ADFD8E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C64362E-553D-4B76-B735-B0251ADFD8E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{296FE0A3-BAEA-4234-AE51-C01EC3F9C153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{296FE0A3-BAEA-4234-AE51-C01EC3F9C153}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{296FE0A3-BAEA-4234-AE51-C01EC3F9C153}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{296FE0A3-BAEA-4234-AE51-C01EC3F9C153}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +29,10 @@ Global
 		{AFFDD4DD-45F9-492C-8934-FA957BFC3696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFFDD4DD-45F9-492C-8934-FA957BFC3696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFFDD4DD-45F9-492C-8934-FA957BFC3696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
