@@ -3,17 +3,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ElectronNET.API" Version="0.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <PackageReference Include="ElectronNET.API" Version="0.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.All" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SethCS\SethCS\LibSethCS.Core.csproj" />
+    <ProjectReference Include="..\..\SethCS\SethCS\LibSethCS.Standard.csproj" />
     <ProjectReference Include="..\MeditationLogger.Api\MeditationLogger.Api.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="ElectronNET.CLI" Version="*" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">

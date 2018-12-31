@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.Api", "Med
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.UnitTests", "MeditationLogger.UnitTests\MeditationLogger.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS.Core", "..\SethCS\SethCS\LibSethCS.Core.csproj", "{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS.Standard", "..\SethCS\SethCS\LibSethCS.Standard.csproj", "{E0D8C5AA-D7E2-4833-8451-D0A1A7827A37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{AFFDD4DD-45F9-492C-8934-FA957BFC3696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFFDD4DD-45F9-492C-8934-FA957BFC3696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFFDD4DD-45F9-492C-8934-FA957BFC3696}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C5E1E8E-63AA-45CD-8A80-2DD2E41B6DE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0D8C5AA-D7E2-4833-8451-D0A1A7827A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0D8C5AA-D7E2-4833-8451-D0A1A7827A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0D8C5AA-D7E2-4833-8451-D0A1A7827A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0D8C5AA-D7E2-4833-8451-D0A1A7827A37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
