@@ -5,3 +5,4 @@ Release
 obj
 packages
 .vs
+/MeditationLogger/dist
