@@ -19,7 +19,7 @@
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <label>Time Meditated: </label><span>@Model.Session.Log.Duration.TotalMinutes Minutes</span>
+                    <label>Time Meditated: </label><span>@Model.Session.Log.Duration.TotalMinutes.ToString( "F" ) Minutes</span>
                 </div>
                 <form action="/Meditate/Save" method="POST">
                     <div class="form-group">
@@ -35,7 +35,7 @@
                     </div>
                     <input class="btn btn-primary" type="submit" value="Save Session!" id="saveButton"/>
                 </form>
-                <div class="form-group">
+                <div class="form-group" style="margin-top:1em;">
                     <form action="/Meditate/Cancel" method="POST">
                         <div class="form-group">
                             <input class="btn btn-danger" type="submit" value="Discard Session" />
