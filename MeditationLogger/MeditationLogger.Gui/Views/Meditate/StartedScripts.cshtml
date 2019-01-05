@@ -15,7 +15,8 @@
         RefreshDocument();
     }
 
-    window.setInterval( OnTick, 1000 );
+    var timer = window.setInterval(OnTick, 1000);
+    var expired = false;
 
     function pad( num ){
         if ( num < 10 ){
@@ -35,13 +36,20 @@
         }
         RefreshDocument()
 
-        if ( ticks <= 0 ){
-            // Auto POST to Stop (TODO)!
+        if (ticks <= 0) {
+            window.clearInterval(timer);
+            if (expired === false) {
+                document.getElementById("stopButton").form.submit();
+            }
+            expired = true;
         }
     }
 
-    function RefreshDocument(){
+    function RefreshDocument() {
         var count = ticks;
+        if (count < 0) {
+            count = 0;
+        }
         var hours = Math.floor( count / 3600 ); // 3600 seconds in an hour
         count = count - ( hours * 3600 );
         var minutes = Math.floor( count / 60 ); // 60 seconds in a minute.
