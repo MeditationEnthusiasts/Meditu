@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
     <ProjectReference Include="..\MeditationLogger.Api\MeditationLogger.Api.csproj" />
   </ItemGroup>
 
