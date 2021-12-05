@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS", "..\SethCS\LibS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.Analyzer", "..\SethCS\Seth.Analyzer\Seth.Analyzer.csproj", "{69B7D655-F297-4232-872E-85CDA2A91F2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevOps", "DevOps\DevOps.csproj", "{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.CakeLib", "..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj", "{D71DD268-3419-445C-9A98-874DE33F4339}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
@@ -45,6 +49,14 @@ Global
 		{69B7D655-F297-4232-872E-85CDA2A91F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69B7D655-F297-4232-872E-85CDA2A91F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69B7D655-F297-4232-872E-85CDA2A91F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D71DD268-3419-445C-9A98-874DE33F4339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D71DD268-3419-445C-9A98-874DE33F4339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D71DD268-3419-445C-9A98-874DE33F4339}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D71DD268-3419-445C-9A98-874DE33F4339}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
