@@ -25,7 +25,7 @@ namespace DevOps.Tasks
 {
     [TaskName( "unit_test" )]
     [TaskDescription( "Runs all the unit tests.  Pass in --code_coverage=true to run with coverage." )]
-    public class RunUnitTestTask : DefaultTask
+    public sealed class RunUnitTestTask : DefaultTask
     {
         // ----------------- Functions -----------------
 

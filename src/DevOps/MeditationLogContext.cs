@@ -32,6 +32,10 @@ namespace DevOps
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
             this.SlnPath = this.SrcPath.CombineWithFilePath( new FilePath( "MeditationLogger.sln" ) );
+            this.DockerPath = this.RepoRoot.Combine( new DirectoryPath( "Docker" ) );
+            this.GuiCsProject = this.SrcPath.CombineWithFilePath(
+                new FilePath( "MeditationLogger.Gui/MeditationLogger.Gui.csproj" )
+            );
 
 #if DEBUG
             this.RunningRelease = false;
@@ -46,7 +50,11 @@ namespace DevOps
 
         public DirectoryPath SrcPath { get; private set; }
 
+        public DirectoryPath DockerPath { get; private set; }
+
         public FilePath SlnPath { get; private set; }
+
+        public FilePath GuiCsProject { get; private set; }
 
         public bool RunningRelease { get; set; }
     }

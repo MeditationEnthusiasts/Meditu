@@ -27,6 +27,8 @@ namespace DevOps
         // ---------------- Fields ----------------
 
         public static readonly Version Version = new Version( 0, 4, 0 );
+
+        public static readonly string VersionString = Version.ToString( 3 );
     }
 #if CAKE
 #else

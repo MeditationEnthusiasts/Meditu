@@ -35,16 +35,8 @@ namespace DevOps
         /// <param name="configuration">The configuration to use (e.g. Debug, Release, etc.).</param>
         public static void DoMsBuild( ICakeContext context, FilePath sln, string configuration )
         {
-            string versString = VersionInfo.Version.ToString( 3 );
-            var msBuildSettings = new DotNetCoreMSBuildSettings
-            {
-                WorkingDirectory = sln.GetDirectory().ToString()
-            }
-            .WithProperty( "Version", versString )
-            .WithProperty( "AssemblyVersion", versString )
-            .WithProperty( "FileVersion", versString )
-            .SetMaxCpuCount( Environment.ProcessorCount )
-            .SetConfiguration( configuration );
+            DotNetCoreMSBuildSettings msBuildSettings = GetMsBuildSettings( configuration );
+            msBuildSettings.WorkingDirectory = sln.GetDirectory().ToString();
 
             var settings = new DotNetCoreBuildSettings
             {
@@ -52,6 +44,21 @@ namespace DevOps
             };
 
             context.DotNetCoreBuild( sln.ToString(), settings );
+        }
+
+        public static DotNetCoreMSBuildSettings GetMsBuildSettings( string configuration )
+        {
+            string versString = VersionInfo.VersionString;
+            var msBuildSettings = new DotNetCoreMSBuildSettings
+            {
+            }
+            .WithProperty( "Version", versString )
+            .WithProperty( "AssemblyVersion", versString )
+            .WithProperty( "FileVersion", versString )
+            .SetMaxCpuCount( Environment.ProcessorCount )
+            .SetConfiguration( configuration );
+
+            return msBuildSettings;
         }
     }
 

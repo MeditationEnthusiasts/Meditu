@@ -25,7 +25,7 @@ using Seth.CakeLib;
 namespace DevOps.Tasks
 {
     [TaskName( "update_licenses" )]
-    public class UpdateLicenseHeaderTask : DefaultTask
+    public sealed class UpdateLicenseHeaderTask : DefaultTask
     {
         // ---------------- Fields ----------------
 
