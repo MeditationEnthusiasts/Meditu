@@ -16,35 +16,25 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using Cake.Core;
-using Cake.Core.IO;
+using System.Runtime.ExceptionServices;
+using Cake.Common.Diagnostics;
 using Cake.Frosting;
 
 namespace DevOps
 {
-    public sealed class MeditationLogContext : FrostingContext
+    public class DefaultTask : FrostingTask<MeditationLogContext>
     {
-        // ---------------- Constructor ----------------
+        // ---------------- Functions ----------------
 
-        public MeditationLogContext( ICakeContext context ) :
-            base( context )
+        public override void OnError( Exception exception, MeditationLogContext context )
         {
-            this.RepoRoot = context.Environment.WorkingDirectory;
-            this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
-
-#if DEBUG
-            this.RunningRelease = false;
-#else
-            this.RunningRelease = true;
-#endif
+            // We want the stack trace to print out when all is said and done.
+            // The way to do this is to set the verbosity to the maximum,
+            // and then re-throw the exception.  Use the weird DispatchInfo
+            // class so we don't get a new stack trace.
+            // We need to re-throw the exception, or cake will exit with a zero exit code.
+            context.DiagnosticVerbosity();
+            ExceptionDispatchInfo.Capture( exception ).Throw();
         }
-
-        // ---------------- Properties ----------------
-
-        public DirectoryPath RepoRoot { get; private set; }
-
-        public DirectoryPath SrcPath { get; private set; }
-
-        public bool RunningRelease { get; set; }
     }
 }

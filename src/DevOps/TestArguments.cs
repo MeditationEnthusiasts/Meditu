@@ -16,35 +16,30 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using Cake.Core;
-using Cake.Core.IO;
-using Cake.Frosting;
+using Cake.ArgumentBinder;
 
 namespace DevOps
 {
-    public sealed class MeditationLogContext : FrostingContext
+    internal class TestArguments
     {
+        // ---------------- Fields ----------------
+
+        public static readonly string CoverageFilter = "+[*]MeditationLogger*";
+
         // ---------------- Constructor ----------------
 
-        public MeditationLogContext( ICakeContext context ) :
-            base( context )
+        public TestArguments()
         {
-            this.RepoRoot = context.Environment.WorkingDirectory;
-            this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
-
-#if DEBUG
-            this.RunningRelease = false;
-#else
-            this.RunningRelease = true;
-#endif
+            this.RunWithCodeCoverage = false;
         }
 
         // ---------------- Properties ----------------
 
-        public DirectoryPath RepoRoot { get; private set; }
-
-        public DirectoryPath SrcPath { get; private set; }
-
-        public bool RunningRelease { get; set; }
+        [BooleanArgument(
+            "code_coverage",
+            Description = "Should we run this with code coverage?",
+            DefaultValue = false
+        )]
+        public bool RunWithCodeCoverage { get; set; }
     }
 }

@@ -18,9 +18,8 @@
 
 #if CAKE
 #else
-using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.Build;
-using Cake.Common.Tools.DotNet.MSBuild;
+using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNetCore.Build;
 using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
@@ -37,7 +36,7 @@ namespace DevOps
         public static void DoMsBuild( ICakeContext context, FilePath sln, string configuration )
         {
             string versString = VersionInfo.Version.ToString( 3 );
-            var msBuildSettings = new DotNetMSBuildSettings
+            var msBuildSettings = new DotNetCoreMSBuildSettings
             {
                 WorkingDirectory = sln.GetDirectory().ToString()
             }
@@ -47,12 +46,12 @@ namespace DevOps
             .SetMaxCpuCount( Environment.ProcessorCount )
             .SetConfiguration( configuration );
 
-            var settings = new DotNetBuildSettings
+            var settings = new DotNetCoreBuildSettings
             {
                 MSBuildSettings = msBuildSettings
             };
 
-            context.DotNetBuild( sln.ToString(), settings );
+            context.DotNetCoreBuild( sln.ToString(), settings );
         }
     }
 
