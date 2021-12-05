@@ -1,19 +1,19 @@
-﻿//
-// Meditation Logger.
-// Copyright (C) 2017  Seth Hendrick.
 //
+// MeditationLogger - A way to track Meditation Sessions.
+// Copyright (C) 2017-2021 Seth Hendrick
+// 
 // This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// any later version.
+// 
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
 using Cake.Common.Solution;
@@ -52,21 +52,21 @@ namespace DevOps.Tasks
 
         const string oldLicense =
 @"^//
-//\s*Meditation Logger\.
-//\s*Copyright (C) \d+\s+Seth Hendrick\.
+//\s*Meditation\s+Logger\.
+//\s*Copyright\s+\(C\)\s+\d+\s+Seth Hendrick\.
 //\s*
-//\s*This program is free software: you can redistribute it and/or modify
-//\s*it under the terms of the GNU General Public License as published by
-//\s*the Free Software Foundation, either version 3 of the License, or
-//\s*\(at your option\) any later version\.
+//\s*This\s+program\s+is\s+free\s+software:\s+you\s+can\s+redistribute\s+it\s+and/or\s+modify
+//\s*it\s+under\s+the\s+terms\s+of\s+the\s+GNU\s+General\s+Public\s+License\s+as\s+published\s+by
+//\s*the\s+Free\s+Software\s+Foundation,\s+either\s+version\s+3\s+of\s+the\s+License,\s+or
+//\s*\(at\s+your\s+option\)\s+any\s+later\s+version\.
 //\s*
-//\s*This program is distributed in the hope that it will be useful,
-//\s*but WITHOUT ANY WARRANTY; without even the implied warranty of
-//\s*MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\.  See the
-//\s*GNU General Public License for more details\.
+//\s*This\s+program\s+is\s+distributed\s+in\s+the\s+hope\s+that\s+it\s+will\s+be\s+useful,
+//\s*but\s+WITHOUT\s+ANY\s+WARRANTY;\s+without\s+even\s+the\s+implied\s+warranty\s+of
+//\s*MERCHANTABILITY\s+or\s+FITNESS\s+FOR\s+A\s+PARTICULAR\s+PURPOSE\.\s+\s+See\s+the
+//\s*GNU\s+General\s+Public\s+License\s+for\s+more\s+details\.
 //\s*
-//\s*You should have received a copy of the GNU General Public License
-//\s*along with this program\.  If not, see <http://www\.gnu\.org/licenses/>\.
+//\s*You\s+should\s+have\s+received\s+a\s+copy\s+of\s+the\s+GNU\s+General\s+Public\s+License
+//\s*along\s+with\s+this\s+program\.\s+\s+If\s+not,\s+see\s+<http://www\.gnu\.org/licenses/>\.
 //[\n\r\s]*";
 
         // ---------------- Functions ----------------
