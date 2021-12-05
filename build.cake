@@ -1,134 +1,67 @@
-string target = Argument( "target", "build" );
+// ---------------- Includes ----------------
 
-const string version = "0.4.0"; // This is the version of Meditation Logger.  Update before releasing.
-const string makeRelaseTarget = "make_release";
-const string armBuildTarget = "arm_linux";
-const string allTarget = "all";
+#load src/DevOps/VersionInfo.cs
+#load src/DevOps/MsBuildHelpers.cs
 
-bool isRelease = ( target == makeRelaseTarget ) || ( target == armBuildTarget ) || ( target == allTarget );
+// ---------------- Constants ----------------
 
-DotNetCoreMSBuildSettings msBuildSettings = new DotNetCoreMSBuildSettings();
+const string target = "run_devops";
+const string buildTask = "build";
+bool forceBuild = Argument<bool>( "force_build", false );
+string targetArg = Argument( "target", string.Empty );
 
-// Sets Meditation Loggers's assembly version.
-msBuildSettings.WithProperty( "Version", version )
-    .WithProperty( "AssemblyVersion", version )
-    .SetMaxCpuCount( System.Environment.ProcessorCount )
-    .WithProperty( "FileVersion", version );
+FilePath devopsExe = File( "./src/DevOps/bin/Debug/net6.0/DevOps.dll" );
+FilePath sln = File( "./src/MeditationLogger.sln" );
 
-const string distFolder = "./dist";
-string configuration;
-if ( isRelease )
+// ---------------- Targets ----------------
+
+Task( buildTask )
+.Does(
+    ( context ) =>
+    {
+        if( forceBuild == false )
+        {
+            Information( "DevOps.dll not found, compiling" );
+        }
+
+        MsBuildHelpers.DoMsBuild( context, sln, "Debug" );
+    }
+)
+.Description( "Builds with Debug turned on." );
+
+var runTask = Task( target )
+.Does(
+    () =>
+    {
+        List<string> args = new List<string>( System.Environment.GetCommandLineArgs() );
+        args.RemoveAt( 0 );
+        args.Insert( 0, devopsExe.ToString() );
+
+        ProcessSettings processSettings = new ProcessSettings
+        {
+            Arguments = ProcessArgumentBuilder.FromStrings( args )
+        };
+
+        int exitCode = StartProcess( "dotnet", processSettings );
+        if( exitCode != 0 )
+        {
+            throw new Exception( $"DevOps.exe Exited with exit code: {exitCode}" );
+        }
+    }
+);
+
+if( forceBuild || ( FileExists( devopsExe ) == false ) )
 {
-    configuration = "Release";
-    msBuildSettings.WithProperty( "TrimUnusedDependencies", "true" );
+    runTask.IsDependentOn( buildTask );
+}
+
+// ---------------- Run ----------------
+
+if( targetArg == buildTask )
+{
+    RunTarget( targetArg );
 }
 else
 {
-    configuration = "Debug";
+    RunTarget( target );
 }
-
-msBuildSettings.SetConfiguration( configuration );
-
-Task( "build" )
-.Does(
-    () => 
-    {
-        DotNetCoreBuildSettings settings = new DotNetCoreBuildSettings
-        {
-            MSBuildSettings = msBuildSettings
-        };
-        DotNetCoreBuild( "./MeditationLogger.sln", settings );
-    }
-)
-.Description( "Compiles Meditation Logger." );
-
-Task( "unit_test" )
-.Does(
-    () =>
-    {
-		DotNetCoreTestSettings settings = new DotNetCoreTestSettings
-		{
-			NoBuild = true,
-			NoRestore = true,
-            Configuration = configuration
-		};
-        DotNetCoreTest( "./MeditationLogger.UnitTests/MeditationLogger.UnitTests.csproj", settings );
-    }
-)
-.IsDependentOn( "build" )
-.Description( "Runs Meditation Loggers's Tests." );
-
-void DoRelease( string target )
-{
-    const string workingDirectory = "./MeditationLogger.Gui";
-
-    ProcessSettings settings = new ProcessSettings
-    {
-        WorkingDirectory = workingDirectory,
-        Arguments = "version"
-    };
-
-    int exitCode = StartProcess( "electronize", settings );
-    if ( exitCode != 0 )
-    {
-        throw new Exception( "Could not get Electron's Version.  Exit Code: " + exitCode );
-    }
-
-    settings.Arguments = "build /target " + target;
-    exitCode = StartProcess( "electronize", settings );
-    if ( exitCode != 0 )
-    {
-        throw new Exception( "Could build target '" + target + "'. Exit Code: " + exitCode );
-    }
-}
-
-Task( makeRelaseTarget )
-.Does(
-    () =>
-    {
-        string outputDir = System.IO.Path.Combine( distFolder, configuration + "-desktop" );
-        CleanDirectories( outputDir );
-
-        DoRelease( "win" );
-        DoRelease( "osx" );
-        DoRelease( "linux" );
-
-        Information( "Copying to Dist folder" );
-        CopyDirectory( "./MeditationLogger.Gui/bin/desktop", outputDir );
-    }
-)
-.IsDependentOn( "unit_test" )
-.Description( "Makes the Electron App." );
-
-Task( armBuildTarget )
-.Does(
-    () =>
-    {
-        string output = System.IO.Path.Combine(
-            distFolder,
-            configuration + "-arm_Linux"
-        );
-
-        CleanDirectories( output );
-
-        DotNetCorePublishSettings winSettings = new DotNetCorePublishSettings
-        {
-            OutputDirectory = output,
-            Configuration = "Release",
-            Runtime = "linux-arm",
-            MSBuildSettings = msBuildSettings,
-            NoBuild = false,
-            NoRestore = false
-        };
-
-        DotNetCorePublish( "./MeditationLogger.Gui/MeditationLogger.Gui.csproj", winSettings );
-    }
-).IsDependentOn( "unit_test" )
-.Description( "Builds and publishes for Linux Arm (e.g. a Raspberry Pi)" );
-
-Task( allTarget )
-.IsDependentOn( makeRelaseTarget )
-.IsDependentOn( armBuildTarget )
-.Description( "Builds ALL targets for release" );
-
-RunTarget( target );
