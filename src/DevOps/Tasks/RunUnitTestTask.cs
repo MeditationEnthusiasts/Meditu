@@ -28,6 +28,7 @@ namespace DevOps.Tasks
     public class RunUnitTestTask : DefaultTask
     {
         // ----------------- Functions -----------------
+
         public override void Run( MeditationLogContext context )
         {
             TestConfig testConfig = new TestConfig

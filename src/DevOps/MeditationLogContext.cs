@@ -31,6 +31,7 @@ namespace DevOps
         {
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
+            this.SlnPath = this.SrcPath.CombineWithFilePath( new FilePath( "MeditationLogger.sln" ) );
 
 #if DEBUG
             this.RunningRelease = false;
@@ -44,6 +45,8 @@ namespace DevOps
         public DirectoryPath RepoRoot { get; private set; }
 
         public DirectoryPath SrcPath { get; private set; }
+
+        public FilePath SlnPath { get; private set; }
 
         public bool RunningRelease { get; set; }
     }
