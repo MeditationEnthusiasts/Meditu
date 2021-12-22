@@ -1,2 +1,3 @@
-# MeditationLoggerV2
+# Meditu
 A (hopefully) cleaner implementation of MeditationLogger.
+
