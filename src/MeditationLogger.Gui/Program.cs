@@ -21,7 +21,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using SethCS.Exceptions;
 
-namespace MeditationLogger.Gui
+namespace Meditu.Gui
 {
     public class Program
     {

@@ -18,7 +18,7 @@
 
 using System;
 
-namespace MeditationLogger.Api
+namespace Meditu.Api
 {
     /// <summary>
     /// This is the current session information.

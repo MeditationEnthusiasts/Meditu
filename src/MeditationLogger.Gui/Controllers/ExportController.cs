@@ -20,11 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using MeditationLogger.Api;
+using Meditu.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MeditationLogger.Gui.Controllers
+namespace Meditu.Gui.Controllers
 {
     public class ExportController : Controller
     {

@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace MeditationLogger.Api
+namespace Meditu.Api
 {
     public static class XmlLoader
     {

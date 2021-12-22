@@ -18,7 +18,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace MeditationLogger.Gui.Controllers
+namespace Meditu.Gui.Controllers
 {
     /// <summary>
     /// Controller for the about page.

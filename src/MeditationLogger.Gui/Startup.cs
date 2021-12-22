@@ -25,7 +25,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace MeditationLogger.Gui
+namespace Meditu.Gui
 {
     public class Startup
     {

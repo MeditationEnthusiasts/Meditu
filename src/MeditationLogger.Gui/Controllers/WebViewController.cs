@@ -23,7 +23,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc;
 using SethCS.Exceptions;
 
-namespace MeditationLogger.Gui.Controllers
+namespace Meditu.Gui.Controllers
 {
     public class WebViewController : Controller
     {

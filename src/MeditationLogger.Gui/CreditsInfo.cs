@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 
-namespace MeditationLogger.Gui
+namespace Meditu.Gui
 {
     public struct CreditsInfo
     {

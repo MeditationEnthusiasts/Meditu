@@ -26,7 +26,7 @@ using LiteDB;
 using SethCS.Collections;
 using SethCS.Extensions;
 
-namespace MeditationLogger.Api
+namespace Meditu.Api
 {
     /// <summary>
     /// This class keeps track of all the logs.

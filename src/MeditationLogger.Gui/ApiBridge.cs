@@ -17,9 +17,9 @@
 //
 
 using System;
-using MeditationLogger.Api;
+using Meditu.Api;
 
-namespace MeditationLogger.Gui
+namespace Meditu.Gui
 {
     /// <summary>
     /// The bridge to the API.

@@ -17,10 +17,10 @@
 //
 
 using System;
-using MeditationLogger.Api;
+using Meditu.Api;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MeditationLogger.Gui.Controllers
+namespace Meditu.Gui.Controllers
 {
     public class MeditateModel
     {

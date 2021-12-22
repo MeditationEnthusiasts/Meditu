@@ -18,11 +18,11 @@
 
 using System;
 using System.Xml;
-using MeditationLogger.Api;
+using Meditu.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SethCS.Exceptions;
 
-namespace MeditationLogger.UnitTests
+namespace Meditu.UnitTests
 {
     [TestClass]
     public class LogTests

@@ -23,7 +23,7 @@ using LiteDB;
 using SethCS.Exceptions;
 using SethCS.Extensions;
 
-namespace MeditationLogger.Api
+namespace Meditu.Api
 {
     /// <summary>
     /// This class represents a specific instance

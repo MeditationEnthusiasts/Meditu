@@ -20,7 +20,7 @@ using System;
 using System.Text;
 using SethCS.Exceptions;
 
-namespace MeditationLogger.Api
+namespace Meditu.Api
 {
     /// <summary>
     /// Parameters for starting a session.

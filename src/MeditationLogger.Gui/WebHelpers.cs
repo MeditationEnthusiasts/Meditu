@@ -18,7 +18,7 @@
 
 using ElectronNET.API;
 
-namespace MeditationLogger.Gui
+namespace Meditu.Gui
 {
     /// <summary>
     /// This class has helper functions that are useful while rendering HTML.

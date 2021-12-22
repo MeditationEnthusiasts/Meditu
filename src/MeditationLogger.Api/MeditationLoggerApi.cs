@@ -18,7 +18,7 @@
 
 using System;
 
-namespace MeditationLogger.Api
+namespace Meditu.Api
 {
     /// <summary>
     /// The API to Meditation Logger.

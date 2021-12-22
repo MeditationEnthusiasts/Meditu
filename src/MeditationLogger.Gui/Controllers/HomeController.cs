@@ -17,10 +17,10 @@
 //
 
 using System.Collections.Generic;
-using MeditationLogger.Api;
+using Meditu.Api;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MeditationLogger.Gui.Controllers
+namespace Meditu.Gui.Controllers
 {
     /// <summary>
     /// The main home page of the app.
