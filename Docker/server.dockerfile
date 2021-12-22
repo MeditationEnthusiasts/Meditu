@@ -8,4 +8,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 COPY bin/ App/
 
 WORKDIR /App
-ENTRYPOINT [ "dotnet", "MeditationLogger.Gui.dll" ]
+ENTRYPOINT [ "dotnet", "Meditu.Gui.dll" ]

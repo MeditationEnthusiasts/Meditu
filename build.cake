@@ -11,7 +11,7 @@ bool forceBuild = Argument<bool>( "force_build", false );
 string targetArg = Argument( "target", string.Empty );
 
 FilePath devopsExe = File( "./src/DevOps/bin/Debug/net6.0/DevOps.dll" );
-FilePath sln = File( "./src/MeditationLogger.sln" );
+FilePath sln = File( "./src/Meditu.sln" );
 
 // ---------------- Targets ----------------
 

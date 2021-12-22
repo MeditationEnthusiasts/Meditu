@@ -34,7 +34,7 @@ namespace DevOps.Tasks
             TestConfig testConfig = new TestConfig
             {
                 ResultsFolder = context.RepoRoot.Combine( new DirectoryPath( "TestResults" ) ),
-                TestCsProject = context.SrcPath.CombineWithFilePath( new FilePath( "MeditationLogger.UnitTests/MeditationLogger.UnitTests.csproj" ) )
+                TestCsProject = context.SrcPath.CombineWithFilePath( new FilePath( "Meditu.UnitTests/Meditu.UnitTests.csproj" ) )
             };
             UnitTestRunner runner = new UnitTestRunner( context, testConfig );
 

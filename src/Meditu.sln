@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.Gui", "MeditationLogger.Gui\Meditu.Gui.csproj", "{5C64362E-553D-4B76-B735-B0251ADFD8E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.Gui", "Meditu.Gui\Meditu.Gui.csproj", "{5C64362E-553D-4B76-B735-B0251ADFD8E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.Api", "MeditationLogger.Api\Meditu.Api.csproj", "{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.Api", "Meditu.Api\Meditu.Api.csproj", "{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.UnitTests", "MeditationLogger.UnitTests\Meditu.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.UnitTests", "Meditu.UnitTests\Meditu.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
 EndProject

@@ -8,7 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
-    <ProjectReference Include="..\MeditationLogger.Api\Meditu.Api.csproj" />
+    <ProjectReference Include="..\Meditu.Api\Meditu.Api.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">
