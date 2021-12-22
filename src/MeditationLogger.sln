@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.Gui", "MeditationLogger.Gui\MeditationLogger.Gui.csproj", "{5C64362E-553D-4B76-B735-B0251ADFD8E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.Gui", "MeditationLogger.Gui\Meditu.Gui.csproj", "{5C64362E-553D-4B76-B735-B0251ADFD8E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.Api", "MeditationLogger.Api\MeditationLogger.Api.csproj", "{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.Api", "MeditationLogger.Api\Meditu.Api.csproj", "{C1577860-92DD-4B68-85D4-DEF62B0CCB6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeditationLogger.UnitTests", "MeditationLogger.UnitTests\MeditationLogger.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Meditu.UnitTests", "MeditationLogger.UnitTests\Meditu.UnitTests.csproj", "{AFFDD4DD-45F9-492C-8934-FA957BFC3696}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCS", "..\SethCS\SethCS\SethCS.shproj", "{52089274-B9A2-4A47-A221-C321DEE1CE7F}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSethCS", "..\SethCS\LibS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.Analyzer", "..\SethCS\Seth.Analyzer\Seth.Analyzer.csproj", "{69B7D655-F297-4232-872E-85CDA2A91F2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevOps", "DevOps\DevOps.csproj", "{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevOps", "DevOps\DevOps.csproj", "{10DFE9D6-6A4E-44AB-9778-EEB7FF4EB7A5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.CakeLib", "..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj", "{D71DD268-3419-445C-9A98-874DE33F4339}"
 EndProject

@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -14,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
-    <ProjectReference Include="..\MeditationLogger.Api\MeditationLogger.Api.csproj" />
+    <ProjectReference Include="..\MeditationLogger.Api\Meditu.Api.csproj" />
   </ItemGroup>
 
 </Project>
