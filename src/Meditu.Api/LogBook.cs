@@ -56,7 +56,7 @@ namespace Meditu.Api
 
         private LiteDatabase db;
 
-        private LiteCollection<Log> col;
+        private ILiteCollection<Log> col;
 
         // -------- Shortcut Fields --------
 
@@ -152,8 +152,15 @@ namespace Meditu.Api
                 throw new InvalidOperationException( "Database is already open!" );
             }
 
-            this.db = new LiteDatabase( dbLocation );
-            this.col = this.db.GetCollection<Log>( "logs" );
+            var connectionString = new ConnectionString
+            {
+                Upgrade = true,
+                Filename = dbLocation,
+                Connection = ConnectionType.Shared // <- So multiple threads can access it without issue.
+            };
+
+            this.db = new LiteDatabase( connectionString );
+            this.col = this.db.GetCollection<Log>();
         }
 
         public void Dispose()
