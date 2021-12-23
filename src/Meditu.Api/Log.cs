@@ -128,11 +128,9 @@ namespace Meditu.Api
             }
             set
             {
-                ArgumentNullException.ThrowIfNull( value, nameof( Comments ) );
-
                 // By default, LiteDB calls trim on strings when saving to the database.
                 // We should do the same.
-                this.comments = value.Trim();
+                this.comments = ( value ?? string.Empty ).Trim();
             }
         }
 
@@ -147,11 +145,9 @@ namespace Meditu.Api
             }
             set
             {
-                ArgumentNullException.ThrowIfNull( value, nameof( Comments ) );
-
                 // By default, LiteDB calls trim on strings when saving to the database.
                 // We should do the same.
-                this.technique = value.Trim();
+                this.technique = ( value ?? string.Empty ).Trim();
             }
         }
 

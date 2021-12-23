@@ -49,9 +49,11 @@ namespace Meditu.UnitTests
             // Should validate out the gate.
             uut.Validate();
 
-            // Comments can not be null.
+            // Comments can not be null, but we'll
+            // make a null equal to empty string.
             Log badLog = uut.Clone();
-            Assert.ThrowsException<ArgumentNullException>( () => { badLog.Comments = null; } );
+            badLog.Comments = null;
+            Assert.AreEqual( string.Empty, badLog.Comments );
 
             // Start time can not be after end time.
             badLog = uut.Clone();
@@ -75,9 +77,11 @@ namespace Meditu.UnitTests
             badLog.Longitude = null;
             Assert.ThrowsException<ValidationException>( () => badLog.Validate() );
 
-            // Technique can not be null.
+            // Technique can not be null, but we'll
+            // make a null equal to empty string.
             badLog = uut.Clone();
-            Assert.ThrowsException<ArgumentNullException>( () => { badLog.Technique = null; } );
+            badLog.Technique = null;
+            Assert.AreEqual( string.Empty, badLog.Technique );
         }
 
         [TestMethod]
