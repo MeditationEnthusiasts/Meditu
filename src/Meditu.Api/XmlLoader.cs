@@ -62,7 +62,9 @@ namespace Meditu.Api
 
             foreach( XmlNode logNode in rootNode.ChildNodes )
             {
-                logs.Add( Log.FromXml( logNode ) );
+                var log = new Log();
+                log.FromXml( logNode );
+                logs.Add( log );
             }
 
             return logs;

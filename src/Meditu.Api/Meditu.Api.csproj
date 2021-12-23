@@ -12,4 +12,11 @@
     <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Meditu.UnitTests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+
 </Project>

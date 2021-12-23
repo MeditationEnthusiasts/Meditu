@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Globalization;
 using System.Text;
 using System.Xml;
 using LiteDB;
@@ -29,11 +30,9 @@ namespace Meditu.Api
     /// This class represents a specific instance
     /// of an event logged.
     /// </summary>
-    public class Log
+    public class Log : IEquatable<Log>
     {
         // ---------------- Fields ----------------
-
-        public const string XmlElementName = "log";
 
         private string comments;
         private string technique;
@@ -50,72 +49,6 @@ namespace Meditu.Api
         /// Yeah, we're not using SQLite, but maybe someday we'll support multiple databases?
         /// </summary>
         public static readonly DateTime MaxTime = new DateTime( 5000, 1, 1, 0, 0, 0 ).ToUniversalTime(); // Year 5000 is good enough.
-
-        public static Log FromXml( XmlNode node )
-        {
-            if( node.Name.ToLower() != XmlElementName )
-            {
-                throw new ArgumentException( "Node name must be " + XmlElementName, nameof( node ) );
-            }
-
-            Log log = new Log();
-
-            foreach( XmlAttribute attr in node.Attributes )
-            {
-                switch( attr.Name.ToLower() )
-                {
-                    case "guid":
-                        log.Guid = Guid.Parse( attr.Value );
-                        break;
-
-                    case "edittime":
-                        log.EditTime = DateTime.Parse( attr.Value );
-                        break;
-
-                    case "starttime":
-                        log.StartTime = DateTime.Parse( attr.Value );
-                        break;
-
-                    case "endtime":
-                        log.EndTime = DateTime.Parse( attr.Value );
-                        break;
-
-                    case "technique":
-                        log.Technique = attr.Value;
-                        break;
-
-                    case "comments":
-                        log.Comments = attr.Value;
-                        break;
-
-                    case "latitude":
-                        if( string.IsNullOrEmpty( attr.Value ) )
-                        {
-                            log.Latitude = null;
-                        }
-                        else
-                        {
-                            log.Latitude = decimal.Parse( attr.Value );
-                        }
-                        break;
-
-                    case "longitude":
-                        if( string.IsNullOrEmpty( attr.Value ) )
-                        {
-                            log.Longitude = null;
-                        }
-                        else
-                        {
-                            log.Longitude = decimal.Parse( attr.Value );
-                        }
-                        break;
-
-                }
-            }
-
-            log.Validate();
-            return log;
-        }
 
         /// <summary>
         /// Constructor.  Set everything to default values.
@@ -237,63 +170,15 @@ namespace Meditu.Api
         // ---------------- Functions ----------------
 
         /// <summary>
-        /// Ensures this Log object is valid.
-        /// </summary>
-        public void Validate()
-        {
-            bool success = true;
-            StringBuilder errorString = new StringBuilder();
-            errorString.AppendLine( "Validation errors found with Log object." );
-
-            if( this.Id < 0 )
-            {
-                success = false;
-                errorString.AppendLine( "\t-ID can not be zero or less" );
-            }
-
-            if( this.EndTime < this.StartTime )
-            {
-                success = false;
-                errorString.AppendLine( "\t-Log End Time is less than the start time." );
-            }
-
-            if( this.Comments == null )
-            {
-                success = false;
-                errorString.AppendLine( "\t-Comments can not be null" );
-            }
-
-            if( this.Technique == null )
-            {
-                success = false;
-                errorString.AppendLine( "\t-Technique can not be null" );
-            }
-
-            if( ( this.Latitude == null ) && ( this.Longitude != null ) )
-            {
-                success = false;
-                errorString.AppendLine( "\t-Latitude set on log, but not longitude" );
-            }
-
-            if( ( this.Longitude == null ) && ( this.Latitude != null ) )
-            {
-                success = false;
-                errorString.AppendLine( "\t-Longitude set on log, but not latitude" );
-            }
-
-            if( success == false )
-            {
-                throw new ValidationException( errorString.ToString() );
-            }
-        }
-
-        /// <summary>
         /// Returns true if all properties EXCEPT For GUID and ID match.
         /// </summary>
-        /// <param name="obj">A <see cref="Log"/> or <see cref="IReadOnlyLog"/> object.</param>
         public override bool Equals( object obj )
         {
-            Log other = obj as Log;
+            return Equals( obj as Log );
+        }
+
+        public bool Equals( Log other )
+        {
             if( other == null )
             {
                 return false;
@@ -345,13 +230,147 @@ namespace Meditu.Api
         {
             return (Log)this.MemberwiseClone();
         }
+    }
+
+    internal static class LogExtensions
+    {
+        // ---------------- Fields ----------------
+
+        public const string XmlElementName = "log";
+
+        // ---------------- Functions ----------------
+
+        public static void Validate( this Log log )
+        {
+            bool success = true;
+            StringBuilder errorString = new StringBuilder();
+            errorString.AppendLine( "Validation errors found with Log object." );
+
+            if( log.Id < 0 )
+            {
+                success = false;
+                errorString.AppendLine( "\t-ID can not be zero or less" );
+            }
+
+            if( log.EndTime < log.StartTime )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Log End Time is less than the start time." );
+            }
+
+            if( log.Comments == null )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Comments can not be null" );
+            }
+
+            if( log.Technique == null )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Technique can not be null" );
+            }
+
+            if( ( log.Latitude == null ) && ( log.Longitude != null ) )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Latitude set on log, but not longitude" );
+            }
+
+            if( ( log.Longitude == null ) && ( log.Latitude != null ) )
+            {
+                success = false;
+                errorString.AppendLine( "\t-Longitude set on log, but not latitude" );
+            }
+
+            if( success == false )
+            {
+                throw new ValidationException( errorString.ToString() );
+            }
+        }
+
+        public static void FromXml( this Log log, XmlNode node )
+        {
+            if( XmlElementName.EqualsIgnoreCase( node.Name ) == false )
+            {
+                throw new ArgumentException(
+                    "Node name must be " + XmlElementName,
+                    nameof( node )
+                );
+            }
+
+            foreach( XmlAttribute attr in node.Attributes )
+            {
+                if( string.IsNullOrWhiteSpace( attr.Name ) )
+                {
+                    continue;
+                }
+                else if( "guid".EqualsIgnoreCase( attr.Name ) )
+                {
+                    log.Guid = Guid.Parse( attr.Value );
+                }
+                else if( "edittime".EqualsIgnoreCase( attr.Name ) )
+                {
+                    log.EditTime = DateTime.ParseExact(
+                        attr.Value,
+                        DateTimeExtensions.TimeStampFormatString,
+                        CultureInfo.InvariantCulture
+                    );
+                }
+                else if( "starttime".EqualsIgnoreCase( attr.Name ) )
+                {
+                    log.StartTime = DateTime.ParseExact(
+                        attr.Value,
+                        DateTimeExtensions.TimeStampFormatString,
+                        CultureInfo.InvariantCulture
+                    );
+                }
+                else if( "endtime".EqualsIgnoreCase( attr.Name ) )
+                {
+                    log.EndTime = DateTime.ParseExact(
+                        attr.Value,
+                        DateTimeExtensions.TimeStampFormatString,
+                        CultureInfo.InvariantCulture
+                    );
+                }
+                else if( "technique".EqualsIgnoreCase( attr.Name ) )
+                {
+                    log.Technique = attr.Value;
+                }
+                else if( "comments".EqualsIgnoreCase( attr.Name ) )
+                {
+                    log.Comments = attr.Value;
+                }
+                else if( "latitude".EqualsIgnoreCase( attr.Name ) )
+                {
+                    if( string.IsNullOrEmpty( attr.Value ) )
+                    {
+                        log.Latitude = null;
+                    }
+                    else
+                    {
+                        log.Latitude = decimal.Parse( attr.Value );
+                    }
+                }
+                else if( "longitude".EqualsIgnoreCase( attr.Name ) )
+                {
+                    if( string.IsNullOrEmpty( attr.Value ) )
+                    {
+                        log.Longitude = null;
+                    }
+                    else
+                    {
+                        log.Longitude = decimal.Parse( attr.Value );
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Appends this Log to the given XML document.
         /// </summary>
-        public void ToXml( XmlDocument doc, XmlNode parentNode )
+        public static void ToXml( this Log log, XmlDocument doc, XmlNode parentNode )
         {
-            this.Validate();
+            log.Validate();
 
             XmlNode logNode = doc.CreateElement( XmlElementName );
 
@@ -359,49 +378,49 @@ namespace Meditu.Api
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "Guid" );
-                attr.Value = this.Guid.ToString();
+                attr.Value = log.Guid.ToString();
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "EditTime" );
-                attr.Value = this.EditTime.ToTimeStampString();
+                attr.Value = log.EditTime.ToTimeStampString();
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "StartTime" );
-                attr.Value = this.StartTime.ToTimeStampString();
+                attr.Value = log.StartTime.ToTimeStampString();
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "EndTime" );
-                attr.Value = this.EndTime.ToTimeStampString();
+                attr.Value = log.EndTime.ToTimeStampString();
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "Comments" );
-                attr.Value = this.Comments;
+                attr.Value = log.Comments;
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "Technique" );
-                attr.Value = this.Technique;
+                attr.Value = log.Technique;
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "Latitude" );
-                attr.Value = this.Latitude.HasValue ? this.Latitude.ToString() : string.Empty;
+                attr.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
                 logNode.Attributes.Append( attr );
             }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "Longitude" );
-                attr.Value = this.Longitude.HasValue ? this.Longitude.ToString() : string.Empty;
+                attr.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
                 logNode.Attributes.Append( attr );
             }
 

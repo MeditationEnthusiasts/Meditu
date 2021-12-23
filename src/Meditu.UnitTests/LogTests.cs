@@ -184,7 +184,8 @@ namespace Meditu.UnitTests
 
             log.ToXml( doc, rootNode );
 
-            Log copiedLog = Log.FromXml( rootNode.FirstChild );
+            var copiedLog = new Log();
+            copiedLog.FromXml( rootNode.FirstChild );
 
             Assert.AreEqual( log, copiedLog );
         }
@@ -201,7 +202,8 @@ namespace Meditu.UnitTests
 
             log.ToXml( doc, rootNode );
 
-            Log copiedLog = Log.FromXml( rootNode.FirstChild );
+            var copiedLog = new Log();
+            copiedLog.FromXml( rootNode.FirstChild );
 
             Assert.AreEqual( log, copiedLog );
         }
