@@ -1,3 +1,35 @@
 {
-  "executable": "Meditu.Gui"
+  "executable": "Meditu.Gui",
+  "splashscreen": {
+    "imageFile": ""
+  },
+  "name": "Meditu",
+  "author": "Meditation Enthusiasts",
+  "singleInstance": false,
+  "environment": "Production",
+  "build": {
+    "appId": "com.Meditu.Gui.app",
+    "productName": "Meditu.Gui",
+    "copyright": "Copyright © 2021",
+    "buildVersion": "1.0.0",
+    "compression": "maximum",
+    "directories": {
+      "output": "../../../bin/Desktop"
+    },
+    "extraResources": [
+      {
+        "from": "./bin",
+        "to": "bin",
+        "filter": [ "**/*" ]
+      }
+    ],
+    "files": [
+      {
+        "from": "./ElectronHostHook/node_modules",
+        "to": "ElectronHostHook/node_modules",
+        "filter": [ "**/*" ]
+      },
+      "**/*"
+    ]
+  }
 }
