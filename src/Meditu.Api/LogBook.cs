@@ -54,9 +54,9 @@ namespace Meditu.Api
         /// </summary>
         private readonly Dictionary<Guid, Log> logTable;
 
-        private LiteDatabase db;
+        private readonly LiteDatabase db;
 
-        private ILiteCollection<Log> col;
+        private readonly ILiteCollection<Log> col;
 
         // -------- Shortcut Fields --------
 
@@ -65,7 +65,7 @@ namespace Meditu.Api
 
         // ---------------- Constructor ----------------
 
-        public LogBook() :
+        public LogBook( string dbLocation ) :
             base( new List<Log>() )
         {
             this.logTable = new Dictionary<Guid, Log>();
@@ -82,6 +82,16 @@ namespace Meditu.Api
             this.Techniques = new ReadOnlyDictionary<string, int>( this.techniques );
 
             this.ResetStateNoLock();
+
+            var connectionString = new ConnectionString
+            {
+                Upgrade = true,
+                Filename = dbLocation,
+                Connection = ConnectionType.Shared // <- So multiple threads can access it without issue.
+            };
+
+            this.db = new LiteDatabase( connectionString );
+            this.col = this.db.GetCollection<Log>();
         }
 
         // ---------------- Properties ----------------
@@ -144,24 +154,6 @@ namespace Meditu.Api
         public int TotalSessions { get; private set; }
 
         // ---------------- Functions ----------------
-
-        public void OpenDb( string dbLocation )
-        {
-            if( this.db != null )
-            {
-                throw new InvalidOperationException( "Database is already open!" );
-            }
-
-            var connectionString = new ConnectionString
-            {
-                Upgrade = true,
-                Filename = dbLocation,
-                Connection = ConnectionType.Shared // <- So multiple threads can access it without issue.
-            };
-
-            this.db = new LiteDatabase( connectionString );
-            this.col = this.db.GetCollection<Log>();
-        }
 
         public void Dispose()
         {
@@ -300,7 +292,7 @@ namespace Meditu.Api
             XmlDeclaration dec = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
 
             // Add declaration to document.
-            XmlElement root = doc.DocumentElement;
+            XmlElement? root = doc.DocumentElement;
             doc.InsertBefore( dec, root );
 
             XmlElement logbookNode = doc.CreateElement( XmlElementName );

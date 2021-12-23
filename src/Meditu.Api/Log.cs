@@ -66,8 +66,8 @@ namespace Meditu.Api
             this.Guid = Guid.NewGuid();
 
             this.EditTime = DateTime.MinValue;
-            this.Comments = string.Empty;
-            this.Technique = string.Empty;
+            this.comments = string.Empty;
+            this.technique = string.Empty;
             this.Latitude = null;
             this.Longitude = null;
         }
@@ -172,12 +172,12 @@ namespace Meditu.Api
         /// <summary>
         /// Returns true if all properties EXCEPT For GUID and ID match.
         /// </summary>
-        public override bool Equals( object obj )
+        public override bool Equals( object? obj )
         {
             return Equals( obj as Log );
         }
 
-        public bool Equals( Log other )
+        public bool Equals( Log? other )
         {
             if( other == null )
             {
@@ -298,6 +298,11 @@ namespace Meditu.Api
                 );
             }
 
+            if( node.Attributes is null )
+            {
+                return;
+            }
+
             foreach( XmlAttribute attr in node.Attributes )
             {
                 if( string.IsNullOrWhiteSpace( attr.Name ) )
@@ -375,6 +380,12 @@ namespace Meditu.Api
             XmlNode logNode = doc.CreateElement( XmlElementName );
 
             // Add attributes
+            if( logNode.Attributes is null )
+            {
+                throw new InvalidOperationException(
+                    "Somehow, the attributes is null"
+                );
+            }
 
             {
                 XmlAttribute attr = doc.CreateAttribute( "Guid" );

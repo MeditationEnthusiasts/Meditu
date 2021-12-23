@@ -100,8 +100,7 @@ namespace Meditu.UnitTests
         {
             this.DeleteFile();
 
-            this.uut = new LogBook();
-            this.uut.OpenDb( fileName );
+            this.uut = new LogBook( fileName );
         }
 
         [TestCleanup]
@@ -142,8 +141,7 @@ namespace Meditu.UnitTests
             this.uut.Dispose();
 
             // Close / reopen.  Everything should still match.
-            this.uut = new LogBook();
-            this.uut.OpenDb( fileName );
+            this.uut = new LogBook( fileName );
             Assert.AreEqual( 0, this.uut.Count );
             this.uut.Refresh();
 

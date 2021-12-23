@@ -27,11 +27,11 @@ namespace Meditu.Api
     {
         // ---------------- Fields ----------------
 
-        private Session currentSession;
+        private Session? currentSession;
 
         private ApiState currentState;
 
-        private object currentStateLock;
+        private readonly object currentStateLock;
 
         // ---------------- Constructor ----------------
 
@@ -43,8 +43,7 @@ namespace Meditu.Api
         {
             this.currentSession = null;
             this.currentState = ApiState.Idle;
-            this.LogBook = new LogBook();
-            this.LogBook.OpenDb( dbPath );
+            this.LogBook = new LogBook( dbPath );
 
             this.currentStateLock = new object();
         }
@@ -117,6 +116,12 @@ namespace Meditu.Api
             {
                 throw new InvalidOperationException( "Session not started, can not stop." );
             }
+            else if( this.currentSession is null )
+            {
+                throw new InvalidOperationException(
+                    "Current Session is null"
+                );
+            }
 
             this.currentSession.Log.EndTime = DateTime.Now;
             this.CurrentState = ApiState.Stopped;
@@ -132,6 +137,12 @@ namespace Meditu.Api
             if( this.CurrentState != ApiState.Stopped )
             {
                 throw new InvalidOperationException( "Session not started, can not save." );
+            }
+            else if( this.currentSession is null )
+            {
+                throw new InvalidOperationException(
+                    "Current Session is null"
+                );
             }
             saveParams.Validate();
 

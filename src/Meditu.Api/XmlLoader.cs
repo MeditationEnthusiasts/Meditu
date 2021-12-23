@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using SethCS.Extensions;
 
 namespace Meditu.Api
 {
@@ -51,20 +52,30 @@ namespace Meditu.Api
 
         public static IList<Log> ParseLogbookXml( XmlDocument doc )
         {
+            if( doc.DocumentElement is null )
+            {
+                throw new InvalidOperationException(
+                    "Somehow, our root node is null"
+                );
+            }
+
             XmlNode rootNode = doc.DocumentElement;
 
-            if( rootNode.Name.ToLower() != LogBook.XmlElementName )
+            if( LogBook.XmlElementName.EqualsIgnoreCase( rootNode?.Name ) == false )
             {
                 throw new ArgumentException( "Rootnode must be named " + LogBook.XmlElementName );
             }
 
             List<Log> logs = new List<Log>();
 
-            foreach( XmlNode logNode in rootNode.ChildNodes )
+            if( rootNode?.ChildNodes is not null )
             {
-                var log = new Log();
-                log.FromXml( logNode );
-                logs.Add( log );
+                foreach( XmlNode logNode in rootNode.ChildNodes )
+                {
+                    var log = new Log();
+                    log.FromXml( logNode );
+                    logs.Add( log );
+                }
             }
 
             return logs;
