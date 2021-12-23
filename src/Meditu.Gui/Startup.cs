@@ -22,6 +22,7 @@ using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -29,8 +30,21 @@ namespace Meditu.Gui
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        // ---------------- Fields ----------------
+
+        /// <summary>
+        /// Where to put the logbook. It is possible for the user to specify this from the command line.
+        /// However, by default, it will end up in the user's Application Data folder if
+        /// not specified from the command line.
+        /// </summary>
+        private string logbookLocation;
+
+        // ---------------- Functions ----------------
+
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// </summary>
         public void ConfigureServices( IServiceCollection services )
         {
             services.AddMvc(
@@ -38,8 +52,10 @@ namespace Meditu.Gui
             );
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure( IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime )
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary> 
+        public void Configure( IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime, IConfiguration config )
         {
             if( env.IsDevelopment() )
             {
@@ -56,6 +72,13 @@ namespace Meditu.Gui
                 }
             );
 
+            this.logbookLocation = config["logbook"];
+            if( string.IsNullOrWhiteSpace( this.logbookLocation ) )
+            {
+                this.logbookLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
+                this.logbookLocation = Path.Combine( this.logbookLocation, "Meditu", "logbook.db" );
+            }
+
             app.UseStaticFiles();
 
             lifetime.ApplicationStarted.Register( this.ApplicationStarted );
@@ -71,18 +94,15 @@ namespace Meditu.Gui
         {
             try
             {
-                string dbLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-                dbLocation = Path.Combine( dbLocation, "MeditationLogger" );
-
-                if( Directory.Exists( dbLocation ) == false )
+                string dir = Path.GetDirectoryName( this.logbookLocation );
+                if( Directory.Exists( dir ) == false )
                 {
-                    Directory.CreateDirectory( dbLocation );
+                    Directory.CreateDirectory( dir );
                 }
-                dbLocation = Path.Combine( dbLocation, "logbook.db" );
 
-                Console.WriteLine( "Database Location: " + dbLocation );
+                Console.WriteLine( "Database Location: " + this.logbookLocation );
 
-                ApiBridge.CreateInstance( dbLocation );
+                ApiBridge.CreateInstance( this.logbookLocation );
                 ApiBridge.Instance.LogBook.Refresh();
             }
             catch( Exception e )
