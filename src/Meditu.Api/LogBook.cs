@@ -52,7 +52,7 @@ namespace Meditu.Api
         /// Table of logs whose key is the guid of the logs.
         /// Useful for quick lookups to see if a log exists.
         /// </summary>
-        private Dictionary<Guid, Log> logTable;
+        private readonly Dictionary<Guid, Log> logTable;
 
         private LiteDatabase db;
 
@@ -60,8 +60,8 @@ namespace Meditu.Api
 
         // -------- Shortcut Fields --------
 
-        private List<int> startTimeBucket;
-        private Dictionary<string, int> techniques;
+        private readonly List<int> startTimeBucket;
+        private readonly Dictionary<string, int> techniques;
 
         // ---------------- Constructor ----------------
 
