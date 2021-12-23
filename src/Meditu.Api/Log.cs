@@ -128,7 +128,7 @@ namespace Meditu.Api
             }
             set
             {
-                ArgumentChecker.IsNotNull( value, nameof( Comments ) );
+                ArgumentNullException.ThrowIfNull( value, nameof( Comments ) );
 
                 // By default, LiteDB calls trim on strings when saving to the database.
                 // We should do the same.
@@ -147,7 +147,7 @@ namespace Meditu.Api
             }
             set
             {
-                ArgumentChecker.IsNotNull( value, nameof( Technique ) );
+                ArgumentNullException.ThrowIfNull( value, nameof( Comments ) );
 
                 // By default, LiteDB calls trim on strings when saving to the database.
                 // We should do the same.
