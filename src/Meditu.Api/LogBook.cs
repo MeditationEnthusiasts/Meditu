@@ -46,8 +46,6 @@ namespace Meditu.Api
     {
         // ---------------- Fields ----------------
 
-        public const string XmlElementName = "logbook";
-
         /// <summary>
         /// Table of logs whose key is the guid of the logs.
         /// Useful for quick lookups to see if a log exists.
@@ -158,6 +156,7 @@ namespace Meditu.Api
         public void Dispose()
         {
             this.db?.Dispose();
+            GC.SuppressFinalize( this );
         }
 
         public Task AsyncRefresh()
@@ -284,32 +283,6 @@ namespace Meditu.Api
             }
         }
 
-        public XmlDocument ToXml()
-        {
-            XmlDocument doc = new XmlDocument();
-
-            // Create declaration.
-            XmlDeclaration dec = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
-
-            // Add declaration to document.
-            XmlElement? root = doc.DocumentElement;
-            doc.InsertBefore( dec, root );
-
-            XmlElement logbookNode = doc.CreateElement( XmlElementName );
-
-            lock( this.list )
-            {
-                foreach ( Log log in this.list )
-                {
-                    log.ToXml( doc, logbookNode );
-                }
-            }
-
-            doc.InsertAfter( logbookNode, dec );
-
-            return doc;
-        }
-
         protected override Log CloneInstructions( Log original )
         {
             return original.Clone();
@@ -380,6 +353,49 @@ namespace Meditu.Api
             }
 
             ++this.techniques[techniqueKey];
+        }
+    }
+
+    public static class LogBookExtensions
+    {
+        // ---------------- Fields ----------------
+
+        internal const string XmlElementName = "logbook";
+
+        internal const int XmlVersion = 1;
+
+        internal const string VersionAttributeName = "version";
+
+        // ---------------- Functions ----------------
+
+        public static XmlDocument ToXml( this LogBook logbook )
+        {
+            XmlDocument doc = new XmlDocument();
+
+            // Create declaration.
+            XmlDeclaration dec = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
+
+            // Add declaration to document.
+            XmlElement? root = doc.DocumentElement;
+            doc.InsertBefore( dec, root );
+
+            XmlElement logbookNode = doc.CreateElement( XmlElementName );
+            {
+                XmlAttribute versionAttribute = doc.CreateAttribute( VersionAttributeName );
+                versionAttribute.Value = XmlVersion.ToString();
+                logbookNode.Attributes.Append( versionAttribute );
+            }
+
+            List<Log> logList = logbook.ToList();
+
+            foreach( Log log in logList )
+            {
+                log.ToXml( doc, logbookNode );
+            }
+
+            doc.InsertAfter( logbookNode, dec );
+
+            return doc;
         }
     }
 }

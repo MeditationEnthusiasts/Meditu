@@ -17,15 +17,17 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml;
 using Meditu.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SethCS.Exceptions;
 
 namespace Meditu.UnitTests
 {
     [TestClass]
-    public class LogBookTests
+    public sealed class LogBookTests
     {
         // ---------------- Fields ----------------
 
@@ -110,14 +112,6 @@ namespace Meditu.UnitTests
             this.DeleteFile();
         }
 
-        private void DeleteFile()
-        {
-            if( File.Exists( fileName ) )
-            {
-                File.Delete( fileName );
-            }
-        }
-
         // ---------------- Tests ----------------
 
         [TestMethod]
@@ -155,6 +149,47 @@ namespace Meditu.UnitTests
             this.CheckForEmptyProperties();
         }
 
+        [TestMethod]
+        public void ToListTest()
+        {
+            // Setup
+            Guid l1Id = this.uut.AddLogToDb( log1 );
+
+            // Act
+            IList<Log> list = this.uut.ToList();
+
+            // Check
+            Assert.AreEqual( 1, list.Count );
+            Assert.AreNotSame( log1, list[0] );
+            Assert.AreEqual( log1, list[0] );
+        }
+
+        [TestMethod]
+        public void XmlRoundTripTest()
+        {
+            Guid l1Id = this.uut.AddLogToDb( log1 );
+            Guid l3Id = this.uut.AddLogToDb( log3 );
+            Guid l2Id = this.uut.AddLogToDb( log2 );
+
+            XmlDocument doc = this.uut.ToXml();
+
+            // Delete the logbook, and then import.
+            this.uut.Dispose();
+            DeleteFile();
+            this.uut = new LogBook( fileName );
+
+            IList<Log> logs = XmlLoader.ParseLogbookXml( doc );
+
+            foreach( Log log in logs )
+            {
+                Assert.IsTrue( this.uut.ImportLog( log ) );
+            }
+
+            CheckLogbook();
+        }
+
+        // ---------------- Test Helpers ----------------
+
         private void CheckLogbook()
         {
             // Should be in order where most current is in slot 0.
@@ -190,7 +225,12 @@ namespace Meditu.UnitTests
             Assert.AreEqual( 0, this.uut.Techniques.Count );
             Assert.AreEqual( TimeSpan.Zero, this.uut.TotalTime );
         }
-
-        // ---------------- Test Helpers ----------------
+        private void DeleteFile()
+        {
+            if( File.Exists( fileName ) )
+            {
+                File.Delete( fileName );
+            }
+        }
     }
 }

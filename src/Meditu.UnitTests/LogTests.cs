@@ -25,7 +25,7 @@ using SethCS.Exceptions;
 namespace Meditu.UnitTests
 {
     [TestClass]
-    public class LogTests
+    public sealed class LogTests
     {
         // ---------------- Tests ----------------
 
@@ -177,6 +177,9 @@ namespace Meditu.UnitTests
         [TestMethod]
         public void XmlTestWithOutLatitudeLongitude()
         {
+            // This test ensures the latest XML versions will always work.
+            // We'll need separate tests if we want to test specific XML versions.
+            const int version = LogBookExtensions.XmlVersion;
             Log log = new Log();
             this.InitLog( log );
             log.Latitude = null;
@@ -189,7 +192,7 @@ namespace Meditu.UnitTests
             log.ToXml( doc, rootNode );
 
             var copiedLog = new Log();
-            copiedLog.FromXml( rootNode.FirstChild );
+            copiedLog.FromXml( rootNode.FirstChild, version );
 
             Assert.AreEqual( log, copiedLog );
         }
@@ -197,6 +200,9 @@ namespace Meditu.UnitTests
         [TestMethod]
         public void XmlTestWithLatitudeLongitude()
         {
+            // This test ensures the latest XML versions will always work.
+            // We'll need separate tests if we want to test specific XML versions.
+            const int version = LogBookExtensions.XmlVersion;
             Log log = new Log();
             this.InitLog( log );
 
@@ -207,7 +213,7 @@ namespace Meditu.UnitTests
             log.ToXml( doc, rootNode );
 
             var copiedLog = new Log();
-            copiedLog.FromXml( rootNode.FirstChild );
+            copiedLog.FromXml( rootNode.FirstChild, version );
 
             Assert.AreEqual( log, copiedLog );
         }

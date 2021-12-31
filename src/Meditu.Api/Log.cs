@@ -284,7 +284,7 @@ namespace Meditu.Api
             }
         }
 
-        public static void FromXml( this Log log, XmlNode node )
+        public static void FromXml( this Log log, XmlNode node, int xmlVersion )
         {
             if( XmlElementName.EqualsIgnoreCase( node.Name ) == false )
             {

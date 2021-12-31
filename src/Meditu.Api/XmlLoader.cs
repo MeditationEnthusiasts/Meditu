@@ -61,9 +61,23 @@ namespace Meditu.Api
 
             XmlNode rootNode = doc.DocumentElement;
 
-            if( LogBook.XmlElementName.EqualsIgnoreCase( rootNode?.Name ) == false )
+            if( LogBookExtensions.XmlElementName.EqualsIgnoreCase( rootNode?.Name ) == false )
             {
-                throw new ArgumentException( "Rootnode must be named " + LogBook.XmlElementName );
+                throw new ArgumentException( "Rootnode must be named " + LogBookExtensions.XmlElementName );
+            }
+
+            // The first XML version did not have a version attribute.
+            // Therefore, if there is no version attribute, assume its version 1.
+            int version = 1;
+            if( rootNode?.Attributes is not null )
+            {
+                foreach( XmlAttribute attribute in rootNode.Attributes )
+                {
+                    if( LogBookExtensions.VersionAttributeName.EqualsIgnoreCase( attribute.Name ) )
+                    {
+                        version = int.Parse( attribute.Value );
+                    }
+                }
             }
 
             List<Log> logs = new List<Log>();
@@ -73,7 +87,7 @@ namespace Meditu.Api
                 foreach( XmlNode logNode in rootNode.ChildNodes )
                 {
                     var log = new Log();
-                    log.FromXml( logNode );
+                    log.FromXml( logNode, version );
                     logs.Add( log );
                 }
             }
