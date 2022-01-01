@@ -17,20 +17,22 @@
 //
 
 using System;
+using System.IO;
 
 namespace Meditu.Api
 {
     /// <summary>
     /// The API to Meditation Logger.
     /// </summary>
-    public class MeditationLoggerApi : IDisposable
+    public sealed class MeditationLoggerApi : IDisposable
     {
         // ---------------- Fields ----------------
+
+        private readonly string settingsFile;
 
         private Session? currentSession;
 
         private ApiState currentState;
-
         private readonly object currentStateLock;
 
         // ---------------- Constructor ----------------
@@ -39,11 +41,16 @@ namespace Meditu.Api
         /// Constructor.
         /// </summary>
         /// <param name="dbPath">The path to the database file.</param>
-        public MeditationLoggerApi( string dbPath )
+        /// <param name="settingsFile">Path to the settings file.</param>
+        public MeditationLoggerApi( string dbPath, string settingsFile )
         {
             this.currentSession = null;
             this.currentState = ApiState.Idle;
             this.LogBook = new LogBook( dbPath );
+
+            this.Settings = new SettingsManager();
+            this.settingsFile = settingsFile;
+            this.Settings.OnUpdated += Settings_OnUpdated;
 
             this.currentStateLock = new object();
         }
@@ -86,8 +93,18 @@ namespace Meditu.Api
         }
 
         public LogBook LogBook { get; private set; }
+        
+        public SettingsManager Settings { get; private set; }
 
         // ---------------- Functions ----------------
+
+        public void LoadSettings()
+        {
+            if( File.Exists( this.settingsFile ) )
+            {
+                this.Settings.LoadXmlFromFile( this.settingsFile );
+            }
+        }
 
         /// <summary>
         /// Starts a session.
@@ -166,7 +183,17 @@ namespace Meditu.Api
 
         public void Dispose()
         {
+            this.Settings.OnUpdated -= this.Settings_OnUpdated;
             this.LogBook?.Dispose();
+            this.Settings.SaveXmlToFile( this.settingsFile );
+        }
+
+        private void Settings_OnUpdated()
+        {
+            lock( this.settingsFile )
+            {
+                this.Settings.SaveXmlToFile( this.settingsFile );
+            }
         }
 
         // ---------------- Helper Classes ----------------

@@ -36,13 +36,13 @@ namespace Meditu.Gui
         /// Creates the single instance of the bridge to the API.
         /// </summary>
         /// <exception cref="InvalidOperationException">Called if called when an instance already exists.</exception>
-        public static void CreateInstance( string databaseLocation )
+        public static void CreateInstance( string databaseLocation, string settingsFile )
         {
             if( Instance != null )
             {
                 throw new InvalidOperationException( "Instance already created!" );
             }
-            Instance = new MeditationLoggerApi( databaseLocation );
+            Instance = new MeditationLoggerApi( databaseLocation, settingsFile );
         }
 
         /// <summary>

@@ -38,6 +38,7 @@ namespace Meditu.Gui
         /// not specified from the command line.
         /// </summary>
         private string logbookLocation;
+        private string settingsLocation;
 
         // ---------------- Functions ----------------
 
@@ -73,10 +74,20 @@ namespace Meditu.Gui
             );
 
             this.logbookLocation = config["logbook"];
+            this.settingsLocation = config["settings"];
+
+            string defaultPath = Path.Combine(
+                Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
+                "Meditu"
+            );
+
             if( string.IsNullOrWhiteSpace( this.logbookLocation ) )
             {
-                this.logbookLocation = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-                this.logbookLocation = Path.Combine( this.logbookLocation, "Meditu", "logbook.db" );
+                this.logbookLocation = Path.Combine( defaultPath, "logbook.db" );
+            }
+            if( string.IsNullOrWhiteSpace( this.settingsLocation ) )
+            {
+                this.settingsLocation = Path.Combine( defaultPath, "settings.xml" );
             }
 
             app.UseStaticFiles();
@@ -101,9 +112,11 @@ namespace Meditu.Gui
                 }
 
                 Console.WriteLine( "Database Location: " + this.logbookLocation );
+                Console.WriteLine( "Settings File Location: " + this.settingsLocation );
 
-                ApiBridge.CreateInstance( this.logbookLocation );
+                ApiBridge.CreateInstance( this.logbookLocation, this.settingsLocation );
                 ApiBridge.Instance.LogBook.Refresh();
+                ApiBridge.Instance.LoadSettings();
             }
             catch( Exception e )
             {
