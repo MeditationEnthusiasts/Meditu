@@ -14,7 +14,7 @@
     <div class="col-md-12">
         <div class="main-box" style="background-color:greenyellow">
             <h3>Total Time:</h3>
-            <h4>@Model.TotalTime.ToString()</h4>
+            <h4>@Model.TotalTime.ToString( @"hh\h\:mm\m" )</h4>
         </div>
     </div>
 </div>
@@ -30,7 +30,7 @@
     <div class="col-md-4">
         <div class="main-box" style="background-color:yellow">
             <h3>Longest Session:</h3>
-            <h4>@Model.LongestTime.ToString()</h4>
+            <h4>@Model.LongestTime.ToString( @"hh\h\:mm\m" )</h4>
         </div>
     </div>
     <div class="col-md-4">
