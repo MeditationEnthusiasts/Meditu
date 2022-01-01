@@ -29,7 +29,7 @@ namespace Meditu.Gui.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Title"] = "About Meditation Logger";
+            ViewData["Title"] = $"About {nameof( Meditu )}";
             return View();
         }
 
