@@ -37,7 +37,7 @@ namespace Meditu.UnitTests
         {
             // Setup
             const string xmlString =
-@"<?xml version=""1.0"" encoding=""utf-16""?>
+@"<?xml version=""1.0"" encoding=""utf-8""?>
 <logbook>
   <log Guid=""00299e35-d8b8-4357-9e84-5d5a9e472e01"" EditTime=""2021-12-30T19:45:46.4050000-05:00"" StartTime=""2021-12-30T19:27:18.7370000-05:00"" EndTime=""2021-12-30T19:45:15.1720000-05:00"" Comments=""Okay session after being back on vacation."" Technique=""Focus on Breath"" Latitude="""" Longitude="""" />
   <log Guid=""73f2a1fa-fb37-4c55-902d-f0a17b58d6ba"" EditTime=""2021-12-24T14:32:17.5680000-05:00"" StartTime=""2021-12-24T14:18:52.8270000-05:00"" EndTime=""2021-12-24T14:31:53.3490000-05:00"" Comments=""Quick pre-travel session. Went okay."" Technique=""Focus on Breath"" Latitude="""" Longitude="""" />
@@ -81,7 +81,7 @@ namespace Meditu.UnitTests
         {
             // Setup
             const string xmlString =
-@"<?xml version=""1.0"" encoding=""utf-16""?>
+@"<?xml version=""1.0"" encoding=""utf-8""?>
 <logbook version=""1"">
   <log Guid=""00299e35-d8b8-4357-9e84-5d5a9e472e01"" EditTime=""2021-12-30T19:45:46.4050000-05:00"" StartTime=""2021-12-30T19:27:18.7370000-05:00"" EndTime=""2021-12-30T19:45:15.1720000-05:00"" Comments=""Okay session after being back on vacation."" Technique=""Focus on Breath"" Latitude="""" Longitude="""" />
   <log Guid=""73f2a1fa-fb37-4c55-902d-f0a17b58d6ba"" EditTime=""2021-12-24T14:32:17.5680000-05:00"" StartTime=""2021-12-24T14:18:52.8270000-05:00"" EndTime=""2021-12-24T14:31:53.3490000-05:00"" Comments=""Quick pre-travel session. Went okay."" Technique=""Focus on Breath"" Latitude="""" Longitude="""" />
