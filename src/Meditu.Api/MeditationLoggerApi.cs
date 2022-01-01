@@ -100,11 +100,20 @@ namespace Meditu.Api
 
         // ---------------- Functions ----------------
 
+        public void Init()
+        {
+            this.LoadSettings();
+            this.LogBook.Refresh();
+        }
+
         public void LoadSettings()
         {
-            if( File.Exists( this.settingsFile ) )
+            lock( this.settingsFile )
             {
-                this.Settings.LoadXmlFromFile( this.settingsFile );
+                if( File.Exists( this.settingsFile ) )
+                {
+                    this.Settings.LoadXmlFromFile( this.settingsFile );
+                }
             }
         }
 

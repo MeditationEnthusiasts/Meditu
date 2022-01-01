@@ -140,9 +140,11 @@ namespace Meditu.Api
         public TimeSpan TotalTime { get; private set; }
 
         /// <summary>
-        /// The longest time of all the logs.
+        /// The Log that contains the longest time
         /// </summary>
-        public TimeSpan LongestTime { get; private set; }
+        public Log? LongestSession { get; private set; }
+
+        public TimeSpan LongestTime => LongestSession?.Duration ?? TimeSpan.Zero;
 
         /// <summary>
         /// The total number of sessions.
@@ -329,7 +331,7 @@ namespace Meditu.Api
 
             this.TotalSessions = 0;
             this.TotalTime = TimeSpan.Zero;
-            this.LongestTime = TimeSpan.Zero;
+            this.LongestSession = null;
         }
 
         private void UpdateShortcutProperties( Log log )
@@ -339,7 +341,7 @@ namespace Meditu.Api
             this.TotalTime += log.Duration;
             if( log.Duration > this.LongestTime )
             {
-                this.LongestTime = log.Duration;
+                this.LongestSession = log;
             }
 
             ++this.startTimeBucket[log.StartTime.Hour];

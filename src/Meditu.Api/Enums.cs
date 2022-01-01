@@ -23,14 +23,14 @@ namespace Meditu.Api
     public enum DateFormat
     {
         /// <summary>
-        /// Day/Month/Year
-        /// </summary>
-        DayMonthYear = 0,
-
-        /// <summary>
         /// Month/Day/Year
         /// </summary>
-        MonthDayYear = 1,
+        MonthDayYear = 0,
+
+        /// <summary>
+        /// Day/Month/Year
+        /// </summary>
+        DayMonthYear = 1,
 
         /// <summary>
         /// Year/Day/Month

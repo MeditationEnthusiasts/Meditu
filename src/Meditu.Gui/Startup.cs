@@ -115,8 +115,7 @@ namespace Meditu.Gui
                 Console.WriteLine( "Settings File Location: " + this.settingsLocation );
 
                 ApiBridge.CreateInstance( this.logbookLocation, this.settingsLocation );
-                ApiBridge.Instance.LogBook.Refresh();
-                ApiBridge.Instance.LoadSettings();
+                ApiBridge.Instance.Init();
             }
             catch( Exception e )
             {

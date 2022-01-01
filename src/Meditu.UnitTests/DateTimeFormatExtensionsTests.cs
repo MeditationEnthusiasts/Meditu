@@ -209,6 +209,84 @@ namespace Meditu.UnitTests
             Assert.AreEqual( "2020-December-13 11:22", format );
         }
 
+        // -------- TimeOnly Format Tests --------
+
+        // ---- 12 Hour ----
+
+        [TestMethod]
+        public void TimeOnly_12Hour_SingleDigit_Test()
+        {
+            // Setup
+            var time = new TimeOnly( 3, 8 );
+
+            var settings = new DateTimeSettings
+            {
+                TimeFormat = TimeFormat.Hour12
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "03:08 AM", format );
+        }
+
+        [TestMethod]
+        public void TimeOnly_12Hour_DoubleDigit_Test()
+        {
+            // Setup
+            var time = new TimeOnly( 14, 18 );
+
+            var settings = new DateTimeSettings
+            {
+                TimeFormat = TimeFormat.Hour12
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "02:18 PM", format );
+        }
+
+        // ---- 24 Hour ----
+
+        [TestMethod]
+        public void TimeOnly_24Hour_SingleDigit_Test()
+        {
+            // Setup
+            var time = new TimeOnly( 3, 8 );
+
+            var settings = new DateTimeSettings
+            {
+                TimeFormat = TimeFormat.Hour24
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "03:08", format );
+        }
+
+        [TestMethod]
+        public void TimeOnly_24Hour_DoubleDigit_Test()
+        {
+            // Setup
+            var time = new TimeOnly( 14, 18 );
+
+            var settings = new DateTimeSettings
+            {
+                TimeFormat = TimeFormat.Hour24
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "14:18", format );
+        }
+
         // -------- TimeSpan Format Tests --------
 
         // ---- HMS Letters Only ----
@@ -445,6 +523,25 @@ namespace Meditu.UnitTests
             Assert.AreEqual( "11:22:23", format );
         }
 
+        [TestMethod]
+        public void HMS_ColonOnly_MoreThanADay_Test()
+        {
+            // Setup
+            var time = new TimeSpan( 48 + 11, 22, 23 );
+
+            var settings = new DateTimeSettings
+            {
+                DurationFormat = DurationFormat.HourMinuteSecond,
+                DurationSeparator = DurationSeparator.ColonOnly
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "59:22:23", format );
+        }
+
         // ---- HMS Letters Only ----
 
         [TestMethod]
@@ -677,6 +774,44 @@ namespace Meditu.UnitTests
 
             // Check
             Assert.AreEqual( "11:22", format );
+        }
+
+        [TestMethod]
+        public void HM_ColonOnly_MoreThanADay_Test()
+        {
+            // Setup
+            var time = new TimeSpan( 24 + 10, 22, 23 );
+
+            var settings = new DateTimeSettings
+            {
+                DurationFormat = DurationFormat.HourMinute,
+                DurationSeparator = DurationSeparator.ColonOnly
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "34:22", format );
+        }
+
+        [TestMethod]
+        public void HM_ColonOnly_MoreThanADayRoundUp_Test()
+        {
+            // Setup
+            var time = new TimeSpan( 24 + 10, 59, 59 );
+
+            var settings = new DateTimeSettings
+            {
+                DurationFormat = DurationFormat.HourMinute,
+                DurationSeparator = DurationSeparator.ColonOnly
+            };
+
+            // Act
+            string format = time.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "34:59", format );
         }
     }
 }

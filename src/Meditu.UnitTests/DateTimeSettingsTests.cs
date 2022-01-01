@@ -36,7 +36,7 @@ namespace Meditu.UnitTests
             // at least in the US.
             var expected = new DateTimeSettings
             {
-                DateFormat = DateFormat.DayMonthYear,
+                DateFormat = DateFormat.MonthDayYear,
                 DateSeparatorFormat = DateSeparatorFormat.Slashes,
                 DurationFormat = DurationFormat.HourMinute,
                 DurationSeparator = DurationSeparator.ColonOnly,

@@ -30,6 +30,10 @@
     <div class="col-md-4">
         <div class="main-box" style="background-color:yellow">
             <h3>Longest Session:</h3>
+            @if( @Model.LogBook.LongestSession != null )
+            {
+                <!-- @Model.LogBook.LongestSession.Guid -->
+            }
             <h4>@Model.LogBook.LongestTime.ToSettingsString( Model.Settings.DateTimeSettings )</h4>
         </div>
     </div>
@@ -80,8 +84,8 @@
                 {
                     // Must use ToList() as IReadOnlyList doesn't implement IndexOf.
                     int hour = @Model.LogBook.StartTimeBucket.ToList().IndexOf( Model.LogBook.StartTimeBucket.Max() );
-                    DateTime time = new DateTime( 2000, 1, 1, hour, 0, 0 );
-                    <h4>@time.ToString( "hh:mm tt" )</h4>
+                    TimeOnly time = new TimeOnly( hour, 0 );
+                    <h4>@time.ToSettingsString( Model.Settings.DateTimeSettings )</h4>
                 }
             }
         </div>

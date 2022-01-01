@@ -92,6 +92,25 @@ namespace Meditu.Api
             return date.ToString( formatString );
         }
 
+        public static string ToSettingsString( this TimeOnly time, DateTimeSettings settings )
+        {
+            string hourFormatString;
+            string amPmFormatString;
+            if( settings.TimeFormat == TimeFormat.Hour24 )
+            {
+                hourFormatString = "HH";
+                amPmFormatString = string.Empty;
+            }
+            else // 12 hour is the default.
+            {
+                hourFormatString = "hh";
+                amPmFormatString = " tt";
+            }
+
+            string timeFormatString = $"{hourFormatString}:mm{amPmFormatString}";
+            return time.ToString( timeFormatString );
+        }
+
         /// <summary>
         /// Reads in the settings, and returns a string representation
         /// of the <see cref="TimeSpan"/> object based on the settings.
@@ -108,34 +127,42 @@ namespace Meditu.Api
             {
                 if( separator == DurationSeparator.LettersOnly )
                 {
-                    formatString = @"hh'H 'mm'M 'ss'S'";
+                    formatString = @"'H 'mm'M 'ss'S'";
                 }
                 else if( separator == DurationSeparator.ColonAndLetters )
                 {
-                    formatString = @"hh'H'\:mm'M'\:ss'S'";
+                    formatString = @"'H'\:mm'M'\:ss'S'";
                 }
                 else // ColonOnly is the default.
                 {
-                    formatString = @"hh\:mm\:ss";
+                    formatString = @"\:mm\:ss";
                 }
             }
             else // HourMinute (and any others) are the default.
             {
                 if( separator == DurationSeparator.LettersOnly )
                 {
-                    formatString = @"hh'H 'mm'M'";
+                    formatString = @"'H 'mm'M'";
                 }
                 else if( separator == DurationSeparator.ColonAndLetters )
                 {
-                    formatString = @"hh'H'\:mm'M'";
+                    formatString = @"'H'\:mm'M'";
                 }
                 else // ColonOnly is the default.
                 {
-                    formatString = @"hh\:mm";
+                    formatString = @"\:mm";
                 }
             }
 
-            return timespan.ToString( formatString );
+            // For total hours, need to use the TotalHours property instead of using
+            // a format string.  Otherwise, if the time is more than a day,
+            // it won't report the correct number of hours.
+            //
+            // Need to Math.Floor it as well, otherwise if we have more than half an hour
+            // in the minutes section, it will round up.
+            return
+                Math.Floor( timespan.TotalHours ).ToString( "00" ) +
+                timespan.ToString( formatString );
         }
     }
 }
