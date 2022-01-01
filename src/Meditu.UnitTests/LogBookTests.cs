@@ -178,7 +178,7 @@ namespace Meditu.UnitTests
             DeleteFile();
             this.uut = new LogBook( fileName );
 
-            IList<Log> logs = XmlLoader.ParseLogbookXml( doc );
+            IList<Log> logs = LogBookXmlLoader.ParseLogbookXml( doc );
 
             foreach( Log log in logs )
             {

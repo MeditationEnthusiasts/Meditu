@@ -24,7 +24,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Meditu.UnitTests
 {
     [TestClass]
-    public sealed class XmlLoaderTests
+    public sealed class LogBookXmlLoaderTests
     {
         // ---------------- Tests ----------------
 
@@ -68,7 +68,7 @@ namespace Meditu.UnitTests
             };
 
             // Act
-            IList<Log> logs = XmlLoader.ParseLogbookXmlString( xmlString );
+            IList<Log> logs = LogBookXmlLoader.ParseLogbookXmlString( xmlString );
 
             // Check
             Assert.AreEqual( 2, logs.Count );
@@ -112,7 +112,7 @@ namespace Meditu.UnitTests
             };
 
             // Act
-            IList<Log> logs = XmlLoader.ParseLogbookXmlString( xmlString );
+            IList<Log> logs = LogBookXmlLoader.ParseLogbookXmlString( xmlString );
 
             // Check
             Assert.AreEqual( 2, logs.Count );

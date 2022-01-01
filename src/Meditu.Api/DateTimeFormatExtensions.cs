@@ -28,7 +28,7 @@ namespace Meditu.Api
         /// Reads in the settings and returns a string representation
         /// of the <see cref="DateTime"/> object based on the settings.
         /// </summary>
-        public static string ToSettingsString( this DateTime date, IReadOnlyDateTimeSettings settings )
+        public static string ToSettingsString( this DateTime date, DateTimeSettings settings )
         {
             ArgumentNullException.ThrowIfNull( settings, nameof( settings ) );
 
@@ -96,7 +96,7 @@ namespace Meditu.Api
         /// Reads in the settings, and returns a string representation
         /// of the <see cref="TimeSpan"/> object based on the settings.
         /// </summary>
-        public static string ToSettingsString( this TimeSpan timespan, IReadOnlyDateTimeSettings settings )
+        public static string ToSettingsString( this TimeSpan timespan, DateTimeSettings settings )
         {
             ArgumentNullException.ThrowIfNull( settings, nameof( settings ) );
 

@@ -17,33 +17,120 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Linq;
+using SethCS.Extensions;
 
 namespace Meditu.Api
 {
-    public sealed class DateTimeSettings : IReadOnlyDateTimeSettings
+    public sealed record DateTimeSettings
     {
-        // ---------------- Constructor ----------------
-
-        public DateTimeSettings()
-        {
-        }
-
         // ---------------- Properties ----------------
 
-        public DateFormat DateFormat { get; set; }
+        public DateFormat DateFormat { get; init; }
 
-        public MonthFormat MonthFormat { get; set; }
+        public MonthFormat MonthFormat { get; init; }
 
-        public DateSeparatorFormat DateSeparatorFormat { get; set; }
+        public DateSeparatorFormat DateSeparatorFormat { get; init; }
 
-        public TimeFormat TimeFormat { get; set; }
+        public TimeFormat TimeFormat { get; init; }
 
-        public DurationFormat DurationFormat { get; set; }
+        public DurationFormat DurationFormat { get; init; }
 
-        public DurationSeparator DurationSeparator { get; set; }
+        public DurationSeparator DurationSeparator { get; init; }
+    }
+
+    internal static class DateTimeSettingsExtensions
+    {
+        // ---------------- Fields ----------------
+
+        internal const string XmlElementName = "datetime";
+
+        internal const int XmlVersion = 1;
+
+        // ---------------- Functions ----------------
+
+        public static void ToXml( this DateTimeSettings settings, XElement parentNode )
+        {
+            var element = new XElement(
+                XmlElementName,
+                new XAttribute( "version", XmlVersion ),
+                // We'll save all formats as integers, so if we rename them in code,
+                // we're not going to blow them up.
+                new XElement( "dateformat", (int)settings.DateFormat ),
+                new XElement( "monthformat", (int)settings.MonthFormat ),
+                new XElement( "dateseparator", (int)settings.DateSeparatorFormat ),
+                new XElement( "timeformat", (int)settings.TimeFormat ),
+                new XElement( "durationformat", (int)settings.DurationFormat ),
+                new XElement( "durationseparator", (int)settings.DurationSeparator )
+            );
+
+            parentNode.Add( element );
+        }
+
+        public static DateTimeSettings FromXml( XElement parentNode )
+        {
+            XElement? settingsNode = parentNode.Elements().FirstOrDefault(
+                e => XmlElementName.EqualsIgnoreCase( e.Name.LocalName )
+            );
+
+            if( settingsNode == default )
+            {
+                return new DateTimeSettings();
+            }
+
+            // Default to the latest version.
+            int version = XmlVersion;
+            foreach( XAttribute attr in settingsNode.Attributes() )
+            {
+                string name = attr.Name.LocalName;
+                if( string.IsNullOrEmpty( name ) )
+                {
+                    continue;
+                }
+                else if( "version".EqualsIgnoreCase( name ) )
+                {
+                    version = int.Parse( attr.Value );
+                }
+            }
+
+            // Any setting that is somehow not specified will be set to defaulted settings.
+            var settings = new DateTimeSettings();
+
+            foreach( XElement child in settingsNode.Elements() )
+            {
+                string name = child.Name.LocalName;
+                if( string.IsNullOrWhiteSpace( name ) )
+                {
+                    continue;
+                }
+                else if( "dateformat".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { DateFormat = (DateFormat)int.Parse( child.Value ) };
+                }
+                else if( "monthformat".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { MonthFormat = (MonthFormat)int.Parse( child.Value ) };
+                }
+                else if( "dateseparator".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { DateSeparatorFormat = (DateSeparatorFormat)int.Parse( child.Value ) };
+                }
+                else if( "timeformat".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { TimeFormat = (TimeFormat)int.Parse( child.Value ) };
+                }
+                else if( "durationformat".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { DurationFormat = (DurationFormat)int.Parse( child.Value ) };
+                }
+                else if( "durationseparator".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { DurationSeparator = (DurationSeparator)int.Parse( child.Value ) };
+                }
+            }
+
+            return settings;
+        }
     }
 }

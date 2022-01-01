@@ -24,7 +24,7 @@ using SethCS.Extensions;
 
 namespace Meditu.Api
 {
-    public static class XmlLoader
+    public static class LogBookXmlLoader
     {
         public static IList<Log> ParseLogbookFromFile( string filePath )
         {

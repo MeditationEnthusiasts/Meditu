@@ -45,7 +45,7 @@ namespace Meditu.Gui.Controllers
                 {
                     using( Stream stream = file.OpenReadStream() )
                     {
-                        logs.AddRange( XmlLoader.ParseLogbookFromStream( stream ) );
+                        logs.AddRange( LogBookXmlLoader.ParseLogbookFromStream( stream ) );
                     }
                 }
 
