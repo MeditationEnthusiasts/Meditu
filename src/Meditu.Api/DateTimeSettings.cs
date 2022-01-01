@@ -38,6 +38,8 @@ namespace Meditu.Api
 
         public MonthFormat MonthFormat { get; set; }
 
+        public DateSeparatorFormat DateSeparatorFormat { get; set; }
+
         public TimeFormat TimeFormat { get; set; }
 
         public DurationFormat DurationFormat { get; set; }

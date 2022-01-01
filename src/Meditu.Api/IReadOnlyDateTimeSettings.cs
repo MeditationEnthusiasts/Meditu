@@ -32,6 +32,8 @@ namespace Meditu.Api
 
         MonthFormat MonthFormat { get; }
 
+        DateSeparatorFormat DateSeparatorFormat { get; }
+
         TimeFormat TimeFormat { get; }
 
         DurationFormat DurationFormat { get; }

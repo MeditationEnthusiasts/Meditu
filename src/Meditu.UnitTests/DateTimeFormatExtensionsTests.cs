@@ -27,6 +27,188 @@ namespace Meditu.UnitTests
     {
         // ---------------- Tests ----------------
 
+        // -------- DateTime Format Tests --------
+
+        // ---- MDY ----
+
+        // This block tests MDY, but also 12 hour vs 24 hour, and dashes vs slashes.
+
+        [TestMethod]
+        public void MDY_24Hr_NumberMonth_Dashes_SingleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 6, 3, 13, 2, 3 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.MonthDayYear,
+                DateSeparatorFormat = DateSeparatorFormat.Dashes,
+                MonthFormat = MonthFormat.Number,
+                TimeFormat = TimeFormat.Hour24
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "06-03-2020 13:02", format );
+        }
+
+        [TestMethod]
+        public void MDY_24Hr_NumberMonth_Dashes_DoubleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.MonthDayYear,
+                DateSeparatorFormat = DateSeparatorFormat.Dashes,
+                MonthFormat = MonthFormat.Number,
+                TimeFormat = TimeFormat.Hour24
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "12-13-2020 11:22", format );
+        }
+
+        [TestMethod]
+        public void MDY_12Hr_NumberMonth_Slashes_SingleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 6, 3, 13, 2, 3 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.MonthDayYear,
+                DateSeparatorFormat = DateSeparatorFormat.Slashes,
+                MonthFormat = MonthFormat.Number,
+                TimeFormat = TimeFormat.Hour12
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "06/03/2020 01:02 PM", format );
+        }
+
+        [TestMethod]
+        public void MDY_12Hr_NumberMonth_Slashes_DoubleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.MonthDayYear,
+                DateSeparatorFormat = DateSeparatorFormat.Slashes,
+                MonthFormat = MonthFormat.Number,
+                TimeFormat = TimeFormat.Hour12
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "12/13/2020 11:22 AM", format );
+        }
+
+        // ---- DMY ----
+
+        // This block tests DMY, but also tests the 3-number Month format as well.
+
+        [TestMethod]
+        public void DMY_12Hr_3LetterMonth_Slashes_SingleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 6, 3, 13, 2, 3 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.DayMonthYear,
+                DateSeparatorFormat = DateSeparatorFormat.Slashes,
+                MonthFormat = MonthFormat.ThreeLetters,
+                TimeFormat = TimeFormat.Hour12
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "03/Jun/2020 01:02 PM", format );
+        }
+
+        [TestMethod]
+        public void DMY_24Hr_3LetterMonth_Dashes_DoubleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.DayMonthYear,
+                DateSeparatorFormat = DateSeparatorFormat.Dashes,
+                MonthFormat = MonthFormat.ThreeLetters,
+                TimeFormat = TimeFormat.Hour24
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "13-Dec-2020 11:22", format );
+        }
+
+        // ---- YMD ----
+
+        // This block tests DMY, but also tests the 3-number Month format as well.
+
+        [TestMethod]
+        public void YMD_12Hr_FullMonth_Slashes_SingleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 6, 3, 1, 2, 3 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.YearMonthDay,
+                DateSeparatorFormat = DateSeparatorFormat.Slashes,
+                MonthFormat = MonthFormat.FullMonth,
+                TimeFormat = TimeFormat.Hour12
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "2020/June/03 01:02 AM", format );
+        }
+
+        [TestMethod]
+        public void YMD_24Hr_FullMonth_Dashes_DoubleDigit_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.YearMonthDay,
+                DateSeparatorFormat = DateSeparatorFormat.Dashes,
+                MonthFormat = MonthFormat.FullMonth,
+                TimeFormat = TimeFormat.Hour24
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "2020-December-13 11:22", format );
+        }
+
         // -------- TimeSpan Format Tests --------
 
         // ---- HMS Letters Only ----

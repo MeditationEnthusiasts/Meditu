@@ -17,10 +17,6 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Meditu.Api
 {
@@ -29,8 +25,76 @@ namespace Meditu.Api
         // ---------------- Functions ----------------
 
         /// <summary>
+        /// Reads in the settings and returns a string representation
+        /// of the <see cref="DateTime"/> object based on the settings.
+        /// </summary>
+        public static string ToSettingsString( this DateTime date, IReadOnlyDateTimeSettings settings )
+        {
+            ArgumentNullException.ThrowIfNull( settings, nameof( settings ) );
+
+            DateFormat dateFormat = settings.DateFormat;
+            MonthFormat monthFormat = settings.MonthFormat;
+            DateSeparatorFormat dateSepFormat = settings.DateSeparatorFormat;
+            TimeFormat timeFormat = settings.TimeFormat;
+
+            char dateSeparator;
+            if( dateSepFormat == DateSeparatorFormat.Dashes )
+            {
+                dateSeparator = '-';
+            }
+            else // Slashes are the default.
+            {
+                dateSeparator = '/';
+            }
+
+            string monthFormatString;
+            if( monthFormat == MonthFormat.ThreeLetters )
+            {
+                monthFormatString = "MMM";
+            }
+            else if( monthFormat == MonthFormat.FullMonth )
+            {
+                monthFormatString = "MMMM";
+            }
+            else // Number is the default.
+            {
+                monthFormatString = "MM";
+            }
+
+            string hourFormatString;
+            string amPmFormatString;
+            if( timeFormat == TimeFormat.Hour24 )
+            {
+                hourFormatString = "HH";
+                amPmFormatString = string.Empty;
+            }
+            else // 12 hour is the default.
+            {
+                hourFormatString = "hh";
+                amPmFormatString = " tt";
+            }
+
+            string timeFormatString = $"{hourFormatString}:mm{amPmFormatString}";
+            string formatString;
+            if( dateFormat == DateFormat.DayMonthYear )
+            {
+                formatString = $"dd{dateSeparator}{monthFormatString}{dateSeparator}yyyy {timeFormatString}";
+            }
+            else if( dateFormat == DateFormat.YearMonthDay )
+            {
+                formatString = $"yyyy{dateSeparator}{monthFormatString}{dateSeparator}dd {timeFormatString}";
+            }
+            else // Month/Day/Year is the default.
+            {
+                formatString = $"{monthFormatString}{dateSeparator}dd{dateSeparator}yyyy {timeFormatString}";
+            }
+
+            return date.ToString( formatString );
+        }
+
+        /// <summary>
         /// Reads in the settings, and returns a string representation
-        /// of the <see cref="TimeSpan"/> based on the settings.
+        /// of the <see cref="TimeSpan"/> object based on the settings.
         /// </summary>
         public static string ToSettingsString( this TimeSpan timespan, IReadOnlyDateTimeSettings settings )
         {
