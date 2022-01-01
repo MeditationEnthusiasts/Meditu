@@ -96,6 +96,8 @@ namespace Meditu.Api
         
         public SettingsManager Settings { get; private set; }
 
+        IReadOnlySettingsManager IApiModel.Settings => this.Settings;
+
         // ---------------- Functions ----------------
 
         public void LoadSettings()

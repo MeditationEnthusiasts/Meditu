@@ -25,6 +25,6 @@ namespace Meditu.Api
     {
         LogBook LogBook { get; }
 
-        SettingsManager Settings { get; }
+        IReadOnlySettingsManager Settings { get; }
     }
 }

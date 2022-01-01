@@ -22,7 +22,12 @@ using SethCS.Extensions;
 
 namespace Meditu.Api
 {
-    public sealed class SettingsManager
+    public interface IReadOnlySettingsManager
+    {
+        DateTimeSettings DateTimeSettings { get; }
+    }
+
+    public sealed class SettingsManager : IReadOnlySettingsManager
     {
         // ---------------- Events ----------------
 

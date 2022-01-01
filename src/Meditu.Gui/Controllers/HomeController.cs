@@ -30,7 +30,7 @@ namespace Meditu.Gui.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = $"{nameof( Meditu )} - A Meditation Logger";
-            return View( ApiBridge.Instance.LogBook );
+            return View( ApiBridge.Instance );
         }
     }
 }
