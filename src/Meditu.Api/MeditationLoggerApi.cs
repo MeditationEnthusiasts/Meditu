@@ -24,7 +24,7 @@ namespace Meditu.Api
     /// <summary>
     /// The API to Meditation Logger.
     /// </summary>
-    public sealed class MeditationLoggerApi : IDisposable
+    public sealed class MeditationLoggerApi : IDisposable, IApiModel
     {
         // ---------------- Fields ----------------
 

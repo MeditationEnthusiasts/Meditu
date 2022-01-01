@@ -17,7 +17,6 @@
 //
 
 using System.IO;
-using System.Xml;
 using Meditu.Api;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,16 +24,28 @@ namespace Meditu.Gui.Controllers
 {
     public class ExportController : Controller
     {
+        // ---------------- Functions ----------------
+
         public IActionResult Index()
         {
             ViewData["Title"] = "Export to XML file";
             return View();
         }
 
-        public IActionResult DownloadXml()
+        public IActionResult DownloadLogXml()
         {
-            XmlDocument xml = ApiBridge.Instance.LogBook.ToXml();
-            using( StringWriter writer = new StringWriter() )
+            var xml = ApiBridge.Instance.LogBook.ToXml();
+            using( var writer = new StringWriter() )
+            {
+                xml.Save( writer );
+                return Content( writer.ToString(), "application/xml" );
+            }
+        }
+
+        public IActionResult DownloadSettingsXml()
+        {
+            var xml = ApiBridge.Instance.Settings.SaveXmlAsXDoc();
+            using( var writer = new StringWriter() )
             {
                 xml.Save( writer );
                 return Content( writer.ToString(), "application/xml" );
