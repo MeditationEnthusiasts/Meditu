@@ -70,7 +70,7 @@ namespace Meditu.Gui.Controllers
                     }
                 }
 
-                return View( logStatus );
+                return RedirectToAction( nameof( Index ) );
             }
             catch( Exception err )
             {

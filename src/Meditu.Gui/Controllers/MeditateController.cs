@@ -18,27 +18,11 @@
 
 using System;
 using Meditu.Api;
+using Meditu.Gui.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Meditu.Gui.Controllers
 {
-    public class MeditateModel
-    {
-        /// <summary>
-        /// Error message, if any.
-        /// </summary>
-        public string ErrorMessage { get; set; }
-
-        /// <summary>
-        /// Info message, if any.
-        /// </summary>
-        public string InfoMessage { get;set; }
-
-        public Session Session{ get; set; }
-        
-        public ApiState ApiState { get; set; }
-    }
-
     public class MeditateController : Controller
     {
         // ---------------- Functions ----------------

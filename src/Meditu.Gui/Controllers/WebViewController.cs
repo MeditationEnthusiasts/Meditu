@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.Encodings.Web;
+using Meditu.Gui.Models;
 using Microsoft.AspNetCore.Mvc;
 using SethCS.Exceptions;
 
@@ -76,18 +77,9 @@ namespace Meditu.Gui.Controllers
             else
             {
                 throw new PlatformNotSupportedException(
-                    "Open in browser functionality not supported for this Operating System '" + Environment.OSVersion.ToString() + "'" );
+                    "Open in browser functionality not supported for this Operating System '" + Environment.OSVersion.ToString() + "'"
+                );
             }
-        }
-
-        // ---------------- Helper Classes ----------------
-
-        public class OpenInBrowserModel
-        {
-            /// <summary>
-            /// URL to open in a browser.
-            /// </summary>
-            public string Url { get; set; }
         }
     }
 }
