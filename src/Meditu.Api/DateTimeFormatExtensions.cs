@@ -24,6 +24,8 @@ namespace Meditu.Api
     {
         // ---------------- Functions ----------------
 
+        // -------- ToSettingsString --------
+
         /// <summary>
         /// Reads in the settings and returns a string representation
         /// of the <see cref="DateTime"/> object based on the settings.
@@ -163,6 +165,85 @@ namespace Meditu.Api
             return
                 Math.Floor( timespan.TotalHours ).ToString( "00" ) +
                 timespan.ToString( formatString );
+        }
+
+        // -------- ToLabelString --------
+
+        public static string ToLabelString( this DateFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        {
+            string label;
+            if( format == DateFormat.DayMonthYear )
+            {
+                label = "Day Month Year";
+            }
+            else if( format == DateFormat.YearMonthDay )
+            {
+                label = "Year Month Day";
+            }
+            else // MonthDayYear is the default.
+            {
+                label = "Month Day Year";
+            }
+
+            DateTimeSettings settings = currentSettings with { DateFormat = format };
+
+            return $"{label} ({sampleTime.ToSettingsString( settings )})";
+        }
+
+        public static string ToLabelString( this MonthFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        {
+            string label;
+            if( format == MonthFormat.ThreeLetters )
+            {
+                label = "Abbreviated";
+            }
+            else if( format == MonthFormat.FullMonth )
+            {
+                label = "Full Month";
+            }
+            else // Number is the default.
+            {
+                label = "Digit";
+            }
+
+            DateTimeSettings settings = currentSettings with { MonthFormat = format };
+
+            return $"{label} ({sampleTime.ToSettingsString( settings )})";
+        }
+
+        public static string ToLabelString( this DateSeparatorFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        {
+            string label;
+            if( format == DateSeparatorFormat.Dashes )
+            {
+                label = "Dashes";
+            }
+            else // Slashes is the default.
+            {
+                label = "Slashes";
+            }
+
+            DateTimeSettings settings = currentSettings with { DateSeparatorFormat = format };
+
+            return $"{label} ({sampleTime.ToSettingsString( settings )})";
+        }
+
+        public static string ToLabelString( this TimeFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        {
+            string label;
+            if( format == TimeFormat.Hour24 )
+            {
+                label = "24 Hour";
+            }
+            else // 12 Hour is the default.
+            {
+                label = "12 Hour";
+            }
+
+            DateTimeSettings settings = currentSettings with { TimeFormat = format };
+            var time = TimeOnly.FromDateTime( sampleTime );
+
+            return $"{label} ({time.ToSettingsString( settings )})";
         }
     }
 }

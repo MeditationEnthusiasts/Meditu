@@ -1,0 +1,101 @@
+﻿@using System.Globalization;
+@using System.Linq;
+@using Meditu.Api;
+@using SethCS.Extensions;
+
+@model IApiModel;
+
+@{
+    Layout = "_Content";
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+
+    var dateTimeNow = DateTime.Now;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Date/Time Settings
+        </h4>
+    </div>
+    <div class="panel-body">
+        <!--
+            Forms can only support GET or POST.  So, although technically
+            this could be a PUT, it won't work.
+        -->
+        <form action="/Settings/SetDateTimeSettings" method="POST">
+            <div class="form-group">
+                <label>Date Format</label>
+                @foreach( DateFormat format in EnumExtensions.SortByNumber<DateFormat>() )
+                {
+                    <div class="radio">
+                        <label>
+                            <input
+                                id="@nameof(DateFormat)_@format.ToString()"
+                                type="radio"
+                                name="@nameof(DateTimeSettings.DateFormat)"
+                                value="@Convert.ToInt32( format )"
+                                checked="@(format == Model.Settings.DateTimeSettings.DateFormat)"
+                            />
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>Month Format</label>
+                @foreach( MonthFormat format in EnumExtensions.SortByNumber<MonthFormat>() )
+                {
+                    <div class="radio">
+                        <label>
+                            <input
+                                id="@nameof(MonthFormat)_@format.ToString()"
+                                type="radio"
+                                name="@nameof(DateTimeSettings.MonthFormat)"
+                                value="@Convert.ToInt32( format )"
+                                checked="@(format == Model.Settings.DateTimeSettings.MonthFormat)"
+                            />
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>Date Separator</label>
+                @foreach( DateSeparatorFormat format in EnumExtensions.SortByNumber<DateSeparatorFormat>() )
+                {
+                    <div class="radio">
+                        <label>
+                            <input
+                                id="@nameof(DateSeparatorFormat)_@format.ToString()"
+                                type="radio"
+                                name="@nameof(DateTimeSettings.DateSeparatorFormat)"
+                                value="@Convert.ToInt32( format )"
+                                checked="@(format == Model.Settings.DateTimeSettings.DateSeparatorFormat)"
+                            />
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>Time Format</label>
+                @foreach( TimeFormat format in EnumExtensions.SortByNumber<TimeFormat>() )
+                {
+                    <div class="radio">
+                        <label>
+                            <input
+                                id="@nameof(TimeFormat)_@format.ToString()"
+                                type="radio"
+                                name="@nameof(DateTimeSettings.TimeFormat)"
+                                value="@Convert.ToInt32( format )"
+                                checked="@(format == Model.Settings.DateTimeSettings.TimeFormat)"
+                            />
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                        </label>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
