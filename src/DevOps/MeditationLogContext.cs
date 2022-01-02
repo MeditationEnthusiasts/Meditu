@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2021 Seth Hendrick.
+// Copyright (C) 2017-2022 Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -31,10 +31,10 @@ namespace DevOps
         {
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
-            this.SlnPath = this.SrcPath.CombineWithFilePath( new FilePath( "MeditationLogger.sln" ) );
+            this.SlnPath = this.SrcPath.CombineWithFilePath( new FilePath( "Meditu.sln" ) );
             this.DockerPath = this.RepoRoot.Combine( new DirectoryPath( "Docker" ) );
             this.GuiCsProject = this.SrcPath.CombineWithFilePath(
-                new FilePath( "MeditationLogger.Gui/MeditationLogger.Gui.csproj" )
+                new FilePath( "Meditu.Gui/Meditu.Gui.csproj" )
             );
 
 #if DEBUG

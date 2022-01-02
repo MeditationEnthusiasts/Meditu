@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2021 Seth Hendrick.
+// Copyright (C) 2017-2022 Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -32,7 +32,7 @@ namespace DevOps.Tasks
         const string currentLicense =
 @"//
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2021 Seth Hendrick.
+// Copyright (C) 2017-2022 Seth Hendrick.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
