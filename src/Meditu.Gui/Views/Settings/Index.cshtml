@@ -10,6 +10,7 @@
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
 
     var dateTimeNow = DateTime.Now;
+    var sampleDuration = new TimeSpan( 1, 13, 30 );
 }
 
 <div class="panel panel-default">
@@ -37,7 +38,7 @@
                                 value="@Convert.ToInt32( format )"
                                 checked="@(format == Model.Settings.DateTimeSettings.DateFormat)"
                             />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
                         </label>
                     </div>
                 }
@@ -55,7 +56,7 @@
                                 value="@Convert.ToInt32( format )"
                                 checked="@(format == Model.Settings.DateTimeSettings.MonthFormat)"
                             />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
                         </label>
                     </div>
                 }
@@ -73,7 +74,7 @@
                                 value="@Convert.ToInt32( format )"
                                 checked="@(format == Model.Settings.DateTimeSettings.DateSeparatorFormat)"
                             />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
                         </label>
                     </div>
                 }
@@ -91,7 +92,43 @@
                                 value="@Convert.ToInt32( format )"
                                 checked="@(format == Model.Settings.DateTimeSettings.TimeFormat)"
                             />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow );
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>Time Duration Format</label>
+                @foreach( DurationFormat format in EnumExtensions.SortByNumber<DurationFormat>() )
+                {
+                    <div class="radio">
+                        <label>
+                            <input
+                                id="@nameof(DurationFormat)_@format.ToString()"
+                                type="radio"
+                                name="@nameof(DateTimeSettings.DurationFormat)"
+                                value="@Convert.ToInt32( format )"
+                                checked="@(format == Model.Settings.DateTimeSettings.DurationFormat)"
+                            />
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, sampleDuration )
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>Time Duration Separator</label>
+                @foreach( DurationSeparator format in EnumExtensions.SortByNumber<DurationSeparator>() )
+                {
+                    <div class="radio">
+                        <label>
+                            <input
+                                id="@nameof(DurationSeparator)_@format.ToString()"
+                                type="radio"
+                                name="@nameof(DateTimeSettings.DurationSeparator)"
+                                value="@Convert.ToInt32( format )"
+                                checked="@(format == Model.Settings.DateTimeSettings.DurationSeparator)"
+                            />
+                            @format.ToLabelString( Model.Settings.DateTimeSettings, sampleDuration )
                         </label>
                     </div>
                 }

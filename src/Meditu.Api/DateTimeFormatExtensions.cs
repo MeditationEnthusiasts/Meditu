@@ -169,7 +169,11 @@ namespace Meditu.Api
 
         // -------- ToLabelString --------
 
-        public static string ToLabelString( this DateFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        public static string ToLabelString(
+            this DateFormat format,
+            DateTimeSettings currentSettings,
+            DateTime sampleTime
+        )
         {
             string label;
             if( format == DateFormat.DayMonthYear )
@@ -190,7 +194,11 @@ namespace Meditu.Api
             return $"{label} ({sampleTime.ToSettingsString( settings )})";
         }
 
-        public static string ToLabelString( this MonthFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        public static string ToLabelString(
+            this MonthFormat format,
+            DateTimeSettings currentSettings,
+            DateTime sampleTime
+        )
         {
             string label;
             if( format == MonthFormat.ThreeLetters )
@@ -211,7 +219,11 @@ namespace Meditu.Api
             return $"{label} ({sampleTime.ToSettingsString( settings )})";
         }
 
-        public static string ToLabelString( this DateSeparatorFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        public static string ToLabelString(
+            this DateSeparatorFormat format,
+            DateTimeSettings currentSettings,
+            DateTime sampleTime
+        )
         {
             string label;
             if( format == DateSeparatorFormat.Dashes )
@@ -228,7 +240,11 @@ namespace Meditu.Api
             return $"{label} ({sampleTime.ToSettingsString( settings )})";
         }
 
-        public static string ToLabelString( this TimeFormat format, DateTimeSettings currentSettings, DateTime sampleTime )
+        public static string ToLabelString(
+            this TimeFormat format,
+            DateTimeSettings currentSettings,
+            DateTime sampleTime
+        )
         {
             string label;
             if( format == TimeFormat.Hour24 )
@@ -244,6 +260,50 @@ namespace Meditu.Api
             var time = TimeOnly.FromDateTime( sampleTime );
 
             return $"{label} ({time.ToSettingsString( settings )})";
+        }
+
+        public static string ToLabelString(
+            this DurationFormat format,
+            DateTimeSettings currentSettings,
+            TimeSpan sampleTime
+        )
+        {
+            string label;
+            if( format == DurationFormat.HourMinuteSecond )
+            {
+                label = "Hour Minute Second";
+            }
+            else // Hour Minute is the default.
+            {
+                label = "Hour Minute";
+            }
+
+            DateTimeSettings settings = currentSettings with { DurationFormat = format };
+            return $"{label} ({sampleTime.ToSettingsString( settings )})";
+        }
+
+        public static string ToLabelString(
+            this DurationSeparator format,
+            DateTimeSettings currentSettings,
+            TimeSpan sampleTime
+        )
+        {
+            string label;
+            if( format == DurationSeparator.ColonAndLetters )
+            {
+                label = "Colons and Letters";
+            }
+            else if( format == DurationSeparator.LettersOnly )
+            {
+                label = "Letters Only";
+            }
+            else // Colons only is the default.
+            {
+                label = "Colons Only";
+            }
+
+            DateTimeSettings settings = currentSettings with { DurationSeparator = format };
+            return $"{label} ({sampleTime.ToSettingsString( settings )})";
         }
     }
 }
