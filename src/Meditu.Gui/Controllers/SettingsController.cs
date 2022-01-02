@@ -18,6 +18,7 @@
 
 using System;
 using Meditu.Api;
+using Meditu.Gui.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Meditu.Gui.Controllers
@@ -29,7 +30,13 @@ namespace Meditu.Gui.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Settings";
-            return View( ApiBridge.Instance );
+
+            var model = new SettingsModel(
+                Api: ApiBridge.Instance,
+                InfoMessage: TempData["info_message"]?.ToString() ?? string.Empty,
+                ErrorMessage: TempData["error_message"]?.ToString() ?? string.Empty
+            );
+            return View( nameof( Index ), model );
         }
 
         [HttpPost]
@@ -39,11 +46,14 @@ namespace Meditu.Gui.Controllers
             {
                 SettingsManager settingsMgr = ApiBridge.Instance.Settings;
                 settingsMgr.DateTimeSettings = settings;
-                return Redirect( "/Settings" );
+
+                TempData["info_message"] = "Settings Saved.";
+                return RedirectToAction( nameof( Index ) );
             }
             catch( Exception err )
             {
-                return BadRequest( err.ToString() );
+                TempData["error_message"] = err.Message;
+                return RedirectToAction( nameof( Index ) );
             }
         }
     }

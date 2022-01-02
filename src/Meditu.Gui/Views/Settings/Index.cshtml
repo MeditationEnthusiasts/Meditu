@@ -1,9 +1,10 @@
 ﻿@using System.Globalization;
 @using System.Linq;
 @using Meditu.Api;
+@using Meditu.Gui.Models;
 @using SethCS.Extensions;
 
-@model IApiModel;
+@model SettingsModel;
 
 @{
     Layout = "_Content";
@@ -11,128 +12,160 @@
 
     var dateTimeNow = DateTime.Now;
     var sampleDuration = new TimeSpan( 1, 13, 30 );
+
+    IApiModel api = Model.Api;
 }
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            Date/Time Settings
-        </h4>
+@if( string.IsNullOrEmpty( @Model.ErrorMessage ) == false )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                <p><strong>Error when saving settings.  Settings may or may not have been saved.</strong></p>
+                <p>@Model.ErrorMessage</p>
+            </div>
+        </div>
     </div>
-    <div class="panel-body">
-        <!--
-            Forms can only support GET or POST.  So, although technically
-            this could be a PUT, it won't work.
-        -->
-        <form action="/Settings/SetDateTimeSettings" method="POST">
-            <div class="form-group">
-                <label>Date Format</label>
-                @foreach( DateFormat format in EnumExtensions.SortByNumber<DateFormat>() )
-                {
-                    <div class="radio">
-                        <label>
-                            <input
-                                id="@nameof(DateFormat)_@format.ToString()"
-                                type="radio"
-                                name="@nameof(DateTimeSettings.DateFormat)"
-                                value="@Convert.ToInt32( format )"
-                                checked="@(format == Model.Settings.DateTimeSettings.DateFormat)"
-                            />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
-                        </label>
-                    </div>
-                }
+}
+
+@if( string.IsNullOrEmpty( @Model.InfoMessage ) == false )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                <p><strong>@Model.InfoMessage</strong></p>
             </div>
-            <div class="form-group">
-                <label>Month Format</label>
-                @foreach( MonthFormat format in EnumExtensions.SortByNumber<MonthFormat>() )
-                {
-                    <div class="radio">
-                        <label>
-                            <input
-                                id="@nameof(MonthFormat)_@format.ToString()"
-                                type="radio"
-                                name="@nameof(DateTimeSettings.MonthFormat)"
-                                value="@Convert.ToInt32( format )"
-                                checked="@(format == Model.Settings.DateTimeSettings.MonthFormat)"
-                            />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
-                        </label>
-                    </div>
-                }
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Date/Time Settings
+                </h4>
             </div>
-            <div class="form-group">
-                <label>Date Separator</label>
-                @foreach( DateSeparatorFormat format in EnumExtensions.SortByNumber<DateSeparatorFormat>() )
-                {
-                    <div class="radio">
-                        <label>
-                            <input
-                                id="@nameof(DateSeparatorFormat)_@format.ToString()"
-                                type="radio"
-                                name="@nameof(DateTimeSettings.DateSeparatorFormat)"
-                                value="@Convert.ToInt32( format )"
-                                checked="@(format == Model.Settings.DateTimeSettings.DateSeparatorFormat)"
-                            />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
-                        </label>
+            <div class="panel-body">
+                <!--
+                    Forms can only support GET or POST.  So, although technically
+                    this could be a PUT, it won't work.
+                -->
+                <form action="/Settings/SetDateTimeSettings" method="POST">
+                    <div class="form-group">
+                        <label>Date Format</label>
+                        @foreach( DateFormat format in EnumExtensions.SortByNumber<DateFormat>() )
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input
+                                        id="@nameof(DateFormat)_@format.ToString()"
+                                        type="radio"
+                                        name="@nameof(DateTimeSettings.DateFormat)"
+                                        value="@Convert.ToInt32( format )"
+                                        checked="@(format == api.Settings.DateTimeSettings.DateFormat)"
+                                    />
+                                    @format.ToLabelString( api.Settings.DateTimeSettings, dateTimeNow )
+                                </label>
+                            </div>
+                        }
                     </div>
-                }
-            </div>
-            <div class="form-group">
-                <label>Time Format</label>
-                @foreach( TimeFormat format in EnumExtensions.SortByNumber<TimeFormat>() )
-                {
-                    <div class="radio">
-                        <label>
-                            <input
-                                id="@nameof(TimeFormat)_@format.ToString()"
-                                type="radio"
-                                name="@nameof(DateTimeSettings.TimeFormat)"
-                                value="@Convert.ToInt32( format )"
-                                checked="@(format == Model.Settings.DateTimeSettings.TimeFormat)"
-                            />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, dateTimeNow )
-                        </label>
+                    <div class="form-group">
+                        <label>Month Format</label>
+                        @foreach( MonthFormat format in EnumExtensions.SortByNumber<MonthFormat>() )
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input
+                                        id="@nameof(MonthFormat)_@format.ToString()"
+                                        type="radio"
+                                        name="@nameof(DateTimeSettings.MonthFormat)"
+                                        value="@Convert.ToInt32( format )"
+                                        checked="@(format == api.Settings.DateTimeSettings.MonthFormat)"
+                                    />
+                                    @format.ToLabelString( api.Settings.DateTimeSettings, dateTimeNow )
+                                </label>
+                            </div>
+                        }
                     </div>
-                }
-            </div>
-            <div class="form-group">
-                <label>Time Duration Format</label>
-                @foreach( DurationFormat format in EnumExtensions.SortByNumber<DurationFormat>() )
-                {
-                    <div class="radio">
-                        <label>
-                            <input
-                                id="@nameof(DurationFormat)_@format.ToString()"
-                                type="radio"
-                                name="@nameof(DateTimeSettings.DurationFormat)"
-                                value="@Convert.ToInt32( format )"
-                                checked="@(format == Model.Settings.DateTimeSettings.DurationFormat)"
-                            />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, sampleDuration )
-                        </label>
+                    <div class="form-group">
+                        <label>Date Separator</label>
+                        @foreach( DateSeparatorFormat format in EnumExtensions.SortByNumber<DateSeparatorFormat>() )
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input
+                                        id="@nameof(DateSeparatorFormat)_@format.ToString()"
+                                        type="radio"
+                                        name="@nameof(DateTimeSettings.DateSeparatorFormat)"
+                                        value="@Convert.ToInt32( format )"
+                                        checked="@(format == api.Settings.DateTimeSettings.DateSeparatorFormat)"
+                                    />
+                                    @format.ToLabelString( api.Settings.DateTimeSettings, dateTimeNow )
+                                </label>
+                            </div>
+                        }
                     </div>
-                }
-            </div>
-            <div class="form-group">
-                <label>Time Duration Separator</label>
-                @foreach( DurationSeparator format in EnumExtensions.SortByNumber<DurationSeparator>() )
-                {
-                    <div class="radio">
-                        <label>
-                            <input
-                                id="@nameof(DurationSeparator)_@format.ToString()"
-                                type="radio"
-                                name="@nameof(DateTimeSettings.DurationSeparator)"
-                                value="@Convert.ToInt32( format )"
-                                checked="@(format == Model.Settings.DateTimeSettings.DurationSeparator)"
-                            />
-                            @format.ToLabelString( Model.Settings.DateTimeSettings, sampleDuration )
-                        </label>
+                    <div class="form-group">
+                        <label>Time Format</label>
+                        @foreach( TimeFormat format in EnumExtensions.SortByNumber<TimeFormat>() )
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input
+                                        id="@nameof(TimeFormat)_@format.ToString()"
+                                        type="radio"
+                                        name="@nameof(DateTimeSettings.TimeFormat)"
+                                        value="@Convert.ToInt32( format )"
+                                        checked="@(format == api.Settings.DateTimeSettings.TimeFormat)"
+                                    />
+                                    @format.ToLabelString( api.Settings.DateTimeSettings, dateTimeNow )
+                                </label>
+                            </div>
+                        }
                     </div>
-                }
+                    <div class="form-group">
+                        <label>Time Duration Format</label>
+                        @foreach( DurationFormat format in EnumExtensions.SortByNumber<DurationFormat>() )
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input
+                                        id="@nameof(DurationFormat)_@format.ToString()"
+                                        type="radio"
+                                        name="@nameof(DateTimeSettings.DurationFormat)"
+                                        value="@Convert.ToInt32( format )"
+                                        checked="@(format == api.Settings.DateTimeSettings.DurationFormat)"
+                                    />
+                                    @format.ToLabelString( api.Settings.DateTimeSettings, sampleDuration )
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label>Time Duration Separator</label>
+                        @foreach( DurationSeparator format in EnumExtensions.SortByNumber<DurationSeparator>() )
+                        {
+                            <div class="radio">
+                                <label>
+                                    <input
+                                        id="@nameof(DurationSeparator)_@format.ToString()"
+                                        type="radio"
+                                        name="@nameof(DateTimeSettings.DurationSeparator)"
+                                        value="@Convert.ToInt32( format )"
+                                        checked="@(format == api.Settings.DateTimeSettings.DurationSeparator)"
+                                    />
+                                    @format.ToLabelString( api.Settings.DateTimeSettings, sampleDuration )
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Save Settings" id="saveSettingsButton" />
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
