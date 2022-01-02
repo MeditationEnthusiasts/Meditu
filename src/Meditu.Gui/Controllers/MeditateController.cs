@@ -31,13 +31,22 @@ namespace Meditu.Gui.Controllers
         {
             ViewData["Title"] = "Meditate!";
 
-            MeditateModel model = new MeditateModel();
-            model.ApiState = ApiBridge.Instance.CurrentState;
-
-            if ( model.ApiState != ApiState.Idle )
+            Session session;
+            if( ApiBridge.Instance.CurrentState != ApiState.Idle )
             {
-                model.Session = ApiBridge.Instance.CurrentSession;
+                session = ApiBridge.Instance.CurrentSession;
             }
+            else
+            {
+                session = null;
+            }
+
+            var model = new MeditateModel(
+                Session: session,
+                ApiState: ApiBridge.Instance.CurrentState,
+                InfoMessage: this.TempData["info_message"]?.ToString() ?? string.Empty,
+                ErrorMessage: this.TempData["error_message"]?.ToString() ?? string.Empty
+            );
 
             return View( model );
         }
@@ -45,8 +54,6 @@ namespace Meditu.Gui.Controllers
         [HttpPost]
         public IActionResult Start( int hour, int minute )
         {
-            MeditateModel model = new MeditateModel();
-
             try
             {
                 StartSessionParams sessionParams = new StartSessionParams();
@@ -60,81 +67,76 @@ namespace Meditu.Gui.Controllers
                 }
                 ApiBridge.Instance.Start( sessionParams );
 
-                model.InfoMessage = "Session started!";
-                model.Session = ApiBridge.Instance.CurrentSession;
+                this.TempData["info_message"] = "Session started!";
             }
             catch( Exception e )
             {
-                model.Session = ApiBridge.Instance.CurrentSession;
-                model.ErrorMessage = e.Message;
+                this.TempData["error_message"] = e.Message;
             }
 
-            model.ApiState = ApiBridge.Instance.CurrentState;
-            return View( "~/Views/Meditate/Index.cshtml", model );
+            return RedirectToAction( nameof( Index ) );
         }
 
         [HttpPost]
         public IActionResult Stop()
         {
-            MeditateModel model = new MeditateModel();
-
             try
             {
                 ApiBridge.Instance.Stop();
 
-                model.InfoMessage = "Session completed!";
-                model.Session = ApiBridge.Instance.CurrentSession;
+                this.TempData["info_message"] = "Session completed!";
             }
             catch( Exception e )
             {
-                model.ErrorMessage = e.Message;
+                this.TempData["error_message"] = e.Message;
             }
 
-            model.ApiState = ApiBridge.Instance.CurrentState;
-            return View( "~/Views/Meditate/Index.cshtml", model );
+            return RedirectToAction( nameof( Index ) );
         }
 
         [HttpPost]
-        public IActionResult Save( string technique, string comments, decimal? latitude, decimal? longitude )
+        public IActionResult Save(
+            string technique,
+            string comments,
+            decimal? latitude,
+            decimal? longitude
+        )
         {
-            MeditateModel model = new MeditateModel();
             try
             {
-                SaveSessionParams saveSessionParams = new SaveSessionParams();
-                saveSessionParams.Comments = comments;
-                saveSessionParams.Technique = technique;
-                saveSessionParams.Latitude = latitude;
-                saveSessionParams.Longitude = longitude;
-                
+                SaveSessionParams saveSessionParams = new SaveSessionParams
+                {
+                    Comments = comments,
+                    Technique = technique,
+                    Latitude = latitude,
+                    Longitude = longitude
+                };
+
                 ApiBridge.Instance.SaveSession( saveSessionParams );
-                model.InfoMessage = "Session saved successfully!";
+                this.TempData["info_message"] = "Session saved successfully!";
             }
             catch( Exception e )
             {
-                model.ErrorMessage = e.Message;
+                this.TempData["error_message"] = e.Message;
             }
 
-            model.ApiState = ApiBridge.Instance.CurrentState;
-            return View( "~/Views/Meditate/Index.cshtml", model );
+            return RedirectToAction( nameof( Index ) );
         }
 
         [HttpPost]
         public IActionResult Cancel()
         {
-            MeditateModel model = new MeditateModel();
-
             try
             {
                 ApiBridge.Instance.CancelSession();
-                model.InfoMessage = "Session cancelled successfully!";
+                this.TempData["info_message"] = "Session cancelled successfully!";
             }
             catch( Exception e )
             {
-                model.ErrorMessage = e.Message;
+                this.TempData["error_message"] = e.Message;
             }
 
-            model.ApiState = ApiBridge.Instance.CurrentState;
-            return View( "~/Views/Meditate/Index.cshtml", model );
+            return RedirectToAction( nameof( Index ) );
         }
     }
 }

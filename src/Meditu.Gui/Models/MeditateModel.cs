@@ -20,21 +20,10 @@ using Meditu.Api;
 
 namespace Meditu.Gui.Models
 {
-    public class MeditateModel
-    {
-        /// <summary>
-        /// Error message, if any.
-        /// </summary>
-        public string ErrorMessage { get; set; }
-
-        /// <summary>
-        /// Info message, if any.
-        /// </summary>
-        public string InfoMessage { get; set; }
-
-        public Session Session { get; set; }
-
-        public ApiState ApiState { get; set; }
-    }
-
+    public record MeditateModel(
+        Session Session,
+        ApiState ApiState,
+        string InfoMessage,
+        string ErrorMessage
+    );
 }
