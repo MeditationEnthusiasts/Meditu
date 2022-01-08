@@ -3,11 +3,13 @@
 @using System.Linq;
 @using Meditu.Api;
 
-@model LogBook;
+@model IApiModel;
 
 @{
     Layout = "_Content";
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+    LogBook logBook = Model.LogBook;
+    IReadOnlySettingsManager settings = Model.Settings;
 }
 
 @section extrahead{
@@ -42,10 +44,10 @@
                 viewDisplay: function () {},
                 viewDestroy: function (view, element) {},
                 events: [
-                    @foreach(Log log in Model)
+                    @foreach( Log log in logBook )
                     {
                         @:{
-                            @:title: '@(log.Technique.Replace( '\n', ' ' ).Replace( "\r", String.Empty ))',
+                            @:title: '@(log.Technique.Replace( '\n', ' ' ).Replace( "\r", string.Empty ))',
                             @:start: '@(log.StartTime.ToLocalTime().ToString( "O" ))',
                             @:end: '@(log.EndTime.ToLocalTime().ToString( "O" ))',
                             @:comments: '@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))',

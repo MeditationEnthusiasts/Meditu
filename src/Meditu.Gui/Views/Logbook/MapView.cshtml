@@ -2,11 +2,14 @@
 @using System.Linq;
 @using Meditu.Api;
 
-@model LogBook;
+@model IApiModel;
 
 @{
     Layout = "_Content";
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+
+    LogBook logBook = Model.LogBook;
+    IReadOnlySettingsManager settings = Model.Settings;
 }
 
 @section scripts {
@@ -41,14 +44,14 @@
             });
 
             // Insert the data.
-            @foreach( Log log in Model )
+            @foreach( Log log in logBook )
             {
                 if( log.Latitude != null && log.Longitude != null )
                 {
                     <text>
                     var markerHTML@(log.Id) = '<div class="left" style="overflow: auto; color: black;">' +
-                    '<p><strong>@(log.StartTime.ToLocalTime().ToString( "MM-dd-yyyy HH:mm" ))</strong></p>' +
-                    '<p><strong>Duration:</strong> @(log.Duration.TotalMinutes.ToString( "F" )) minutes</p>' +
+                    '<p><strong>@(log.StartTime.ToLocalTime().ToSettingsString( settings.DateTimeSettings ))</strong></p>' +
+                    '<p><strong>Duration:</strong> @(log.Duration.ToSettingsString( settings.DateTimeSettings ))</p>' +
                     '<p><strong>Technique:</strong> @(log.Technique)</p>' +
                     '<p><strong>Comments:</strong>@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))</p>';
 

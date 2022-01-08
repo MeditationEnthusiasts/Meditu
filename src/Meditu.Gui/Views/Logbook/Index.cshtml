@@ -3,23 +3,25 @@
 @using System.Linq;
 @using Meditu.Api;
 
-@model LogBook;
+@model IApiModel;
 
 @{
     Layout = "_Content";
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+    LogBook logBook = Model.LogBook;
+    IReadOnlySettingsManager settings = Model.Settings;
 }
 
-@if(Model.TotalSessions == 0)
+@if( logBook.TotalSessions == 0 )
 {
     <p>No Sessions, yet.</p>
 }
 else
 {
-    @foreach( Log log in Model )
+    @foreach( Log log in logBook )
     {
-        string technique = textInfo.ToTitleCase(log.Technique);
-        @if (string.IsNullOrEmpty(technique))
+        string technique = textInfo.ToTitleCase( log.Technique );
+        @if( string.IsNullOrEmpty( technique ) )
         {
             technique = "None";
         }
@@ -27,10 +29,10 @@ else
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3><strong>@log.StartTime.ToLocalTime().ToString("G")</strong> - @technique</h3>
+                        <h3><strong>@log.StartTime.ToLocalTime().ToSettingsString( settings.DateTimeSettings )</strong> - @technique</h3>
                     </div>
                     <div class="panel-body">
-                        <p><strong>Duration: </strong>@log.Duration.ToString(@"hh\:mm\:ss")</p>
+                        <p><strong>Duration: </strong>@log.Duration.ToSettingsString( settings.DateTimeSettings )</p>
                         <p><strong>Comments:</strong></p>
                         @if (string.IsNullOrEmpty(log.Comments))
                         {
@@ -38,10 +40,10 @@ else
                         }
                         else
                         {
-                            @using(StringReader reader = new StringReader(log.Comments))
+                            @using( StringReader reader = new StringReader( log.Comments ) )
                             {
                                 string line = reader.ReadLine();
-                                while(line != null)
+                                while( line != null )
                                 {
                                     <p>@line</p>
                                     line = reader.ReadLine();

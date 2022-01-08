@@ -28,25 +28,25 @@ namespace Meditu.Gui.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Logbook";
-            return View( ApiBridge.Instance.LogBook );
+            return View( ApiBridge.Instance );
         }
 
         public IActionResult MapView()
         {
             ViewData["Title"] = "The places you have meditated!";
-            return View( ApiBridge.Instance.LogBook );
+            return View( ApiBridge.Instance );
         }
 
         public IActionResult GraphView()
         {
             ViewData["Title"] = "Logbook - Graph View";
-            return View( ApiBridge.Instance.LogBook );
+            return View( ApiBridge.Instance );
         }
 
         public IActionResult CalendarView()
         {
             ViewData["Title"] = "Logbook - Calendar View";
-            return View( ApiBridge.Instance.LogBook );
+            return View( ApiBridge.Instance );
         }
     }
 }

@@ -3,11 +3,19 @@
 @using System.Linq;
 @using Meditu.Api;
 
-@model LogBook;
+@model IApiModel;
 
 @{
     Layout = "_Content";
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+    LogBook logBook = Model.LogBook;
+    IReadOnlySettingsManager settings = Model.Settings;
+    DateTimeSettings dateTimeSettings = settings.DateTimeSettings;
+    if( dateTimeSettings.MonthFormat == MonthFormat.FullMonth )
+    {
+        // Full month is too big for the graphs.  Make it only 3 letters.
+        dateTimeSettings = dateTimeSettings with { MonthFormat = MonthFormat.ThreeLetters };
+    }
 }
 
 @section scripts {
@@ -34,10 +42,8 @@
                                     time += new TimeSpan(1, 0, 0)
                                 )
                                 {
-                                    // No need for ToLocalTime(), as Logbook
-                                    // uses local time to begin with since our database
-                                    // retrieves from UTC time.
-                                    @:'@(time.ToString("hh:mm tt"))',
+                                    TimeOnly timeOnly = TimeOnly.FromDateTime( time );
+                                    @:'@(timeOnly.ToSettingsString( dateTimeSettings ))',
                                 }
                             ],
                             datasets: [{
@@ -45,7 +51,7 @@
                                 backgroundColor: 'rgb(255, 99, 132)',
                                 borderColor: 'rgb(255, 99, 132)',
                                 data: [
-                                    @foreach(int count in Model.StartTimeBucket)
+                                    @foreach(int count in logBook.StartTimeBucket)
                                     {
                                         @:@(count),
                                     }
@@ -71,7 +77,7 @@
                         // The data for our dataset
                         data: {
                             labels: [
-                                @foreach(KeyValuePair<string, int> technique in Model.Techniques)
+                                @foreach(KeyValuePair<string, int> technique in logBook.Techniques)
                                 {
                                     @:'@(textInfo.ToTitleCase(technique.Key))',
                                 }
@@ -83,9 +89,9 @@
                                 hoverBackgroundColor : 'White',
                                 hoverBorderColor :['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Pink', 'Black', 'Orange'],
                                 data: [
-                                    @foreach(KeyValuePair<string, int> technique in Model.Techniques)
+                                    @foreach(KeyValuePair<string, int> technique in logBook.Techniques)
                                     {
-                                        @:@(Model.Techniques[technique.Key]),
+                                        @:@(logBook.Techniques[technique.Key]),
                                     }
                                 ],
                             }]
@@ -107,9 +113,9 @@
                         // The data for our dataset
                         data: {
                                 labels: [
-                                    @foreach(Log log in Model.Reverse())
+                                    @foreach(Log log in logBook.Reverse())
                                     {
-                                        @:'@log.StartTime.ToString("MM/dd/yyyy")',
+                                        @:'@log.StartTime.ToLocalTime().ToSettingsString( dateTimeSettings )',
                                     }  
                                 ],
                                 datasets: [{
@@ -117,7 +123,7 @@
                                     borderColor: 'rgb(75, 192, 192)',
                                     label: 'Duration (Minutes)',
                                     data: [
-                                        @foreach(Log log in Model.Reverse())
+                                        @foreach(Log log in logBook.Reverse())
                                         {
                                             @:@log.Duration.TotalMinutes,
                                         }
