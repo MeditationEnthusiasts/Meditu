@@ -179,13 +179,7 @@ namespace Meditu.Api
 
             lock( this.list )
             {
-                this.ResetStateNoLock();
-                IOrderedEnumerable<Log> logs = col.FindAll().OrderByDescending( l => l.StartTime );
-
-                foreach( Log log in logs )
-                {
-                    this.AddLogNoLock( log );
-                }
+                this.RefreshNoLock();
             }
         }
 
@@ -304,9 +298,12 @@ namespace Meditu.Api
                 }
 
                 Log log = this.logTable[id];
-                this.logTable.Remove( id );
-                this.list.Remove( log );
                 this.col.DeleteMany( l => l.Guid == id );
+
+                // Need to do a full refresh as our "shortcuts" all change.
+                // A lot of CPU for deleting a log.
+                // Maybe we'll optimize later.
+                RefreshNoLock();
 
                 return log;
             }
@@ -370,6 +367,17 @@ namespace Meditu.Api
             this.TotalSessions = 0;
             this.TotalTime = TimeSpan.Zero;
             this.LongestSession = null;
+        }
+
+        private void RefreshNoLock()
+        {
+            this.ResetStateNoLock();
+            IOrderedEnumerable<Log> logs = col.FindAll().OrderByDescending( l => l.StartTime );
+
+            foreach( Log log in logs )
+            {
+                this.AddLogNoLock( log );
+            }
         }
 
         private void UpdateShortcutProperties( Log log )
