@@ -17,6 +17,7 @@
 //
 
 using System;
+using SethCS.Extensions;
 
 namespace Meditu.Api
 {
@@ -92,6 +93,11 @@ namespace Meditu.Api
             }
 
             return date.ToString( formatString );
+        }
+
+        public static string ToFormDateString( this DateTime date )
+        {
+            return date.ToString( "s" );
         }
 
         public static string ToSettingsString( this TimeOnly time, DateTimeSettings settings )

@@ -17,21 +17,70 @@
 
 @if( log == null )
 {
-    <div class="alert alert-danger">Error: No log found at this ID.</div>
-    <a href="/LogBook" class="btn btn-inverse"><i class="fas fa-long-arrow-alt-left"></i> Back to LogBook</a>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">Error: No log found at this ID.</div>
+            <a href="/LogBook" class="btn btn-inverse"><i class="fas fa-long-arrow-alt-left"></i> Back to LogBook</a>
+        </div>
+    </div>
 }
 else
 {
     <div class="row">
         <div class="col-md-12">
+        <a href="/LogBook/Log/@log.Guid" class="btn btn-inverse"><i class="fas fa-long-arrow-alt-left"></i> Back to Log View</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
             <div class="panel panel-success">
                 <div class="panel-heading">Edit Log</div>
                 <div class="panel-body">
-                    <p>Something</p>
-                </div>
-                <div class="panel-footer">
                     <form action="/LogBook/EditLog/@log.Guid" method="POST">
-                        <input class="btn btn-success" type="submit" value="Save Log"/>
+                        <div class="form-group">
+                            <label>Start Time</label>
+                            <input id="starttime" class="form-control" type="datetime-local" name="starttime"
+                                   value="@log.StartTime.ToLocalTime().ToFormDateString()"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>End Time</label>
+                            <input id="endtime" class="form-control" type="datetime-local" name="endtime"
+                                   value="@log.EndTime.ToLocalTime().ToFormDateString()"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Technique</label>
+                            <input id="technique" class="form-control" type="text" name="technique"
+                                   value="@log.Technique"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <textarea id="comments" class="form-control" rows="10" cols="80" name="comments">@log.Comments</textarea>
+                        </div>
+                        <div class="form-group">
+                            <!--
+                                TODO: allow for the modifying of location.
+                                For now, just allow them to delete it.
+                            -->
+                            @if( log.Longitude.HasValue || log.Latitude.HasValue )
+                            {
+                                <label>
+                                    <input id="removelocation" type="checkbox" name="removelocation"/>
+                                    Remove Location
+                                </label>
+                            }
+                            else
+                            {
+                                <label>
+                                    <input id="removelocation" title="No location to delete" type="checkbox" name="removelocation" disabled="disabled" readonly="readonly"/>
+                                    Remove Location
+                                </label>
+                            }
+                        </div>
+                        <input id="savelogbutton" class="btn btn-success" type="submit" value="Save Log"/>
                     </form>
                 </div>
             </div>
@@ -44,7 +93,7 @@ else
                 <div class="panel-body">
                     <p>Click the button to delete this log.  This action can not be undone.</p>
                     <form action="/LogBook/DeleteLog/@log.Guid" method="POST">
-                        <input class="btn btn-danger" type="submit" value="Delete Log"/>
+                        <input id="deletelogbutton" class="btn btn-danger" type="submit" value="Delete Log"/>
                     </form>
                 </div>
             </div>
