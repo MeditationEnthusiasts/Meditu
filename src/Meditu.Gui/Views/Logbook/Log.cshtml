@@ -16,7 +16,7 @@
 @if( log == null )
 {
     <div class="alert alert-danger">Error: No log found at this ID.</div>
-    <a href="/LogBook" class="btn btn-inverse"><i class="fa fa-backward" aria-hidden="true"></i> Back to LogBook</a>
+    <a href="/LogBook" class="btn btn-inverse"><i class="fas fa-long-arrow-alt-left"></i> Back to LogBook</a>
 }
 else
 {
@@ -47,6 +47,10 @@ else
                                 }
                             }
                         }
+                </div>
+                <div class="panel-footer">
+                    <a href="/LogBook#log_@log.Guid" class="btn btn-info"><i class="fas fa-long-arrow-alt-left"></i> Back to LogBook</a>
+                    <a href="/LogBook/Edit/@log.Guid" class="btn btn-success"><i class="fas fa-edit"></i> Edit</a>
                 </div>
             </div>
         </div>

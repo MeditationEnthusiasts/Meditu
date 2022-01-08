@@ -57,6 +57,29 @@ namespace Meditu.Gui.Controllers
             return View( model );
         }
 
+        public IActionResult Edit( [FromRoute] string id )
+        {
+            MeditationLoggerApi api = ApiBridge.Instance;
+
+            Log log;
+            if( Guid.TryParse( id, out Guid guid ) )
+            {
+                log = api.LogBook.TryGetLog( guid );
+            }
+            else
+            {
+                log = null;
+            }
+
+            var model = new LogModel(
+                Api: api,
+                Log: log
+            );
+
+            ViewData["Title"] = "Editing: " + log.ToTitleString( api.Settings.DateTimeSettings );
+            return View( model );
+        }
+
         public IActionResult MapView()
         {
             ViewData["Title"] = "The places you have meditated!";
