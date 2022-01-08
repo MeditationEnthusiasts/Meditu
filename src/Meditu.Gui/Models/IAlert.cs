@@ -16,13 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using Meditu.Api;
-
 namespace Meditu.Gui.Models
 {
-    public record LogBookModel(
-        IApiModel Api,
-        string InfoMessage,
-        string ErrorMessage
-    ) : IAlert;
+    public interface IAlert
+    {
+        string InfoMessage { get; }
+
+        string ErrorMessage { get; }
+    }
 }

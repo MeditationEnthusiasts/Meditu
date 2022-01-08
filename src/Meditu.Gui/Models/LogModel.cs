@@ -29,5 +29,5 @@ namespace Meditu.Gui.Models
         Log Log,
         string InfoMessage,
         string ErrorMessage
-    );
+    ) : IAlert;
 }

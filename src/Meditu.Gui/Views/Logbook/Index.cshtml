@@ -13,29 +13,7 @@
     IReadOnlySettingsManager settings = Model.Api.Settings;
 }
 
-@if( string.IsNullOrEmpty( Model.InfoMessage ) == false )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-info alert-dismissable">
-                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
-                @Model.InfoMessage
-            </div>
-        </div>
-    </div>
-}
-
-@if( string.IsNullOrEmpty( Model.ErrorMessage ) == false )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-danger alert-dismissable">
-                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
-                @Model.ErrorMessage
-            </div>
-        </div>
-    </div>
-}
+@await Html.PartialAsync( "~/Views/Shared/_Alert.cshtml", Model )
 
 @if( logBook.TotalSessions == 0 )
 {

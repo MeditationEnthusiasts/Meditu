@@ -25,5 +25,5 @@ namespace Meditu.Gui.Models
         ApiState ApiState,
         string InfoMessage,
         string ErrorMessage
-    );
+    ) : IAlert;
 }

@@ -16,30 +16,7 @@
     IApiModel api = Model.Api;
 }
 
-@if( string.IsNullOrEmpty( @Model.ErrorMessage ) == false )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-danger alert-dismissable">
-                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
-                <p><strong>Error when saving settings.  Settings may or may not have been saved.</strong></p>
-                <p>@Model.ErrorMessage</p>
-            </div>
-        </div>
-    </div>
-}
-
-@if( string.IsNullOrEmpty( @Model.InfoMessage ) == false )
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-info alert-dismissable">
-                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
-                <p><strong>@Model.InfoMessage</strong></p>
-            </div>
-        </div>
-    </div>
-}
+@await Html.PartialAsync( "~/Views/Shared/_Alert.cshtml", Model )
 
 <div class="row">
     <div class="col-md-12">
