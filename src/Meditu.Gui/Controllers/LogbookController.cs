@@ -23,14 +23,44 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Meditu.Gui.Controllers
 {
-    /// <summary>
-    /// The main home page of the app.
-    /// </summary>
     public class LogbookController : Controller
     {
+        // ---------------- Fields ----------------
+
+        private const string infoMessageKey = "info_message";
+        private const string errorMessageKey = "error_message";
+
+        // ---------------- Functions ----------------
+
         public IActionResult Index()
         {
             ViewData["Title"] = "Logbook";
+
+            MeditationLoggerApi api = ApiBridge.Instance;
+
+            var model = new LogBookModel(
+                Api: api,
+                InfoMessage: this.TempData[infoMessageKey]?.ToString() ?? string.Empty,
+                ErrorMessage: this.TempData[errorMessageKey]?.ToString() ?? string.Empty
+            );
+
+            return View( model );
+        }
+        public IActionResult MapView()
+        {
+            ViewData["Title"] = "The places you have meditated!";
+            return View( ApiBridge.Instance );
+        }
+
+        public IActionResult GraphView()
+        {
+            ViewData["Title"] = "Logbook - Graph View";
+            return View( ApiBridge.Instance );
+        }
+
+        public IActionResult CalendarView()
+        {
+            ViewData["Title"] = "Logbook - Calendar View";
             return View( ApiBridge.Instance );
         }
 
@@ -50,7 +80,9 @@ namespace Meditu.Gui.Controllers
 
             var model = new LogModel(
                 Api: api,
-                Log: log
+                Log: log,
+                InfoMessage: this.TempData[infoMessageKey]?.ToString() ?? string.Empty,
+                ErrorMessage: this.TempData[errorMessageKey]?.ToString() ?? string.Empty
             );
 
             ViewData["Title"] = log.ToTitleString( api.Settings.DateTimeSettings );
@@ -73,29 +105,47 @@ namespace Meditu.Gui.Controllers
 
             var model = new LogModel(
                 Api: api,
-                Log: log
+                Log: log,
+                InfoMessage: this.TempData[infoMessageKey]?.ToString() ?? string.Empty,
+                ErrorMessage: this.TempData[errorMessageKey]?.ToString() ?? string.Empty
             );
 
             ViewData["Title"] = "Editing: " + log.ToTitleString( api.Settings.DateTimeSettings );
             return View( model );
         }
 
-        public IActionResult MapView()
+        [HttpPost] // <- Delete is not supported by forms.  So use a POST.
+        public IActionResult DeleteLog( [FromRoute] string id )
         {
-            ViewData["Title"] = "The places you have meditated!";
-            return View( ApiBridge.Instance );
-        }
+            MeditationLoggerApi api = ApiBridge.Instance;
 
-        public IActionResult GraphView()
-        {
-            ViewData["Title"] = "Logbook - Graph View";
-            return View( ApiBridge.Instance );
-        }
+            Log log = null;
+            string errorString = string.Empty;
+            try
+            {
+                if( Guid.TryParse( id, out Guid guid ) )
+                {
+                    log = api.LogBook.DeleteLog( guid );
+                }
 
-        public IActionResult CalendarView()
-        {
-            ViewData["Title"] = "Logbook - Calendar View";
-            return View( ApiBridge.Instance );
+                if( log is null )
+                {
+                    this.TempData[errorMessageKey] = "Could not delete log, ID not found.";
+                }
+            }
+            catch( Exception e )
+            {
+                this.TempData[errorMessageKey] = e.Message;
+            }
+            
+            // When a log is deleted, we want to go back to the main
+            // logbook page, as there is no log to redirect to.
+            if( log is not null )
+            {
+                this.TempData[infoMessageKey] = $"Deleted log: {log.ToTitleString( api.Settings.DateTimeSettings )}";
+            }
+
+            return RedirectToAction( nameof( Index ) );
         }
     }
 }

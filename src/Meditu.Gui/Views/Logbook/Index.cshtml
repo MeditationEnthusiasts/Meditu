@@ -2,14 +2,39 @@
 @using System.IO;
 @using System.Linq;
 @using Meditu.Api;
+@using Meditu.Gui.Models;
 
-@model IApiModel;
+@model LogBookModel;
 
 @{
     Layout = "_Content";
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-    LogBook logBook = Model.LogBook;
-    IReadOnlySettingsManager settings = Model.Settings;
+    LogBook logBook = Model.Api.LogBook;
+    IReadOnlySettingsManager settings = Model.Api.Settings;
+}
+
+@if( string.IsNullOrEmpty( Model.InfoMessage ) == false )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                @Model.InfoMessage
+            </div>
+        </div>
+    </div>
+}
+
+@if( string.IsNullOrEmpty( Model.ErrorMessage ) == false )
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissable">
+                <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                @Model.ErrorMessage
+            </div>
+        </div>
+    </div>
 }
 
 @if( logBook.TotalSessions == 0 )

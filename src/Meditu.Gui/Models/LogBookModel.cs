@@ -20,13 +20,8 @@ using Meditu.Api;
 
 namespace Meditu.Gui.Models
 {
-    /// <param name="Log">
-    /// The log that wants to be viewed.  Null
-    /// if the log is not found.
-    /// </param>
-    public record LogModel(
+    public record LogBookModel(
         IApiModel Api,
-        Log Log,
         string InfoMessage,
         string ErrorMessage
     );

@@ -290,6 +290,29 @@ namespace Meditu.Api
         }
 
         /// <summary>
+        /// Tries to delete the log at the given ID from
+        /// the database. 
+        /// </summary>
+        /// <returns>The log that was deleted.  Null if no log of the ID exists.</returns>
+        public Log? DeleteLog( Guid id )
+        {
+            lock( this.list )
+            {
+                if( this.logTable.ContainsKey( id ) == false )
+                {
+                    return null;
+                }
+
+                Log log = this.logTable[id];
+                this.logTable.Remove( id );
+                this.list.Remove( log );
+                this.col.DeleteMany( l => l.Guid == id );
+
+                return log;
+            }
+        }
+
+        /// <summary>
         /// Clears the list AND resets the "shortcut" properties.
         /// </summary>
         public void ResetState()
