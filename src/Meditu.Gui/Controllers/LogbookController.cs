@@ -16,6 +16,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using System;
+using Meditu.Api;
+using Meditu.Gui.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Meditu.Gui.Controllers
@@ -29,6 +32,29 @@ namespace Meditu.Gui.Controllers
         {
             ViewData["Title"] = "Logbook";
             return View( ApiBridge.Instance );
+        }
+
+        public IActionResult Log( [FromRoute] string id )
+        {
+            MeditationLoggerApi api = ApiBridge.Instance;
+
+            Log log;
+            if( Guid.TryParse( id, out Guid guid ) )
+            {
+                log = api.LogBook.TryGetLog( guid );
+            }
+            else
+            {
+                log = null;
+            }
+
+            var model = new LogModel(
+                Api: api,
+                Log: log
+            );
+
+            ViewData["Title"] = log.ToTitleString( api.Settings.DateTimeSettings );
+            return View( model );
         }
 
         public IActionResult MapView()

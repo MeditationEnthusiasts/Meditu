@@ -228,15 +228,15 @@ namespace Meditu.Api
         }
     }
 
-    internal static class LogExtensions
+    public static class LogExtensions
     {
         // ---------------- Fields ----------------
 
-        public const string XmlElementName = "log";
+        internal const string XmlElementName = "log";
 
         // ---------------- Functions ----------------
 
-        public static void Validate( this Log log )
+        internal static void Validate( this Log log )
         {
             bool success = true;
             StringBuilder errorString = new StringBuilder();
@@ -284,7 +284,7 @@ namespace Meditu.Api
             }
         }
 
-        public static void FromXml( this Log log, XmlNode node, int xmlVersion )
+        internal static void FromXml( this Log log, XmlNode node, int xmlVersion )
         {
             if( XmlElementName.EqualsIgnoreCase( node.Name ) == false )
             {
@@ -369,7 +369,7 @@ namespace Meditu.Api
         /// <summary>
         /// Appends this Log to the given XML document.
         /// </summary>
-        public static void ToXml( this Log log, XmlDocument doc, XmlNode parentNode )
+        internal static void ToXml( this Log log, XmlDocument doc, XmlNode parentNode )
         {
             log.Validate();
 
@@ -432,6 +432,17 @@ namespace Meditu.Api
             }
 
             parentNode.AppendChild( logNode );
+        }
+
+        public static string ToTitleString( this Log log, DateTimeSettings settings )
+        {
+            if( log is null )
+            {
+                return "Unknown Log Entry";
+            }
+
+            string technique = string.IsNullOrWhiteSpace( log.Technique ) ? "Unknown Technique" : log.Technique;
+            return $"{technique} - {log.StartTime.ToSettingsString( settings )}";
         }
     }
 }

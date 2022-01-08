@@ -1,0 +1,54 @@
+﻿@using System.Globalization;
+@using System.IO;
+@using System.Linq;
+@using Meditu.Api;
+@using Meditu.Gui.Models;
+
+@model LogModel;
+
+@{
+    Layout = "_Content";
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+    Log log = Model.Log;
+    DateTimeSettings dateTimeSettings = Model.Api.Settings.DateTimeSettings;
+}
+
+@if( log == null )
+{
+    <div class="alert alert-danger">Error: No log found at this ID.</div>
+    <a href="/LogBook" class="btn btn-inverse"><i class="fa fa-backward" aria-hidden="true"></i> Back to LogBook</a>
+}
+else
+{
+    <div class = "row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3><string>@textInfo.ToTitleCase( @log.Technique )</string></h3>
+                </div>
+                <div class="panel-body">
+                    <p><strong>Start Time: </strong> @log.StartTime.ToSettingsString( dateTimeSettings )</p>
+                    <p><strong>End Time: </strong> @log.EndTime.ToSettingsString( dateTimeSettings )</p>
+                    <p><strong>Duration: </strong> @log.Duration.ToSettingsString( dateTimeSettings )</p>
+                    <p><strong>Comments:</strong></p>
+                        @if (string.IsNullOrEmpty(log.Comments))
+                        {
+                            <p>None.</p>
+                        }
+                        else
+                        {
+                            @using( StringReader reader = new StringReader( log.Comments ) )
+                            {
+                                string line = reader.ReadLine();
+                                while( line != null )
+                                {
+                                    <p>@line</p>
+                                    line = reader.ReadLine();
+                                }
+                            }
+                        }
+                </div>
+            </div>
+        </div>
+    </div>
+}

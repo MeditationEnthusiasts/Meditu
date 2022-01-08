@@ -189,6 +189,21 @@ namespace Meditu.Api
             }
         }
 
+        public Log? TryGetLog( Guid guid )
+        {
+            lock( this.list )
+            {
+                if( this.logTable.ContainsKey( guid ) == false )
+                {
+                    return null;
+                }
+                else
+                {
+                    return this.logTable[guid].Clone();
+                }
+            }
+        }
+
         /// <summary>
         /// Clears the list (might save memory), but will NOT clear any of the "shortcut" properties.
         /// </summary>
