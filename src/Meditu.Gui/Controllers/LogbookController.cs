@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using Meditu.Api;
 using Meditu.Gui.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -131,9 +132,16 @@ namespace Meditu.Gui.Controllers
                     this.TempData[errorMessageKey] = $"Invalid ID: {id}.";
                 }
             }
+            catch( KeyNotFoundException e )
+            {
+                this.TempData[errorMessageKey] = e.Message;
+            }
             catch( Exception e )
             {
                 this.TempData[errorMessageKey] = e.Message;
+                // Some other exception while editing happened,
+                // but we know the key, so return to the edit page.
+                return Redirect( $"/LogBook/Edit/{id}" );
             }
 
             return Redirect( $"/LogBook/Log/{id}" );

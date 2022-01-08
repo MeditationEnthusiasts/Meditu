@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using LiteDB;
 using SethCS.Collections;
+using SethCS.Exceptions;
 using SethCS.Extensions;
 
 namespace Meditu.Api
@@ -285,6 +286,11 @@ namespace Meditu.Api
 
         public void EditLog( Guid id, EditLogSettings settings )
         {
+            if( settings.TryValidate( out string errorString ) == false )
+            {
+                throw new ValidationException( errorString );
+            }
+
             lock( this.list )
             {
                 if( this.logTable.ContainsKey( id ) == false )
