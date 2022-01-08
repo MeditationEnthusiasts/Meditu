@@ -1,0 +1,13 @@
+﻿@using System.IO;
+
+@model string;
+
+@using( StringReader reader = new StringReader( Model ) )
+{
+    string line = reader.ReadLine();
+    while( line != null )
+    {
+        <p>@line</p>
+        line = reader.ReadLine();
+    }
+}

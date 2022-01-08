@@ -43,15 +43,7 @@ else
                         }
                         else
                         {
-                            @using( StringReader reader = new StringReader( log.Comments ) )
-                            {
-                                string line = reader.ReadLine();
-                                while( line != null )
-                                {
-                                    <p>@line</p>
-                                    line = reader.ReadLine();
-                                }
-                            }
+                            @await Html.PartialAsync( "~/Views/Shared/_Paragraph.cshtml", log.Comments );
                         }
                     </div>
                     <div class="panel-footer">
