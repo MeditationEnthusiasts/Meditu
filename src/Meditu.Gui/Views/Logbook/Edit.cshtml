@@ -40,25 +40,25 @@ else
                     <form action="/LogBook/EditLog/@log.Guid" method="POST">
                         <div class="form-group">
                             <label>Start Time</label>
-                            <input id="starttime" class="form-control" type="datetime-local" name="starttime"
+                            <input id="@nameof( EditLogSettings.StartTime )" class="form-control" type="datetime-local" name="@nameof( EditLogSettings.StartTime )"
                                    value="@log.StartTime.ToLocalTime().ToFormDateString()"
                             />
                         </div>
                         <div class="form-group">
                             <label>End Time</label>
-                            <input id="endtime" class="form-control" type="datetime-local" name="endtime"
+                            <input id="@nameof( EditLogSettings.EndTime )" class="form-control" type="datetime-local" name="@nameof( EditLogSettings.EndTime )"
                                    value="@log.EndTime.ToLocalTime().ToFormDateString()"
                             />
                         </div>
                         <div class="form-group">
                             <label>Technique</label>
-                            <input id="technique" class="form-control" type="text" name="technique"
+                            <input id="@nameof( EditLogSettings.Technique )" class="form-control" type="text" name="@nameof( EditLogSettings.Technique )"
                                    value="@log.Technique"
                             />
                         </div>
                         <div class="form-group">
                             <label>Comments</label>
-                            <textarea id="comments" class="form-control" rows="10" cols="80" name="comments">@log.Comments</textarea>
+                            <textarea id="@nameof( EditLogSettings.Comments )" class="form-control" rows="10" cols="80" name="@nameof( EditLogSettings.Comments )">@log.Comments</textarea>
                         </div>
                         <div class="form-group">
                             <!--
@@ -68,14 +68,14 @@ else
                             @if( log.Longitude.HasValue || log.Latitude.HasValue )
                             {
                                 <label>
-                                    <input id="removelocation" type="checkbox" name="removelocation"/>
+                                    <input id="@nameof( EditLogSettings.RemoveLocation )" type="checkbox" name="@nameof( EditLogSettings.RemoveLocation )"/>
                                     Remove Location
                                 </label>
                             }
                             else
                             {
                                 <label>
-                                    <input id="removelocation" title="No location to delete" type="checkbox" name="removelocation" disabled="disabled" readonly="readonly"/>
+                                    <input id="@nameof( EditLogSettings.RemoveLocation )" title="No location to delete" type="checkbox" name="@nameof( EditLogSettings.RemoveLocation )" disabled="disabled" readonly="readonly"/>
                                     Remove Location
                                 </label>
                             }

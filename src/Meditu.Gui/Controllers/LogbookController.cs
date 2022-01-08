@@ -114,6 +114,31 @@ namespace Meditu.Gui.Controllers
             return View( model );
         }
 
+        [HttpPost]
+        public IActionResult EditLog( [FromRoute] string id, [FromForm] EditLogSettings settings )
+        {
+            MeditationLoggerApi api = ApiBridge.Instance;
+
+            try
+            {
+                if( Guid.TryParse( id, out Guid guid ) )
+                {
+                    api.LogBook.EditLog( guid, settings );
+                    this.TempData[infoMessageKey] = "Log has been updated successfully.";
+                }
+                else
+                {
+                    this.TempData[errorMessageKey] = $"Invalid ID: {id}.";
+                }
+            }
+            catch( Exception e )
+            {
+                this.TempData[errorMessageKey] = e.Message;
+            }
+
+            return Redirect( $"/LogBook/Log/{id}" );
+        }
+
         [HttpPost] // <- Delete is not supported by forms.  So use a POST.
         public IActionResult DeleteLog( [FromRoute] string id )
         {

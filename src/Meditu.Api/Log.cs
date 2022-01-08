@@ -434,6 +434,22 @@ namespace Meditu.Api
             parentNode.AppendChild( logNode );
         }
 
+        internal static void EditLog( this Log log, EditLogSettings settings )
+        {
+            log.StartTime = settings.StartTime;
+            log.EndTime = settings.EndTime;
+            log.Comments = settings.Comments;
+            log.Technique = settings.Technique;
+
+            if( settings.RemoveLocation )
+            {
+                log.Latitude = null;
+                log.Longitude = null;
+            }
+
+            log.EditTime = DateTime.Now;
+        }
+
         public static string ToTitleString( this Log log, DateTimeSettings settings )
         {
             if( log is null )

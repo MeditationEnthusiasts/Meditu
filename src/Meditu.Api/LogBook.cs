@@ -283,6 +283,27 @@ namespace Meditu.Api
             return log.Guid;
         }
 
+        public void EditLog( Guid id, EditLogSettings settings )
+        {
+            lock( this.list )
+            {
+                if( this.logTable.ContainsKey( id ) == false )
+                {
+                    throw new KeyNotFoundException(
+                        $"Can not find log with ID {id}, can not edit."
+                    );
+                }
+
+                Log log = this.logTable[id];
+                log.EditLog( settings );
+                this.col.Update( log );
+
+                // Need to rebuild our cache.
+                // There's probably a more efficent way to do this.
+                this.RefreshNoLock();
+            }
+        }
+
         /// <summary>
         /// Tries to delete the log at the given ID from
         /// the database. 

@@ -31,6 +31,7 @@ else
                 <div class="panel-body">
                     <p><strong>Start Time: </strong> @log.StartTime.ToSettingsString( dateTimeSettings )</p>
                     <p><strong>End Time: </strong> @log.EndTime.ToSettingsString( dateTimeSettings )</p>
+                    <p><strong>Last Updated: </strong> @log.EditTime.ToSettingsString( dateTimeSettings )</p>
                     <p><strong>Duration: </strong> @log.Duration.ToSettingsString( dateTimeSettings )</p>
                     <p><strong>Comments:</strong></p>
                     @if (string.IsNullOrEmpty(log.Comments))
