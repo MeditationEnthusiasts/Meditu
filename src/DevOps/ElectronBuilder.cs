@@ -47,15 +47,14 @@ namespace DevOps
         {
             FilePath projectPath = this.context.GuiCsProject;
             DirectoryPath workingDirectory = projectPath.GetDirectory();
-            DirectoryPath outputDirectory = this.context.DistributionPath.Combine( new DirectoryPath( target ) );
-            string medituExeName = projectPath.GetFilenameWithoutExtension().ToString();
+            DirectoryPath outputDirectory = this.context.DistributionPath.Combine( target );
 
             var arguments = ProcessArgumentBuilder.FromStrings(
                 new string[]
                 {
                     "build",
                     $"/target {target}",
-                    $"/absolute-path {outputDirectory}",
+                    // $"/absolute-path \"{outputDirectory}\"", // <- Doesn't work.  Need to use the manifest file to specify this.
                     $"/version {VersionInfo.VersionString}",
                     $"/p:Version={VersionInfo.VersionString}",
                     $"/p:AssemblyVersion={VersionInfo.VersionString}",
@@ -74,6 +73,7 @@ namespace DevOps
 
             FilePath electronizeExe = userArgs.ElectronizePath ?? new FilePath( "electronize" );
             context.Information( $"Building desktop application for {target}" );
+            CreateManifestFile( projectPath, outputDirectory, workingDirectory );
 
             using( IProcess proc = this.context.ProcessRunner.Start( electronizeExe, processSettings ) )
             {
@@ -85,8 +85,60 @@ namespace DevOps
             }
         }
 
-        private void CreateManifestFile( DirectoryPath workingDirectory )
+        private void CreateManifestFile(
+            FilePath projectPath,
+            DirectoryPath outputDir,
+            DirectoryPath workingDirectory
+        )
         {
+            string medituExeName = projectPath.GetFilenameWithoutExtension().ToString();
+
+            string manifest =
+@$"
+{{
+  ""executable"": ""{medituExeName}"",
+  ""splashscreen"": {{
+    ""imageFile"": ""{this.context.ImageDirectory.CombineWithFilePath( "reallogo.png" )}""
+  }},
+  ""name"": ""Meditu"",
+  ""author"": ""Meditation Enthusiasts"",
+  ""singleInstance"": true,
+  ""environment"": ""Production"",
+  ""build"": {{
+    ""appId"": ""com.{medituExeName}.app"",
+    ""productName"": ""Meditu"",
+    ""copyright"": ""{VersionInfo.CopyrightString}"",
+    ""buildVersion"": ""{VersionInfo.VersionString}"",
+    ""compression"": ""maximum"",
+    ""directories"": {{
+      ""output"": ""{outputDir}""
+    }},
+    ""win"": {{
+        ""target"": ""msi"",
+        ""icon"": ""{this.context.ImageDirectory.CombineWithFilePath( "reallogo.ico" )}""
+    }},
+    ""extraResources"": [
+      {{
+        ""from"": ""./bin"",
+        ""to"": ""bin"",
+        ""filter"": [ ""**/*"" ]
+      }}
+    ],
+    ""files"": [
+      {{
+        ""from"": ""./ElectronHostHook/node_modules"",
+        ""to"": ""ElectronHostHook/node_modules"",
+        ""filter"": [ ""**/*"" ]
+      }},
+      ""**/*""
+    ]
+  }}
+}}
+";
+            File.WriteAllText(
+                workingDirectory.CombineWithFilePath( "electron.manifest.json" ).ToString(),
+                manifest
+            );
         }
     }
 }

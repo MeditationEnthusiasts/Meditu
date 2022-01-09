@@ -37,6 +37,9 @@ namespace DevOps
             this.GuiCsProject = this.SrcPath.CombineWithFilePath(
                 new FilePath( "Meditu.Gui/Meditu.Gui.csproj" )
             );
+            this.ImageDirectory = this.GuiCsProject.GetDirectory().Combine(
+                "wwwroot/static/img"
+            );
 
 #if DEBUG
             this.RunningRelease = false;
@@ -58,6 +61,8 @@ namespace DevOps
         public FilePath SlnPath { get; private set; }
 
         public FilePath GuiCsProject { get; private set; }
+
+        public DirectoryPath ImageDirectory { get; private set; }
 
         public bool RunningRelease { get; set; }
     }
