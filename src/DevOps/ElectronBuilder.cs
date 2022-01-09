@@ -119,7 +119,8 @@ namespace DevOps
     }},
     ""nsis"": {{
         ""perMachine"": true,
-        ""oneClick"": false
+        ""oneClick"": false,
+        ""artifactName"": ""${{productName}} Setup.${{ext}}""
     }},
     ""extraResources"": [
       {{
