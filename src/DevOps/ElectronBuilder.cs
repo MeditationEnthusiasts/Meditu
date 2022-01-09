@@ -118,7 +118,8 @@ namespace DevOps
         ""icon"": ""{this.context.ImageDirectory.CombineWithFilePath( "reallogo.ico" )}""
     }},
     ""nsis"": {{
-        ""perMachine"": true
+        ""perMachine"": true,
+        ""oneClick"": false
     }},
     ""extraResources"": [
       {{
