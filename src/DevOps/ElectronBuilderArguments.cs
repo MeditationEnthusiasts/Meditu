@@ -1,4 +1,4 @@
-//
+﻿//
 // Meditu - A way to track Meditation Sessions.
 // Copyright (C) 2017-2022 Seth Hendrick.
 // 
@@ -16,23 +16,28 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#if CAKE
-#else
+using Cake.ArgumentBinder;
+using Cake.Core.IO;
 
 namespace DevOps
 {
-#endif
-    public static class VersionInfo
+    internal sealed class ElectronBuilderArguments
     {
-        // ---------------- Fields ----------------
+        // ---------------- Constructor ----------------
 
-        public static readonly Version Version = new Version( 0, 4, 0 );
+        public ElectronBuilderArguments()
+        {
+            this.ElectronizePath = null;
+        }
 
-        public static readonly string VersionString = Version.ToString( 3 );
+        // ---------------- Properties ----------------
 
-        public static readonly string CopyrightString = "Copyright (C) 2017-2022 Meditation Enthusiasts.";
+        [FilePathArgument(
+            "electronize_path",
+            Description = "Path to Electronize.exe.  Leave unspecified to search the path.",
+            MustExist = false,
+            DefaultValue = null
+        )]
+        public FilePath? ElectronizePath { get; set; }
     }
-#if CAKE
-#else
 }
-#endif

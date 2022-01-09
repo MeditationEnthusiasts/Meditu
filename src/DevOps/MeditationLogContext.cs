@@ -32,6 +32,7 @@ namespace DevOps
             this.RepoRoot = context.Environment.WorkingDirectory;
             this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
             this.SlnPath = this.SrcPath.CombineWithFilePath( new FilePath( "Meditu.sln" ) );
+            this.DistributionPath = this.RepoRoot.Combine( new DirectoryPath( "dist" ) );
             this.DockerPath = this.RepoRoot.Combine( new DirectoryPath( "Docker" ) );
             this.GuiCsProject = this.SrcPath.CombineWithFilePath(
                 new FilePath( "Meditu.Gui/Meditu.Gui.csproj" )
@@ -47,6 +48,8 @@ namespace DevOps
         // ---------------- Properties ----------------
 
         public DirectoryPath RepoRoot { get; private set; }
+
+        public DirectoryPath DistributionPath { get; private set; }
 
         public DirectoryPath SrcPath { get; private set; }
 
