@@ -114,8 +114,11 @@ namespace DevOps
       ""output"": ""{outputDir}""
     }},
     ""win"": {{
-        ""target"": ""msi"",
+        ""target"": ""nsis"",
         ""icon"": ""{this.context.ImageDirectory.CombineWithFilePath( "reallogo.ico" )}""
+    }},
+    ""nsis"": {{
+        ""perMachine"": true
     }},
     ""extraResources"": [
       {{
