@@ -19,7 +19,7 @@
 using Cake.ArgumentBinder;
 using Cake.Core.IO;
 
-namespace DevOps
+namespace DevOps.ElectronBuild
 {
     internal sealed class ElectronBuilderArguments
     {

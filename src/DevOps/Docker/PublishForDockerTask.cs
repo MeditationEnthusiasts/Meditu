@@ -22,7 +22,7 @@ using Cake.Common.Tools.DotNetCore.Publish;
 using Cake.Core.IO;
 using Cake.Frosting;
 
-namespace DevOps.Tasks
+namespace DevOps.Docker
 {
     [TaskName( "publish_for_docker" )]
     [TaskDescription( "Publishes everything needed for Docker before creating the Docker file." )]

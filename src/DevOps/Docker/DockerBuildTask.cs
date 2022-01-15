@@ -20,7 +20,7 @@ using Cake.Common;
 using Cake.Core.IO;
 using Cake.Frosting;
 
-namespace DevOps.Tasks
+namespace DevOps.Docker
 {
     [TaskName( "docker_build" )]
     [TaskDescription( "Builds the Docker image for the currently running platform." )]

@@ -16,4 +16,10 @@
     <ProjectReference Include="..\..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ElectronBuild\" />
+    <Folder Include="UnitTests\" />
+    <Folder Include="VersionDump\" />
+  </ItemGroup>
+
 </Project>

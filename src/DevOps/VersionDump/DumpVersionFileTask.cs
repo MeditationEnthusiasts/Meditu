@@ -20,7 +20,7 @@ using Cake.ArgumentBinder;
 using Cake.Common.Diagnostics;
 using Cake.Frosting;
 
-namespace DevOps.Tasks
+namespace DevOps.VersionDump
 {
     [TaskName( "dump_version" )]
     [TaskDescription( "Writes the version to the given file." )]

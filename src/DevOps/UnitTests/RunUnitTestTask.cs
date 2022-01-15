@@ -21,7 +21,7 @@ using Cake.Core.IO;
 using Cake.Frosting;
 using Seth.CakeLib.TestRunner;
 
-namespace DevOps.Tasks
+namespace DevOps.UnitTests
 {
     [TaskName( "unit_test" )]
     [TaskDescription( "Runs all the unit tests.  Pass in --code_coverage=true to run with coverage." )]

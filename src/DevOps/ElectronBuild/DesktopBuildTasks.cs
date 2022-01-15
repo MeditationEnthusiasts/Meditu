@@ -18,7 +18,7 @@
 
 using Cake.Frosting;
 
-namespace DevOps.Tasks
+namespace DevOps.ElectronBuild
 {
     [TaskName( "build_windows" )]
     [TaskDescription( "Builds the desktop application for Windows" )]

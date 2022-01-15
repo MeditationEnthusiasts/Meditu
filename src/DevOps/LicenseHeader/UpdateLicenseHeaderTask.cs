@@ -22,7 +22,7 @@ using Cake.Frosting;
 using Cake.LicenseHeaderUpdater;
 using Seth.CakeLib;
 
-namespace DevOps.Tasks
+namespace DevOps.LicenseHeader
 {
     [TaskName( "update_licenses" )]
     public sealed class UpdateLicenseHeaderTask : DefaultTask

@@ -19,7 +19,7 @@
 using Cake.ArgumentBinder;
 using Cake.Core.IO;
 
-namespace DevOps
+namespace DevOps.VersionDump
 {
     public sealed class VersionDumpArguments
     {

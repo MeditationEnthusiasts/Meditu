@@ -21,7 +21,7 @@ using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Core.IO;
 
-namespace DevOps
+namespace DevOps.ElectronBuild
 {
     internal sealed class ElectronBuilder
     {

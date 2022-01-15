@@ -18,7 +18,7 @@
 
 using Cake.ArgumentBinder;
 
-namespace DevOps
+namespace DevOps.UnitTests
 {
     internal class TestArguments
     {
