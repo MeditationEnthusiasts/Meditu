@@ -1,0 +1,323 @@
+@Library( "X13JenkinsLib" )_
+
+final String archiveFolder = "archives";
+
+def CallCake( String arguments )
+{
+    X13Cmd( "./Cake/dotnet-cake ./checkout/build.cake ${arguments}" );
+}
+
+def CallDevops( String arguments )
+{
+    X13Cmd( "dotnet ./checkout/src/DevOps/bin/Debug/net6.0/DevOps.dll ${arguments}" );
+}
+
+def Build()
+{
+    CallCake( "--target=build" );
+}
+
+def RunUnitTests()
+{
+    CallDevops( "--target=unit_test" );
+}
+
+def GetVersFile()
+{
+    return "version.txt";
+}
+
+def GetVersion()
+{
+    return readFile( GetVersFile() );
+}
+
+pipeline
+{
+    agent none
+    environment
+    {
+        DOTNET_CLI_TELEMETRY_OPTOUT = "true"
+        DOTNET_NOLOGO = "true"
+    }
+    parameters
+    {
+        booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
+        booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
+        booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
+        booleanParam( name: "BuildDocker", defaultValue: true, description: "Should we build Docker Containers?" );
+    }
+    options
+    {
+        skipDefaultCheckout( true );
+        timeout( time: 1, unit: 'HOURS' ); // <- Docker can be slow.
+        timestamps();
+    }
+    stages
+    {
+        stage( "Build & Test" )
+        {
+            parallel
+            {
+                // ---------------- Windows ----------------
+
+                stage( "Windows" )
+                {
+                    agent
+                    {
+                        label "windows & x64";
+                    }
+                    stages
+                    {
+                        // Jenkins doesn't seem to like running Docker in
+                        // and agent... it just seems to just hang.
+                        // https://issues.jenkins.io/browse/JENKINS-59893
+                        // Therefore, just run on the Windows agent directly.
+                        stage( "clean" )
+                        {
+                            steps
+                            {
+                                cleanWs();
+                            }
+                        }
+                        stage( "checkout" )
+                        {
+                            steps
+                            {
+                                checkout scm;
+                            }
+                        }
+                        stage( "prepare" )
+                        {
+                            steps
+                            {
+                                X13Cmd( "dotnet tool update Cake.Tool --tool-path ./Cake" );
+                                CallCake( "--showdescription" );
+                            }
+                        }
+                        stage( "build" )
+                        {
+                            steps
+                            {
+                                Build();
+                                CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
+                                CleanDirectory( pwd() + "\\${archiveFolder}" );
+                            }
+                        }
+                        stage( "unit_test" )
+                        {
+                            steps
+                            {
+                                RunUnitTests();
+                            }
+                            when
+                            {
+                                expression
+                                {
+                                    return params.RunUnitTests;
+                                }
+                            }
+                            post
+                            {
+                                always
+                                {
+                                    X13ParseMsTestResults(
+                                        filePattern: "checkout/TestResults/UnitTests/*.xml",
+                                        // Will already abort if the unit tests fail.
+                                        abortOnFail: false
+                                    );
+                                }
+                            }
+                        }
+                        stage( "build_desktop" )
+                        {
+                            steps
+                            {
+                                CallDevops( "--target=build_windows" );
+                                archiveArtifacts "checkout/dist/win/*.exe";
+                                archiveArtifacts "checkout/dist/win/*.exe.sha256";
+                            }
+                        }
+                        stage( "build_docker" )
+                        {
+                            steps
+                            {
+                                echo "Windows does not support docker buildx command.  No Windows images will currently be made.";
+                            }
+                        }
+                        when
+                        {
+                            expression
+                            {
+                                return params.BuildDocker;
+                            }
+                        }
+                    }
+                }
+                when
+                {
+                    expression
+                    {
+                        return params.BuildWindows;
+                    }
+                } // End Windows
+
+                // ---------------- Linux ----------------
+
+                stage( "Linux" )
+                {
+                    agent
+                    {
+                        label "ubuntu && docker && x64";
+                    }
+                    stages
+                    {
+                        stage( "clean" )
+                        {
+                            steps
+                            {
+                                cleanWs();
+                            }
+                        }
+                        stage( "checkout" )
+                        {
+                            steps
+                            {
+                                checkout scm;
+                            }
+                        }
+                        stage( "In .NET Docker" )
+                        {
+                            agent
+                            {
+                                dockerfile
+                                {
+                                    filename "linuxbuild.dockerfile";
+                                    dir "checkout/Docker";
+                                    label "meditu-linux-buildenv";
+                                    args "-e HOME='${env.WORKSPACE}'";
+                                    reuseNode true;
+                                }
+                            }
+                            stages
+                            {
+                                stage( "build" )
+                                {
+                                    steps
+                                    {
+                                        Build();
+                                        CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
+                                        CleanDirectory( pwd() + "\\${archiveFolder}" );
+                                        stash includes: GetVersFile(), name: 'version'
+                                    }
+                                }
+                                stage( "unit_test" )
+                                {
+                                    steps
+                                    {
+                                        RunUnitTests();
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return params.RunUnitTests;
+                                        }
+                                    }
+                                    post
+                                    {
+                                        always
+                                        {
+                                            X13ParseMsTestResults(
+                                                filePattern: "checkout/TestResults/UnitTests/*.xml",
+                                                // Will already abort if the unit tests fail.
+                                                abortOnFail: false
+                                            );
+                                        }
+                                    }
+                                }
+                                stage( "build_desktop" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=build_linux" );
+                                        sh "ls -la checkout/dist/linux";
+                                        // archiveArtifacts "checkout/dist/linux/*.deb";
+                                        //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+                                    }
+                                }
+                                stage( "build_docker" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=publish_for_docker" );
+                                        CallDevops( "--target=build_docker_linux_x64" );
+                                        stash includes: "checkout/Docker/bin/**/*" name: "linux_build";
+                                    }
+                                }
+                                when
+                                {
+                                    expression
+                                    {
+                                        return params.BuildDocker;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                when
+                {
+                    expression
+                    {
+                        return params.BuildLinux;
+                    }
+                }
+            } // End Parallel
+            
+            // ---------------- Linux ARM ----------------
+
+            stage( "Linux Arm" )
+            {
+                agent
+                {
+                    label "arm32 && docker && linux"
+                }
+                stages
+                {
+                    stage( "clean" )
+                    {
+                        steps
+                        {
+                            cleanWs();
+                        }
+                    }
+                    stage( "checkout" )
+                    {
+                        steps
+                        {
+                            checkout scm;
+                            unstash "version";
+                            unstash "linux_build";
+                        }
+                    }
+                    stage( "Build Docker" )
+                    {
+                        steps
+                        {
+                            sh "cd checkout/Docker && docker buildx build --platform linux/arm/v7,linux/arm/v6 --tag xforever1313/meditu --file server.dockerfile .";
+                            sh "docker tag xforever1313/meditu:latest xforever1313/meditu:${GetVersion}";
+                        }
+                    }
+                }
+            }
+            when
+            {
+                expression
+                {
+                    return params.BuildLinux && params.BuildDocker;
+                }
+            }
+        }
+    }
+}
