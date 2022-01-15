@@ -55,8 +55,8 @@ namespace DevOps.Docker
             // may as well decrease the file size a bit.
             var filesToDelete = new FilePath[]
             {
-                publishDir.CombineWithFilePath( "MeditationLogger.Gui.exe" ),
-                publishDir.CombineWithFilePath( "MeditationLogger.Gui" )
+                publishDir.CombineWithFilePath( "Meditu.Gui.exe" ),
+                publishDir.CombineWithFilePath( "Meditu.Gui" )
             };
             foreach( FilePath path in filesToDelete )
             {

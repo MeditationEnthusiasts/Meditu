@@ -22,52 +22,42 @@ using Cake.Frosting;
 
 namespace DevOps.Docker
 {
-    [TaskName( "docker_build" )]
-    [TaskDescription( "Builds the Docker image for the currently running platform." )]
-    public sealed class DockerBuildTask : DefaultTask
+    [TaskName( "build_docker_windows" )]
+    [TaskDescription( "Builds the Docker image for Windows." )]
+    public sealed class BuildWindowsX64DockerTask : DefaultTask
     {
-        // ----------------- Fields -----------------
-
-        private const string imageName = "xforever1313/meditationlogger";
-
         // ----------------- Functions -----------------
 
         public override void Run( MeditationLogContext context )
         {
-            FilePath dockerFile = "server.dockerfile";
+            var builder = new DockerBuilder( context );
+            builder.Run( "windows/amd64" );
+        }
+    }
 
-            {
-                string arguments = $"build -t {imageName} -f {dockerFile} .";
-                ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
-                ProcessSettings settings = new ProcessSettings
-                {
-                    Arguments = argumentsBuilder,
-                    WorkingDirectory = context.DockerPath
-                };
-                int exitCode = context.StartProcess( "docker", settings );
-                if( exitCode != 0 )
-                {
-                    throw new ApplicationException(
-                        "Error when running docker to build.  Got error: " + exitCode
-                    );
-                }
-            }
+    [TaskName( "build_docker_linux_x64" )]
+    [TaskDescription( "Builds the Docker image for Linux x64." )]
+    public sealed class BuildLinuxX64DockerTask : DefaultTask
+    {
+        // ----------------- Functions -----------------
 
-            {
-                string arguments = $"tag {imageName}:latest {imageName}:{VersionInfo.VersionString}";
-                ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
-                ProcessSettings settings = new ProcessSettings
-                {
-                    Arguments = argumentsBuilder
-                };
-                int exitCode = context.StartProcess( "docker", settings );
-                if( exitCode != 0 )
-                {
-                    throw new ApplicationException(
-                        "Error when running docker to tag.  Got error: " + exitCode
-                    );
-                }
-            }
+        public override void Run( MeditationLogContext context )
+        {
+            var builder = new DockerBuilder( context );
+            builder.Run( "linux/amd64,linux/386" );
+        }
+    }
+
+    [TaskName( "build_docker_linux_arm32" )]
+    [TaskDescription( "Builds the Docker image for Linux arm32." )]
+    public sealed class BuildLinuxArm32DockerTask : DefaultTask
+    {
+        // ----------------- Functions -----------------
+
+        public override void Run( MeditationLogContext context )
+        {
+            var builder = new DockerBuilder( context );
+            builder.Run( "linux/arm/v7,linux/arm/v6" );
         }
     }
 }
