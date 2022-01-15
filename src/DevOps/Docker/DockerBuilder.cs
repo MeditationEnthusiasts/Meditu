@@ -48,7 +48,7 @@ namespace DevOps.Docker
             FilePath dockerFile = "server.dockerfile";
 
             {
-                string arguments = $"buildx build --platform {platforms} --tag {imageName} -f {dockerFile} .";
+                string arguments = $"buildx build --platform {platforms} --tag {imageName} --file {dockerFile} .";
                 ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
                 ProcessSettings settings = new ProcessSettings
                 {
