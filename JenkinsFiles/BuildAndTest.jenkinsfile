@@ -55,7 +55,7 @@ pipeline
     }
     stages
     {
-        stage( "Build & Test" )
+        stage( "Build x64" )
         {
             parallel
             {
@@ -274,50 +274,50 @@ pipeline
                     }
                 } // End Linux
             } // End Parallel
-            
-            // ---------------- Linux ARM ----------------
+        } // End Build x64
 
-            stage( "Linux Arm" )
+        // ---------------- Linux ARM ----------------
+
+        stage( "Linux Arm" )
+        {
+            agent
             {
-                agent
+                label "arm32 && docker && linux"
+            }
+            stages
+            {
+                stage( "clean" )
                 {
-                    label "arm32 && docker && linux"
-                }
-                stages
-                {
-                    stage( "clean" )
+                    steps
                     {
-                        steps
-                        {
-                            cleanWs();
-                        }
-                    }
-                    stage( "checkout" )
-                    {
-                        steps
-                        {
-                            checkout scm;
-                            unstash "version";
-                            unstash "linux_build";
-                        }
-                    }
-                    stage( "Build Docker" )
-                    {
-                        steps
-                        {
-                            sh "cd checkout/Docker && docker buildx build --platform linux/arm/v7,linux/arm/v6 --tag xforever1313/meditu --file server.dockerfile .";
-                            sh "docker tag xforever1313/meditu:latest xforever1313/meditu:${GetVersion}";
-                        }
+                        cleanWs();
                     }
                 }
-                when
+                stage( "checkout" )
                 {
-                    expression
+                    steps
                     {
-                        return params.BuildLinux && params.BuildDocker;
+                        checkout scm;
+                        unstash "version";
+                        unstash "linux_build";
+                    }
+                }
+                stage( "Build Docker" )
+                {
+                    steps
+                    {
+                        sh "cd checkout/Docker && docker buildx build --platform linux/arm/v7,linux/arm/v6 --tag xforever1313/meditu --file server.dockerfile .";
+                        sh "docker tag xforever1313/meditu:latest xforever1313/meditu:${GetVersion}";
                     }
                 }
             }
-        } // End Build & Test
+            when
+            {
+                expression
+                {
+                    return params.BuildLinux && params.BuildDocker;
+                }
+            }
+        }
     }
 }
