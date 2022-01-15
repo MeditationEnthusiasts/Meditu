@@ -1,1 +1,109 @@
 @Library( "X13JenkinsLib" )_
+
+def DockerPush()
+{
+    // Todo: unarchive version file.
+    X13DockerLogin(
+        credsId: "dockerhub"
+    );
+
+    X13Cmd( "docker push xforever1313/meditu:latest" );
+    X13Cmd( "docker push xforever1313/meditu:${GetVersion()}" );
+}
+
+def GetVersFile()
+{
+    return "version.txt";
+}
+
+def GetVersion()
+{
+    return readFile( GetVersFile() );
+}
+
+pipeline
+{
+    agent none
+    environment
+    {
+        DOTNET_CLI_TELEMETRY_OPTOUT = "true"
+        DOTNET_NOLOGO = "true"
+    }
+    parameters
+    {
+        booleanParam( name: "DeployDocker", defaultValue: true, description: "Should we deploy docker containers?" );
+    }
+    options
+    {
+        skipDefaultCheckout( true );
+        timeout( time: 1, unit: 'HOURS' ); // <- Docker can be slow.
+        timestamps();
+    }
+    stages
+    {
+        stage( "Deploy Docker" )
+        {
+            parallel
+            {
+                // ---------------- Windows ----------------
+
+                stage( "Windows" )
+                {
+                    agent
+                    {
+                        label "windows && docker && x64";
+                    }
+                    stages
+                    {
+                        stage( "Docker Push" )
+                        {
+                            DockerPush();
+                        }
+                    }
+                    when
+                    {
+                        expression
+                        {
+                            // No docker image on Windows yet...
+                            return false;
+                        }
+                    }
+                }
+
+                stage( "Linux X64" )
+                {
+                    agent
+                    {
+                        label "ubuntu && docker && x64";
+                    }
+                    stages
+                    {
+                        stage( "Docker Push" )
+                        {
+                            DockerPush();
+                        }
+                    }
+                }
+
+                stage( "Linux Arm32" )
+                {
+                    agent
+                    {
+                        label "arm32 && docker && linux";
+                    }
+                    stages
+                    {
+                        stage( "Docker Push" )
+                        {
+                            DockerPush();
+                        }
+                    }
+                }
+            }
+            expression
+            {
+                return false && params.DeployDocker;
+            }
+        }
+    }
+}

@@ -1,7 +1,5 @@
 @Library( "X13JenkinsLib" )_
 
-final String archiveFolder = "archives";
-
 def CallCake( String arguments )
 {
     X13Cmd( "./Cake/dotnet-cake ./checkout/build.cake ${arguments}" );
@@ -101,7 +99,6 @@ pipeline
                             {
                                 Build();
                                 CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
-                                CleanDirectory( pwd() + "\\${archiveFolder}" );
                             }
                         }
                         stage( "unit_test" )
@@ -207,8 +204,8 @@ pipeline
                                     {
                                         Build();
                                         CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
-                                        CleanDirectory( pwd() + "\\${archiveFolder}" );
                                         stash includes: GetVersFile(), name: 'version'
+                                        archiveArtifacts GetVersFile();
                                     }
                                 }
                                 stage( "unit_test" )
