@@ -2,7 +2,11 @@
 
 def DockerPush()
 {
-    // Todo: unarchive version file.
+    copyArtifacts(
+        projectName: "Meditu/Build And Test",
+        filter: "version.txt"
+    );
+
     X13DockerLogin(
         credsId: "dockerhub"
     );
@@ -55,9 +59,19 @@ pipeline
                     }
                     stages
                     {
+                        stage( "clean" )
+                        {
+                            steps
+                            {
+                                cleanWs();
+                            }
+                        }
                         stage( "Docker Push" )
                         {
-                            DockerPush();
+                            steps
+                            {
+                                DockerPush();
+                            }
                         }
                     }
                     when
@@ -78,9 +92,19 @@ pipeline
                     }
                     stages
                     {
+                        stage( "clean" )
+                        {
+                            steps
+                            {
+                                cleanWs();
+                            }
+                        }
                         stage( "Docker Push" )
                         {
-                            DockerPush();
+                            steps
+                            {
+                                DockerPush();
+                            }
                         }
                     }
                 }
@@ -93,16 +117,26 @@ pipeline
                     }
                     stages
                     {
+                        stage( "clean" )
+                        {
+                            steps
+                            {
+                                cleanWs();
+                            }
+                        }
                         stage( "Docker Push" )
                         {
-                            DockerPush();
+                            steps
+                            {
+                                DockerPush();
+                            }
                         }
                     }
                 }
             }
             expression
             {
-                return false && params.DeployDocker;
+                return params.DeployDocker;
             }
         }
     }
