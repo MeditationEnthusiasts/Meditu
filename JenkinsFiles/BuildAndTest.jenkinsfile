@@ -264,12 +264,12 @@ pipeline
                                 }
                             }
                         }
-                        when
+                    }
+                    when
+                    {
+                        expression
                         {
-                            expression
-                            {
-                                return params.BuildLinux;
-                            }
+                            return params.BuildLinux;
                         }
                     }
                 } // End Linux
@@ -318,6 +318,6 @@ pipeline
                     }
                 }
             }
-        }
+        } // End Build & Test
     }
 }
