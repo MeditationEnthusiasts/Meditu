@@ -252,7 +252,7 @@ pipeline
                                     {
                                         CallDevops( "--target=publish_for_docker" );
                                         CallDevops( "--target=build_docker_linux_x64" );
-                                        stash includes: "checkout/Docker/bin/**/*" name: "linux_build";
+                                        stash includes: "checkout/Docker/bin/**/*", name: "linux_build";
                                     }
                                 }
                                 when
