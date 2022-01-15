@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Cake.Common.Diagnostics;
+using Cake.Common.Security;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Frosting;
@@ -65,5 +67,15 @@ namespace DevOps
         public DirectoryPath ImageDirectory { get; private set; }
 
         public bool RunningRelease { get; set; }
+
+        // ---------------- Functions ----------------
+        public void GenerateSha256( FilePath source, FilePath output )
+        {
+            FileHash hash = this.CalculateFileHash( source, HashAlgorithm.SHA256 );
+
+            string hashStr = hash.ToHex();
+            File.WriteAllText( output.ToString(), hashStr );
+            this.Information( "Hash for " + source.GetFilename() + ": " + hashStr );
+        }
     }
 }

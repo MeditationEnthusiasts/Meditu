@@ -30,6 +30,11 @@ namespace DevOps.Tasks
         {
             var electronBuilder = new ElectronBuilder( context );
             electronBuilder.Build( "win" );
+
+            context.GenerateSha256(
+                context.DistributionPath.CombineWithFilePath( "win/Meditu Setup.exe" ),
+                context.DistributionPath.CombineWithFilePath( "win/Meditu Setup.exe.sha256" )
+            );
         }
     }
 
