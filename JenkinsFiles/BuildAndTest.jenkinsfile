@@ -48,7 +48,7 @@ pipeline
     options
     {
         skipDefaultCheckout( true );
-        timeout( time: 2, unit: 'HOURS' ); // <- Docker can be slow.
+        timeout( time: 6, unit: 'HOURS' ); // <- Docker can be slow.
         timestamps();
     }
     stages
