@@ -2,18 +2,18 @@
 
 def CallCake( String arguments )
 {
-    X13Cmd( "./Cake/dotnet-cake ./checkout/build.cake ${arguments}" );
+    X13Cmd( "${new File("Cake", "dotnet-cake")} ${new File("checkout", "build.cake")} ${arguments}" );
 }
 
 def CallDevops( String arguments )
 {
-    X13Cmd( "dotnet ./checkout/src/DevOps/bin/Debug/net6.0/DevOps.dll ${arguments}" );
+    X13Cmd( "dotnet ${new File( "checkout", "src", "DevOps", "bin", "Debug", "net6.0", "DevOps.dll" )} ${arguments}" );
 }
 
 def Prepare()
 {
     X13Cmd( "dotnet tool update electronnet.cli --tool-path electron" );
-    X13Cmd( "dotnet tool update Cake.Tool --tool-path ./Cake" );
+    X13Cmd( "dotnet tool update Cake.Tool --tool-path Cake" );
     CallCake( "--showdescription" );
 }
 
@@ -39,7 +39,7 @@ def GetVersion()
 
 def GetElectronPath()
 {
-    return "${pwd()}/electron/electronize";
+    return new File( pwd(), "electron", "electronize" ).toString();
 }
 
 pipeline
@@ -221,7 +221,7 @@ pipeline
                                     steps
                                     {
                                         Build();
-                                        CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
+                                        CallDevops( "--target=dump_version --output=\"${pwd()}/${GetVersFile()}\"" );
                                         stash includes: GetVersFile(), name: 'version'
                                         archiveArtifacts GetVersFile();
                                     }
