@@ -141,7 +141,7 @@ pipeline
                         {
                             steps
                             {
-                                CallDevops( "--target=build_windows --electronize_path=${GetElectronPath()}" );
+                                CallDevops( "--target=build_windows --electronize_path=\"${GetElectronPath()}\"" );
                                 archiveArtifacts "checkout/dist/win/*.exe";
                                 archiveArtifacts "checkout/dist/win/*.exe.sha256";
                             }
@@ -255,7 +255,7 @@ pipeline
                                 {
                                     steps
                                     {
-                                        CallDevops( "--target=build_linux --electronize_path=${GetElectronPath()}" );
+                                        CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
                                         sh "ls -la checkout/dist/linux";
                                         // archiveArtifacts "checkout/dist/linux/*.deb";
                                         //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
