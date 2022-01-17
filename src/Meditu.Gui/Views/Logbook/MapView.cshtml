@@ -50,7 +50,7 @@
                 {
                     <text>
                     var markerHTML@(log.Id) = '<div class="left" style="overflow: auto; color: black;">' +
-                    '<p><strong>@(log.StartTime.ToLocalTime().ToSettingsString( settings.DateTimeSettings ))</strong></p>' +
+                    '<p><strong>@(log.StartTime.ToSettingsString( settings.DateTimeSettings ))</strong></p>' +
                     '<p><strong>Duration:</strong> @(log.Duration.ToSettingsString( settings.DateTimeSettings ))</p>' +
                     '<p><strong>Technique:</strong> @(log.Technique)</p>' +
                     '<p><strong>Comments:</strong>@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))</p>';

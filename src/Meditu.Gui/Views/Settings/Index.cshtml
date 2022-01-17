@@ -14,7 +14,7 @@
 
     IApiModel api = Model.Api;
 
-    var dateTimeNow = api.Settings.DateTimeSettings.GetLocalDateTimeNow();
+    var dateTimeNow = DateTime.UtcNow;
     TimeZoneInfo currentTimeZone = api.Settings.DateTimeSettings.GetTimeZoneInfo();
 }
 

@@ -90,6 +90,12 @@ namespace Meditu.Api
             };
 
             this.db = new LiteDatabase( connectionString );
+
+            // Use UTC for everything in the back-end to keep our sanity.
+            // When presenting to the front-end, the front-end will handle
+            // converting date strings to use the timezone
+            // configured in the settings.
+            this.db.Pragma( "UTC_DATE", true );
             this.col = this.db.GetCollection<Log>();
         }
 
@@ -119,7 +125,7 @@ namespace Meditu.Api
         /// So if index 0 has 2 in it, then there were 2 sessions that started
         /// between 12AM - 1AM.
         /// 
-        /// Note: Like our <see cref="Log"/> object, this is based on local time.
+        /// Note: Like our <see cref="Log"/> object, this is based on UTC time.
         /// </summary>
         public IReadOnlyList<int> StartTimeBucket { get; private set; }
 

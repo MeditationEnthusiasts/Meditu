@@ -43,15 +43,20 @@ namespace Meditu.Api
             }
         }
 
-        public static DateTime GetLocalDateTimeNow( this DateTimeSettings settings )
+        public static DateTime ToTimeZoneTime( this DateTime date, DateTimeSettings settings )
         {
             TimeZoneInfo tz = settings.GetTimeZoneInfo();
 
             return TimeZoneInfo.ConvertTime(
-                DateTime.UtcNow,
+                date,
                 TimeZoneInfo.Utc,
                 tz
             );
+        }
+
+        public static DateTime GetLocalDateTimeNow( this DateTimeSettings settings )
+        {
+            return DateTime.UtcNow.ToTimeZoneTime( settings );
         }
 
         // -------- ToSettingsString --------
@@ -63,6 +68,8 @@ namespace Meditu.Api
         public static string ToSettingsString( this DateTime date, DateTimeSettings settings )
         {
             ArgumentNullException.ThrowIfNull( settings, nameof( settings ) );
+
+            date = date.ToTimeZoneTime( settings );
 
             DateFormat dateFormat = settings.DateFormat;
             MonthFormat monthFormat = settings.MonthFormat;
@@ -124,8 +131,10 @@ namespace Meditu.Api
             return date.ToString( formatString );
         }
 
-        public static string ToFormDateString( this DateTime date )
+        public static string ToFormDateString( this DateTime date, DateTimeSettings settings )
         {
+            date = date.ToTimeZoneTime( settings );
+
             return date.ToString( "s" );
         }
 

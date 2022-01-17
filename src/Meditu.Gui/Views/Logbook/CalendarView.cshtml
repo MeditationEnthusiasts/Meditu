@@ -10,6 +10,7 @@
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
     LogBook logBook = Model.LogBook;
     IReadOnlySettingsManager settings = Model.Settings;
+    DateTimeSettings dateTimeSettings = settings.DateTimeSettings;
 }
 
 @section extrahead{
@@ -48,8 +49,8 @@
                     {
                         @:{
                             @:title: '@(log.Technique.Replace( '\n', ' ' ).Replace( "\r", string.Empty ))',
-                            @:start: '@(log.StartTime.ToLocalTime().ToString( "O" ))',
-                            @:end: '@(log.EndTime.ToLocalTime().ToString( "O" ))',
+                            @:start: '@(log.StartTime.ToTimeZoneTime( dateTimeSettings ).ToString( "O" ))',
+                            @:end: '@(log.EndTime.ToTimeZoneTime( dateTimeSettings ).ToString( "O" ))',
                             @:comments: '@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))',
                             @:id: @(log.Id)
                         @:},

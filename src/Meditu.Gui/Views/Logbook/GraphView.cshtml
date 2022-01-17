@@ -115,7 +115,7 @@
                                 labels: [
                                     @foreach(Log log in logBook.Reverse())
                                     {
-                                        @:'@log.StartTime.ToLocalTime().ToSettingsString( dateTimeSettings )',
+                                        @:'@log.StartTime.ToSettingsString( dateTimeSettings )',
                                     }  
                                 ],
                                 datasets: [{

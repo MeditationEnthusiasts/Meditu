@@ -81,15 +81,13 @@ namespace Meditu.Api
 
         /// <summary>
         /// When the session starts
-        /// The time is in local time
-        /// (database saves to UTC, and retrieves to local time).
+        /// The time is in UTC Time.
         /// </summary>
         public DateTime StartTime { get; set; }
 
         /// <summary>
         /// When the session ends
-        /// The time is in local time.
-        /// (database saves to UTC, and retrieves to local time).
+        /// The time is in UTC Time.
         /// </summary>
         public DateTime EndTime { get; set; }
 
@@ -112,8 +110,7 @@ namespace Meditu.Api
 
         /// <summary>
         /// The last time this log was edited.
-        /// The time is in local time.
-        /// (database saves to UTC, and retrieves to local time).
+        /// The time is in UTC Time.
         /// </summary>
         public DateTime EditTime { get; set; }
 
