@@ -299,6 +299,16 @@ namespace Meditu.Api
                 return;
             }
 
+            DateTime parseV1( string value )
+            {
+                return DateTimeOffset.ParseExact(
+                    value,
+                    DateTimeExtensions.TimeStampFormatString,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeLocal
+                ).DateTime;
+            }
+
             foreach( XmlAttribute attr in node.Attributes )
             {
                 if( string.IsNullOrWhiteSpace( attr.Name ) )
@@ -311,30 +321,15 @@ namespace Meditu.Api
                 }
                 else if( "edittime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.EditTime = DateTimeOffset.ParseExact(
-                        attr.Value,
-                        DateTimeExtensions.TimeStampFormatString,
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.AssumeLocal
-                    ).DateTime;
+                    log.EditTime = parseV1( attr.Value );
                 }
                 else if( "starttime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.StartTime = DateTimeOffset.ParseExact(
-                        attr.Value,
-                        DateTimeExtensions.TimeStampFormatString,
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.AssumeLocal
-                    ).DateTime;
+                    log.StartTime = parseV1( attr.Value );
                 }
                 else if( "endtime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.EndTime = DateTimeOffset.ParseExact(
-                        attr.Value,
-                        DateTimeExtensions.TimeStampFormatString,
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.AssumeLocal
-                    ).DateTime;
+                    log.EndTime = parseV1( attr.Value );
                 }
                 else if( "technique".EqualsIgnoreCase( attr.Name ) )
                 {
