@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Linq;
 using System.Xml.Linq;
 using SethCS.Extensions;
@@ -25,6 +24,13 @@ namespace Meditu.Api
 {
     public sealed record DateTimeSettings
     {
+        // ---------------- Constructor ----------------
+
+        public DateTimeSettings()
+        {
+            this.TimeZoneIdentifier = string.Empty;
+        }
+
         // ---------------- Properties ----------------
 
         public DateFormat DateFormat { get; init; }
@@ -38,6 +44,12 @@ namespace Meditu.Api
         public DurationFormat DurationFormat { get; init; }
 
         public DurationSeparator DurationSeparator { get; init; }
+
+        /// <remarks>
+        /// If this is null or empty string, assume
+        /// local timezone.
+        /// </remarks>
+        public string TimeZoneIdentifier { get; init; }
     }
 
     internal static class DateTimeSettingsExtensions
@@ -62,7 +74,8 @@ namespace Meditu.Api
                 new XElement( "dateseparator", (int)settings.DateSeparatorFormat ),
                 new XElement( "timeformat", (int)settings.TimeFormat ),
                 new XElement( "durationformat", (int)settings.DurationFormat ),
-                new XElement( "durationseparator", (int)settings.DurationSeparator )
+                new XElement( "durationseparator", (int)settings.DurationSeparator ),
+                new XElement( "timezone", settings.TimeZoneIdentifier ?? string.Empty )
             );
 
             parentNode.Add( element );
@@ -127,6 +140,10 @@ namespace Meditu.Api
                 else if( "durationseparator".EqualsIgnoreCase( name ) )
                 {
                     settings = settings with { DurationSeparator = (DurationSeparator)int.Parse( child.Value ) };
+                }
+                else if( "timezone".EqualsIgnoreCase( name ) )
+                {
+                    settings = settings with { TimeZoneIdentifier = child.Value };
                 }
             }
 

@@ -25,6 +25,25 @@ namespace Meditu.Api
     {
         // ---------------- Functions ----------------
 
+        public static TimeZoneInfo GetTimeZoneInfo( this DateTimeSettings settings )
+        {
+            // If not specified, assume local timezone.
+            if( string.IsNullOrWhiteSpace( settings.TimeZoneIdentifier ) )
+            {
+                return TimeZoneInfo.Local;
+            }
+
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById( settings.TimeZoneIdentifier );
+            }
+            catch( TimeZoneNotFoundException )
+            {
+                // If we can't find the timezone, assume UTC.
+                return TimeZoneInfo.Utc;
+            }
+        }
+
         // -------- ToSettingsString --------
 
         /// <summary>
