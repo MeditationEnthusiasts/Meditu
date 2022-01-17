@@ -251,16 +251,16 @@ pipeline
                                         }
                                     }
                                 }
-                                stage( "build_desktop" )
-                                {
-                                    steps
-                                    {
-                                        CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
-                                        sh "ls -la checkout/dist/linux";
-                                        // archiveArtifacts "checkout/dist/linux/*.deb";
-                                        //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
-                                    }
-                                }
+                                // stage( "build_desktop" )
+                                // {
+                                //     steps
+                                //     {
+                                //         CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
+                                //         sh "ls -la checkout/dist/linux";
+                                //         // archiveArtifacts "checkout/dist/linux/*.deb";
+                                //         //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+                                //     }
+                                // }
                                 stage( "build_docker" )
                                 {
                                     steps
