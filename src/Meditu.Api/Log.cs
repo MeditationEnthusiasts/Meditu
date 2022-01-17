@@ -311,27 +311,30 @@ namespace Meditu.Api
                 }
                 else if( "edittime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.EditTime = DateTime.ParseExact(
+                    log.EditTime = DateTimeOffset.ParseExact(
                         attr.Value,
                         DateTimeExtensions.TimeStampFormatString,
-                        CultureInfo.InvariantCulture
-                    );
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeLocal
+                    ).DateTime;
                 }
                 else if( "starttime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.StartTime = DateTime.ParseExact(
+                    log.StartTime = DateTimeOffset.ParseExact(
                         attr.Value,
                         DateTimeExtensions.TimeStampFormatString,
-                        CultureInfo.InvariantCulture
-                    );
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeLocal
+                    ).DateTime;
                 }
                 else if( "endtime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.EndTime = DateTime.ParseExact(
+                    log.EndTime = DateTimeOffset.ParseExact(
                         attr.Value,
                         DateTimeExtensions.TimeStampFormatString,
-                        CultureInfo.InvariantCulture
-                    );
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.AssumeLocal
+                    ).DateTime;
                 }
                 else if( "technique".EqualsIgnoreCase( attr.Name ) )
                 {
