@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -29,10 +29,10 @@ namespace DevOps.LicenseHeader
     {
         // ---------------- Fields ----------------
 
-        const string currentLicense =
-@"//
+        private const string currentLicense =
+@$"//
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// {VersionInfo.CopyrightString}
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -53,7 +53,7 @@ namespace DevOps.LicenseHeader
         private const string oldLicense1 =
 @"^//
 //\s*((Meditation\s*Logger)|(Meditu))\s+-\s+A\s+way\s+to\s+track\s+Meditation\s+Sessions\.
-//\s*Copyright\s+\(C\)\s+\d+(\s*-\s*\d+)?\s+Seth Hendrick\.?
+//\s*Copyright\s+\(C\)\s+\d+(\s*-\s*\d+)?\s+Seth\s+Hendrick\.?
 //\s*
 //\s*This\s+program\s+is\s+free\s+software:\s+you\s+can\s+redistribute\s+it\s+and/or\s+modify
 //\s*it\s+under\s+the\s+terms\s+of\s+the\s+GNU\s+General\s+Public\s+License\s+as\s+published\s+by
