@@ -283,6 +283,18 @@ namespace Meditu.Api
 
         internal static void FromXml( this Log log, XmlNode node, int xmlVersion )
         {
+            if( xmlVersion == 2 )
+            {
+                FromXmlV2( log, node );
+            }
+            else
+            {
+                FromXmlV1( log, node );
+            }
+        }
+
+        private static void FromXmlV2( this Log log, XmlNode node )
+        {
             if( XmlElementName.EqualsIgnoreCase( node.Name ) == false )
             {
                 throw new ArgumentException(
@@ -296,7 +308,95 @@ namespace Meditu.Api
                 return;
             }
 
-            DateTime parseV1( string value )
+            DateTime parseDate( string value )
+            {
+                return DateTimeOffset.ParseExact(
+                    value,
+                    DateTimeExtensions.TimeStampFormatString,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.RoundtripKind
+                ).DateTime;
+            }
+
+            foreach( XmlElement child in node.ChildNodes )
+            {
+                if( child is null )
+                {
+                    continue;
+                }
+                else if( child.InnerText is null )
+                {
+                    continue;
+                }
+                else if( string.IsNullOrWhiteSpace( child.Name ) )
+                {
+                    continue;
+                }
+                else if( "guid".EqualsIgnoreCase( child.Name ) )
+                {
+                    log.Guid = Guid.Parse( child.InnerText );
+                }
+                else if( "edittime".EqualsIgnoreCase( child.Name ) )
+                {
+                    log.EditTime = parseDate( child.InnerText );
+                }
+                else if( "starttime".EqualsIgnoreCase( child.Name ) )
+                {
+                    log.StartTime = parseDate( child.InnerText );
+                }
+                else if( "endtime".EqualsIgnoreCase( child.Name ) )
+                {
+                    log.EndTime = parseDate( child.InnerText );
+                }
+                else if( "technique".EqualsIgnoreCase( child.Name ) )
+                {
+                    log.Technique = child.InnerText;
+                }
+                else if( "comments".EqualsIgnoreCase( child.Name ) )
+                {
+                    log.Comments = child.InnerText;
+                }
+                else if( "latitude".EqualsIgnoreCase( child.Name ) )
+                {
+                    if( string.IsNullOrEmpty( child.InnerText ) )
+                    {
+                        log.Latitude = null;
+                    }
+                    else
+                    {
+                        log.Latitude = decimal.Parse( child.InnerText );
+                    }
+                }
+                else if( "longitude".EqualsIgnoreCase( child.Name ) )
+                {
+                    if( string.IsNullOrEmpty( child.InnerText ) )
+                    {
+                        log.Longitude = null;
+                    }
+                    else
+                    {
+                        log.Longitude = decimal.Parse( child.InnerText );
+                    }
+                }
+            }
+        }
+
+        private static void FromXmlV1( this Log log, XmlNode node )
+        {
+            if( XmlElementName.EqualsIgnoreCase( node.Name ) == false )
+            {
+                throw new ArgumentException(
+                    "Node name must be " + XmlElementName,
+                    nameof( node )
+                );
+            }
+
+            if( node.Attributes is null )
+            {
+                return;
+            }
+
+            DateTime parseDate( string value )
             {
                 return DateTimeOffset.ParseExact(
                     value,
@@ -318,15 +418,15 @@ namespace Meditu.Api
                 }
                 else if( "edittime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.EditTime = parseV1( attr.Value );
+                    log.EditTime = parseDate( attr.Value );
                 }
                 else if( "starttime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.StartTime = parseV1( attr.Value );
+                    log.StartTime = parseDate( attr.Value );
                 }
                 else if( "endtime".EqualsIgnoreCase( attr.Name ) )
                 {
-                    log.EndTime = parseV1( attr.Value );
+                    log.EndTime = parseDate( attr.Value );
                 }
                 else if( "technique".EqualsIgnoreCase( attr.Name ) )
                 {
@@ -368,62 +468,61 @@ namespace Meditu.Api
         {
             log.Validate();
 
-            XmlNode logNode = doc.CreateElement( XmlElementName );
-
-            // Add attributes
-            if( logNode.Attributes is null )
+            string getTimestampString( DateTime time )
             {
-                throw new InvalidOperationException(
-                    "Somehow, the attributes is null"
-                );
+                return time.ToTimeStampString();
+            }
+
+            XmlElement logNode = doc.CreateElement( XmlElementName );
+
+            {
+                XmlElement child = doc.CreateElement( "Guid" );
+                child.InnerText = log.Guid.ToString();
+                logNode.AppendChild( child );
             }
 
             {
-                XmlAttribute attr = doc.CreateAttribute( "Guid" );
-                attr.Value = log.Guid.ToString();
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "EditTime" );
+                child.InnerText = getTimestampString( log.EditTime );
+                logNode.AppendChild( child );
             }
 
             {
-                XmlAttribute attr = doc.CreateAttribute( "EditTime" );
-                attr.Value = log.EditTime.ToTimeStampString();
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "StartTime" );
+                child.InnerText = getTimestampString( log.StartTime );
+                logNode.AppendChild( child );
             }
 
             {
-                XmlAttribute attr = doc.CreateAttribute( "StartTime" );
-                attr.Value = log.StartTime.ToTimeStampString();
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "EndTime" );
+                child.InnerText = getTimestampString( log.EndTime );
+                logNode.AppendChild( child );
             }
 
             {
-                XmlAttribute attr = doc.CreateAttribute( "EndTime" );
-                attr.Value = log.EndTime.ToTimeStampString();
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "Comments" );
+                child.InnerText = log.Comments;
+                logNode.AppendChild( child );
             }
 
             {
-                XmlAttribute attr = doc.CreateAttribute( "Comments" );
-                attr.Value = log.Comments;
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "Technique" );
+                child.InnerText = log.Technique;
+                logNode.AppendChild( child );
             }
 
+            if( log.Latitude is not null )
             {
-                XmlAttribute attr = doc.CreateAttribute( "Technique" );
-                attr.Value = log.Technique;
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "Latitude" );
+                child.InnerText = log.Latitude?.ToString() ?? string.Empty;
+                logNode.AppendChild( child );
             }
 
+            if( log.Longitude is not null )
             {
-                XmlAttribute attr = doc.CreateAttribute( "Latitude" );
-                attr.Value = log.Latitude.HasValue ? log.Latitude.ToString() : string.Empty;
-                logNode.Attributes.Append( attr );
-            }
-
-            {
-                XmlAttribute attr = doc.CreateAttribute( "Longitude" );
-                attr.Value = log.Longitude.HasValue ? log.Longitude.ToString() : string.Empty;
-                logNode.Attributes.Append( attr );
+                XmlElement child = doc.CreateElement( "Longitude" );
+                child.InnerText = log.Longitude?.ToString() ?? string.Empty;
+                logNode.AppendChild( child );
             }
 
             parentNode.AppendChild( logNode );

@@ -443,7 +443,16 @@ namespace Meditu.Api
 
         internal const string XmlElementName = "logbook";
 
-        internal const int XmlVersion = 1;
+        /// <summary>
+        /// Version 1:
+        ///     Original version.  Everything was an attribute.
+        ///     Times were in local time.
+        ///
+        /// Version 2:
+        ///     Everything is an element.
+        ///     Times are in UTC time.
+        /// </summary>
+        internal const int XmlVersion = 2;
 
         internal const string VersionAttributeName = "version";
 
