@@ -17,7 +17,6 @@
 //
 
 using System;
-using SethCS.Extensions;
 
 namespace Meditu.Api
 {
@@ -42,6 +41,17 @@ namespace Meditu.Api
                 // If we can't find the timezone, assume UTC.
                 return TimeZoneInfo.Utc;
             }
+        }
+
+        public static DateTime GetLocalDateTimeNow( this DateTimeSettings settings )
+        {
+            TimeZoneInfo tz = settings.GetTimeZoneInfo();
+
+            return TimeZoneInfo.ConvertTime(
+                DateTime.UtcNow,
+                TimeZoneInfo.Utc,
+                tz
+            );
         }
 
         // -------- ToSettingsString --------

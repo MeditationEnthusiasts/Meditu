@@ -10,11 +10,11 @@
     Layout = "_Content";
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
 
-    var dateTimeNow = DateTime.Now;
     var sampleDuration = new TimeSpan( 1, 13, 30 );
 
     IApiModel api = Model.Api;
 
+    var dateTimeNow = api.Settings.DateTimeSettings.GetLocalDateTimeNow();
     TimeZoneInfo currentTimeZone = api.Settings.DateTimeSettings.GetTimeZoneInfo();
 }
 

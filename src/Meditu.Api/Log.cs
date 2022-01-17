@@ -445,7 +445,7 @@ namespace Meditu.Api
                 log.Longitude = null;
             }
 
-            log.EditTime = DateTime.Now;
+            log.EditTime = DateTime.UtcNow;
         }
 
         public static string ToTitleString( this Log log, DateTimeSettings settings )

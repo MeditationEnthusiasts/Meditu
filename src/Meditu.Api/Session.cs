@@ -64,14 +64,14 @@ namespace Meditu.Api
                 TimeSpan span;
                 if ( this.IsCountingUp )
                 {
-                    DateTime now = DateTime.Now;
+                    DateTime now = DateTime.UtcNow;
                     span = now - this.Log.StartTime;
                 }
                 else
                 {
                     DateTime expectedCompleteTime = this.Log.StartTime + this.SessionDuration.Value;
 
-                    span = expectedCompleteTime - DateTime.Now;
+                    span = expectedCompleteTime - DateTime.UtcNow;
                 }
 
                 // Don't allow for negative time.

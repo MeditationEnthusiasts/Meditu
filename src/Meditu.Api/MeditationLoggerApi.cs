@@ -130,7 +130,7 @@ namespace Meditu.Api
 
             this.currentSession = new Session();
             this.currentSession.SessionDuration = startParams.Duration;
-            this.currentSession.Log.StartTime = DateTime.Now;
+            this.currentSession.Log.StartTime = DateTime.UtcNow;
             this.CurrentState = ApiState.Started;
         }
 
@@ -151,7 +151,7 @@ namespace Meditu.Api
                 );
             }
 
-            this.currentSession.Log.EndTime = DateTime.Now;
+            this.currentSession.Log.EndTime = DateTime.UtcNow;
             this.CurrentState = ApiState.Stopped;
         }
 
@@ -175,7 +175,7 @@ namespace Meditu.Api
             saveParams.Validate();
 
             // Save Session!
-            this.currentSession.Log.EditTime = DateTime.Now;
+            this.currentSession.Log.EditTime = DateTime.UtcNow;
             this.currentSession.Log.Latitude = saveParams.Latitude;
             this.currentSession.Log.Longitude = saveParams.Longitude;
             this.currentSession.Log.Technique = saveParams.Technique;
