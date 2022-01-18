@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -108,6 +108,68 @@ namespace Meditu.UnitTests
                 StartTime = new DateTime( 2021, 12, 24, 14, 18, 52, 827, DateTimeKind.Local ),
                 Latitude = null,
                 Longitude = null,
+                Technique = "Focus on Breath"
+            };
+
+            // Act
+            IList<Log> logs = LogBookXmlLoader.ParseLogbookXmlString( xmlString );
+
+            // Check
+            Assert.AreEqual( 2, logs.Count );
+            Assert.AreEqual( log0, logs[0] );
+            Assert.AreEqual( log1, logs[1] );
+        }
+
+        [TestMethod]
+        public void Version2Test()
+        {
+            // Setup
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<logbook version=""2"">
+    <log>
+        <Guid>24fb25ea-f91e-460e-b27d-4e570086fea5</Guid>
+        <EditTime>2022-01-17T21:24:17.1780000Z</EditTime>
+        <StartTime>2022-01-17T20:23:44.0000000Z</StartTime>
+        <EndTime>2022-01-17T20:23:48.0000000Z</EndTime>
+        <Comments>UTC Test</Comments>
+        <Technique>UTC Test</Technique>
+    </log>
+    <log>
+        <Guid>3f205902-8826-421f-b9ea-a67ebcd6afbb</Guid>
+        <EditTime>2021-12-22T00:51:54.1610000Z</EditTime>
+        <StartTime>2021-12-22T00:35:16.5480000Z</StartTime>
+        <EndTime>2021-12-22T00:51:31.3800000Z</EndTime>
+        <Comments>
+        Quick session since it's late.
+        </Comments>
+        <Technique>Focus on Breath</Technique>
+        <Latitude>42</Latitude>
+        <Longitude>-73</Longitude>
+    </log>
+</logbook>
+";
+            var log0 = new Log
+            {
+                Guid = Guid.Parse( "24fb25ea-f91e-460e-b27d-4e570086fea5" ),
+                Comments = "UTC Test",
+                EditTime = new DateTime( 2022, 1, 17, 21, 24, 17, 178, DateTimeKind.Utc ),
+                StartTime = new DateTime( 2022, 1, 17, 20, 23, 44, 0, DateTimeKind.Utc ),
+                EndTime = new DateTime( 2022, 1, 17, 20, 23, 48, 0, DateTimeKind.Utc ),
+                Latitude = null,
+                Longitude = null,
+                Technique = "UTC Test"
+            };
+
+            var log1 = new Log
+            {
+                Guid = Guid.Parse( "3f205902-8826-421f-b9ea-a67ebcd6afbb" ),
+                Comments = "Quick session since it's late.",
+                EditTime = new DateTime( 2021, 12, 22, 0, 51, 54, 161, DateTimeKind.Utc ),
+                StartTime = new DateTime( 2021, 12, 22, 0, 35, 16, 548, DateTimeKind.Utc ),
+                EndTime = new DateTime( 2021, 12, 22, 0, 51, 31, 380, DateTimeKind.Utc ),
+                Latitude = 42,
+                Longitude = -73,
                 Technique = "Focus on Breath"
             };
 

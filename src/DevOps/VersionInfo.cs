@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -30,7 +30,7 @@ namespace DevOps
 
         public static readonly string VersionString = Version.ToString( 3 );
 
-        public static readonly string CopyrightString = "Copyright (C) 2017-2022 Meditation Enthusiasts.";
+        internal const string CopyrightString = "Copyright (C) 2017-2022 Meditation Enthusiasts.";
     }
 #if CAKE
 #else

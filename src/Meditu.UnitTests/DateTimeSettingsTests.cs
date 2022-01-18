@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -41,7 +41,8 @@ namespace Meditu.UnitTests
                 DurationFormat = DurationFormat.HourMinute,
                 DurationSeparator = DurationSeparator.ColonOnly,
                 MonthFormat = MonthFormat.Number,
-                TimeFormat = TimeFormat.Hour12
+                TimeFormat = TimeFormat.Hour12,
+                TimeZoneIdentifier = string.Empty
             };
 
             // Act
@@ -86,6 +87,9 @@ namespace Meditu.UnitTests
 
             uut2 = uut1 with { TimeFormat = TimeFormat.Hour24 };
             EqualsFailureTest( uut1, uut2 );
+
+            uut2 = uut1 with { TimeZoneIdentifier = "UTC" };
+            EqualsFailureTest( uut1, uut2 );
         }
 
         [TestMethod]
@@ -99,7 +103,8 @@ namespace Meditu.UnitTests
                 DurationFormat = DurationFormat.HourMinuteSecond,
                 DurationSeparator = DurationSeparator.LettersOnly,
                 MonthFormat = MonthFormat.FullMonth,
-                TimeFormat = TimeFormat.Hour24
+                TimeFormat = TimeFormat.Hour24,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act

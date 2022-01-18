@@ -10,6 +10,7 @@
     TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
     LogBook logBook = Model.LogBook;
     IReadOnlySettingsManager settings = Model.Settings;
+    DateTimeSettings dateTimeSettings = settings.DateTimeSettings;
 }
 
 @section extrahead{
@@ -35,7 +36,7 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                defaultDate: '@(DateTime.Now.ToString( "yyyy-MM-dd" ))',
+                defaultDate: '@(settings.DateTimeSettings.GetLocalDateTimeNow().ToString( "yyyy-MM-dd" ))',
                 navLinks: true, // can click day/week names to navigate views
                 editable: false,
                 eventLimit: false, // allow "more" link when too many events
@@ -48,8 +49,8 @@
                     {
                         @:{
                             @:title: '@(log.Technique.Replace( '\n', ' ' ).Replace( "\r", string.Empty ))',
-                            @:start: '@(log.StartTime.ToLocalTime().ToString( "O" ))',
-                            @:end: '@(log.EndTime.ToLocalTime().ToString( "O" ))',
+                            @:start: '@(log.StartTime.ToTimeZoneTime( dateTimeSettings ).ToString( "O" ))',
+                            @:end: '@(log.EndTime.ToTimeZoneTime( dateTimeSettings ).ToString( "O" ))',
                             @:comments: '@(log.Comments.Replace( '\n', ' ' ).Replace( '\r', ' ' ))',
                             @:id: @(log.Id)
                         @:},

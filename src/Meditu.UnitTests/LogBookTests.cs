@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -51,7 +51,7 @@ namespace Meditu.UnitTests
             // - No Comments
             // - No Location
             log1 = new Log();
-            log1.StartTime = new DateTime( 1990, 1, 1, 0, 0, 0 );
+            log1.StartTime = new DateTime( 1990, 1, 1, 0, 0, 0, DateTimeKind.Utc );
             log1.EndTime = log1.StartTime + new TimeSpan( 1, 0, 0 );
             log1.Technique = "A technique";
             log1.EditTime = log1.EndTime;
@@ -66,7 +66,7 @@ namespace Meditu.UnitTests
             // - Comments
             // - Location
             log2 = new Log();
-            log2.StartTime = new DateTime( 1991, 1, 1, 0, 0, 0 );
+            log2.StartTime = new DateTime( 1991, 1, 1, 0, 0, 0, DateTimeKind.Utc );
             log2.EndTime = log2.StartTime + new TimeSpan( 1, 0, 0 );
 
             // Same technique as long 1, but with different casing and whitespace.
@@ -85,7 +85,7 @@ namespace Meditu.UnitTests
             // - Comments
             // - No Location
             log3 = new Log();
-            log3.StartTime = new DateTime( 1992, 1, 1, 2, 0, 0 );
+            log3.StartTime = new DateTime( 1992, 1, 1, 2, 0, 0, DateTimeKind.Utc );
             log3.EndTime = log3.StartTime + new TimeSpan( 0, 30, 0 );
             log3.EditTime = log3.EndTime;
             log3.Comments = "Some Comment.";

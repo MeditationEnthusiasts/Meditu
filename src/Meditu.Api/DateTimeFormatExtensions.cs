@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -17,13 +17,47 @@
 //
 
 using System;
-using SethCS.Extensions;
 
 namespace Meditu.Api
 {
     public static class DateTimeFormatExtensions
     {
         // ---------------- Functions ----------------
+
+        public static TimeZoneInfo GetTimeZoneInfo( this DateTimeSettings settings )
+        {
+            // If not specified, assume local timezone.
+            if( string.IsNullOrWhiteSpace( settings.TimeZoneIdentifier ) )
+            {
+                return TimeZoneInfo.Local;
+            }
+
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById( settings.TimeZoneIdentifier );
+            }
+            catch( TimeZoneNotFoundException )
+            {
+                // If we can't find the timezone, assume UTC.
+                return TimeZoneInfo.Utc;
+            }
+        }
+
+        public static DateTime ToTimeZoneTime( this DateTime date, DateTimeSettings settings )
+        {
+            TimeZoneInfo tz = settings.GetTimeZoneInfo();
+
+            return TimeZoneInfo.ConvertTime(
+                date,
+                TimeZoneInfo.Utc,
+                tz
+            );
+        }
+
+        public static DateTime GetLocalDateTimeNow( this DateTimeSettings settings )
+        {
+            return DateTime.UtcNow.ToTimeZoneTime( settings );
+        }
 
         // -------- ToSettingsString --------
 
@@ -34,6 +68,8 @@ namespace Meditu.Api
         public static string ToSettingsString( this DateTime date, DateTimeSettings settings )
         {
             ArgumentNullException.ThrowIfNull( settings, nameof( settings ) );
+
+            date = date.ToTimeZoneTime( settings );
 
             DateFormat dateFormat = settings.DateFormat;
             MonthFormat monthFormat = settings.MonthFormat;
@@ -95,8 +131,10 @@ namespace Meditu.Api
             return date.ToString( formatString );
         }
 
-        public static string ToFormDateString( this DateTime date )
+        public static string ToFormDateString( this DateTime date, DateTimeSettings settings )
         {
+            date = date.ToTimeZoneTime( settings );
+
             return date.ToString( "s" );
         }
 

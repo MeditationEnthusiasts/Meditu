@@ -41,13 +41,13 @@ else
                         <div class="form-group">
                             <label>Start Time</label>
                             <input id="@nameof( EditLogSettings.StartTime )" class="form-control" type="datetime-local" name="@nameof( EditLogSettings.StartTime )"
-                                   value="@log.StartTime.ToLocalTime().ToFormDateString()"
+                                   value="@log.StartTime.ToFormDateString( dateTimeSettings )"
                             />
                         </div>
                         <div class="form-group">
                             <label>End Time</label>
                             <input id="@nameof( EditLogSettings.EndTime )" class="form-control" type="datetime-local" name="@nameof( EditLogSettings.EndTime )"
-                                   value="@log.EndTime.ToLocalTime().ToFormDateString()"
+                                   value="@log.EndTime.ToFormDateString( dateTimeSettings )"
                             />
                         </div>
                         <div class="form-group">

@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -90,6 +90,12 @@ namespace Meditu.Api
             };
 
             this.db = new LiteDatabase( connectionString );
+
+            // Use UTC for everything in the back-end to keep our sanity.
+            // When presenting to the front-end, the front-end will handle
+            // converting date strings to use the timezone
+            // configured in the settings.
+            this.db.Pragma( "UTC_DATE", true );
             this.col = this.db.GetCollection<Log>();
         }
 
@@ -119,7 +125,7 @@ namespace Meditu.Api
         /// So if index 0 has 2 in it, then there were 2 sessions that started
         /// between 12AM - 1AM.
         /// 
-        /// Note: Like our <see cref="Log"/> object, this is based on local time.
+        /// Note: Like our <see cref="Log"/> object, this is based on UTC time.
         /// </summary>
         public IReadOnlyList<int> StartTimeBucket { get; private set; }
 
@@ -437,7 +443,16 @@ namespace Meditu.Api
 
         internal const string XmlElementName = "logbook";
 
-        internal const int XmlVersion = 1;
+        /// <summary>
+        /// Version 1:
+        ///     Original version.  Everything was an attribute.
+        ///     Times were in local time.
+        ///
+        /// Version 2:
+        ///     Everything is an element.
+        ///     Times are in UTC time.
+        /// </summary>
+        internal const int XmlVersion = 2;
 
         internal const string VersionAttributeName = "version";
 

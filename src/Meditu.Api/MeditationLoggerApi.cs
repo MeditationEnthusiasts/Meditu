@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -130,7 +130,7 @@ namespace Meditu.Api
 
             this.currentSession = new Session();
             this.currentSession.SessionDuration = startParams.Duration;
-            this.currentSession.Log.StartTime = DateTime.Now;
+            this.currentSession.Log.StartTime = DateTime.UtcNow;
             this.CurrentState = ApiState.Started;
         }
 
@@ -151,7 +151,7 @@ namespace Meditu.Api
                 );
             }
 
-            this.currentSession.Log.EndTime = DateTime.Now;
+            this.currentSession.Log.EndTime = DateTime.UtcNow;
             this.CurrentState = ApiState.Stopped;
         }
 
@@ -175,7 +175,7 @@ namespace Meditu.Api
             saveParams.Validate();
 
             // Save Session!
-            this.currentSession.Log.EditTime = DateTime.Now;
+            this.currentSession.Log.EditTime = DateTime.UtcNow;
             this.currentSession.Log.Latitude = saveParams.Latitude;
             this.currentSession.Log.Longitude = saveParams.Longitude;
             this.currentSession.Log.Technique = saveParams.Technique;

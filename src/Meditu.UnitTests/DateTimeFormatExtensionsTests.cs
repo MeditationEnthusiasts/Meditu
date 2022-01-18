@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -37,14 +37,37 @@ namespace Meditu.UnitTests
         public void MDY_24Hr_NumberMonth_Dashes_SingleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 6, 3, 13, 2, 3 );
+            var date = new DateTime( 2020, 6, 3, 13, 2, 3, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.MonthDayYear,
                 DateSeparatorFormat = DateSeparatorFormat.Dashes,
                 MonthFormat = MonthFormat.Number,
-                TimeFormat = TimeFormat.Hour24
+                TimeFormat = TimeFormat.Hour24,
+                TimeZoneIdentifier = "UTC"
+            };
+
+            // Act
+            string format = date.ToSettingsString( settings );
+
+            // Check
+            Assert.AreEqual( "06-03-2020 13:02", format );
+        }
+
+        [TestMethod]
+        public void MDY_24Hr_NumberMonth_Dashes_SingleDigit_DifferentTimeZone_Test()
+        {
+            // Setup
+            var date = new DateTime( 2020, 6, 3, 17, 2, 3, DateTimeKind.Utc );
+
+            var settings = new DateTimeSettings
+            {
+                DateFormat = DateFormat.MonthDayYear,
+                DateSeparatorFormat = DateSeparatorFormat.Dashes,
+                MonthFormat = MonthFormat.Number,
+                TimeFormat = TimeFormat.Hour24,
+                TimeZoneIdentifier = "Eastern Standard Time"
             };
 
             // Act
@@ -58,14 +81,15 @@ namespace Meditu.UnitTests
         public void MDY_24Hr_NumberMonth_Dashes_DoubleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.MonthDayYear,
                 DateSeparatorFormat = DateSeparatorFormat.Dashes,
                 MonthFormat = MonthFormat.Number,
-                TimeFormat = TimeFormat.Hour24
+                TimeFormat = TimeFormat.Hour24,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act
@@ -79,14 +103,15 @@ namespace Meditu.UnitTests
         public void MDY_12Hr_NumberMonth_Slashes_SingleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 6, 3, 13, 2, 3 );
+            var date = new DateTime( 2020, 6, 3, 13, 2, 3, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.MonthDayYear,
                 DateSeparatorFormat = DateSeparatorFormat.Slashes,
                 MonthFormat = MonthFormat.Number,
-                TimeFormat = TimeFormat.Hour12
+                TimeFormat = TimeFormat.Hour12,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act
@@ -100,14 +125,15 @@ namespace Meditu.UnitTests
         public void MDY_12Hr_NumberMonth_Slashes_DoubleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.MonthDayYear,
                 DateSeparatorFormat = DateSeparatorFormat.Slashes,
                 MonthFormat = MonthFormat.Number,
-                TimeFormat = TimeFormat.Hour12
+                TimeFormat = TimeFormat.Hour12,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act
@@ -125,14 +151,15 @@ namespace Meditu.UnitTests
         public void DMY_12Hr_3LetterMonth_Slashes_SingleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 6, 3, 13, 2, 3 );
+            var date = new DateTime( 2020, 6, 3, 13, 2, 3, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.DayMonthYear,
                 DateSeparatorFormat = DateSeparatorFormat.Slashes,
                 MonthFormat = MonthFormat.ThreeLetters,
-                TimeFormat = TimeFormat.Hour12
+                TimeFormat = TimeFormat.Hour12,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act
@@ -146,14 +173,15 @@ namespace Meditu.UnitTests
         public void DMY_24Hr_3LetterMonth_Dashes_DoubleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.DayMonthYear,
                 DateSeparatorFormat = DateSeparatorFormat.Dashes,
                 MonthFormat = MonthFormat.ThreeLetters,
-                TimeFormat = TimeFormat.Hour24
+                TimeFormat = TimeFormat.Hour24,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act
@@ -171,14 +199,15 @@ namespace Meditu.UnitTests
         public void YMD_12Hr_FullMonth_Slashes_SingleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 6, 3, 1, 2, 3 );
+            var date = new DateTime( 2020, 6, 3, 1, 2, 3, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.YearMonthDay,
                 DateSeparatorFormat = DateSeparatorFormat.Slashes,
                 MonthFormat = MonthFormat.FullMonth,
-                TimeFormat = TimeFormat.Hour12
+                TimeFormat = TimeFormat.Hour12,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act
@@ -192,14 +221,15 @@ namespace Meditu.UnitTests
         public void YMD_24Hr_FullMonth_Dashes_DoubleDigit_Test()
         {
             // Setup
-            var date = new DateTime( 2020, 12, 13, 11, 22, 23 );
+            var date = new DateTime( 2020, 12, 13, 11, 22, 23, DateTimeKind.Utc );
 
             var settings = new DateTimeSettings
             {
                 DateFormat = DateFormat.YearMonthDay,
                 DateSeparatorFormat = DateSeparatorFormat.Dashes,
                 MonthFormat = MonthFormat.FullMonth,
-                TimeFormat = TimeFormat.Hour24
+                TimeFormat = TimeFormat.Hour24,
+                TimeZoneIdentifier = "UTC"
             };
 
             // Act

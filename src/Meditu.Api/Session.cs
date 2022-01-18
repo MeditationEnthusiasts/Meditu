@@ -1,6 +1,6 @@
 //
 // Meditu - A way to track Meditation Sessions.
-// Copyright (C) 2017-2022 Seth Hendrick.
+// Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published
@@ -64,14 +64,14 @@ namespace Meditu.Api
                 TimeSpan span;
                 if ( this.IsCountingUp )
                 {
-                    DateTime now = DateTime.Now;
+                    DateTime now = DateTime.UtcNow;
                     span = now - this.Log.StartTime;
                 }
                 else
                 {
                     DateTime expectedCompleteTime = this.Log.StartTime + this.SessionDuration.Value;
 
-                    span = expectedCompleteTime - DateTime.Now;
+                    span = expectedCompleteTime - DateTime.UtcNow;
                 }
 
                 // Don't allow for negative time.

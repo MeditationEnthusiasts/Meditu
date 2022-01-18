@@ -3,17 +3,16 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:50615/",
+      "applicationUrl": "http://localhost:10113/",
       "sslPort": 0
     }
   },
   "profiles": {
-"Electron.NET App": {
-"commandName": "Executable",
-"executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
-"commandLineArgs": "electronize start"
-},
-
+    "Electron.NET App": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\xfore.000\\.dotnet\\tools\\electronize.exe",
+      "commandLineArgs": "start"
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
