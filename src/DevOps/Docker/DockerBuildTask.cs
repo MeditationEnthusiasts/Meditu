@@ -31,7 +31,7 @@ namespace DevOps.Docker
         public override void Run( MeditationLogContext context )
         {
             var builder = new DockerBuilder( context );
-            builder.Run( "windows/amd64" );
+            builder.Run( DockerConstants.WinX64Platform );
         }
     }
 
@@ -44,7 +44,7 @@ namespace DevOps.Docker
         public override void Run( MeditationLogContext context )
         {
             var builder = new DockerBuilder( context );
-            builder.Run( "linux/amd64,linux/386" );
+            builder.Run( DockerConstants.LinuxX64Platform );
         }
     }
 
@@ -57,7 +57,7 @@ namespace DevOps.Docker
         public override void Run( MeditationLogContext context )
         {
             var builder = new DockerBuilder( context );
-            builder.Run( "linux/arm/v7,linux/arm/v6" );
+            builder.Run( DockerConstants.LinuxArm32Platform );
         }
     }
 }

@@ -29,9 +29,6 @@ namespace DevOps.Docker
     internal sealed class DockerBuilder
     {
         // ----------------- Fields -----------------
-
-        private const string imageName = "xforever1313/meditu";
-
         private readonly MeditationLogContext context;
 
         // ----------------- Constructor -----------------
@@ -43,41 +40,23 @@ namespace DevOps.Docker
 
         // ----------------- Functions -----------------
 
-        public void Run( string platforms )
+        public void Run( string platform )
         {
             FilePath dockerFile = "server.dockerfile";
 
+            string arguments = $"build --tag {DockerConstants.ImageName}:{VersionInfo.VersionString}_{platform} --file {dockerFile} .";
+            ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
+            ProcessSettings settings = new ProcessSettings
             {
-                string arguments = $"buildx build --platform {platforms} --tag {imageName} --file {dockerFile} .";
-                ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
-                ProcessSettings settings = new ProcessSettings
-                {
-                    Arguments = argumentsBuilder,
-                    WorkingDirectory = context.DockerPath
-                };
-                int exitCode = context.StartProcess( "docker", settings );
-                if( exitCode != 0 )
-                {
-                    throw new ApplicationException(
-                        "Error when running docker to build.  Got error: " + exitCode
-                    );
-                }
-            }
-
+                Arguments = argumentsBuilder,
+                WorkingDirectory = context.DockerPath
+            };
+            int exitCode = context.StartProcess( "docker", settings );
+            if( exitCode != 0 )
             {
-                string arguments = $"tag {imageName}:latest {imageName}:{VersionInfo.VersionString}";
-                ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
-                ProcessSettings settings = new ProcessSettings
-                {
-                    Arguments = argumentsBuilder
-                };
-                int exitCode = context.StartProcess( "docker", settings );
-                if( exitCode != 0 )
-                {
-                    throw new ApplicationException(
-                        "Error when running docker to tag.  Got error: " + exitCode
-                    );
-                }
+                throw new ApplicationException(
+                    "Error when running docker to build.  Got error: " + exitCode
+                );
             }
         }
     }
