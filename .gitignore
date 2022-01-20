@@ -8,4 +8,5 @@ packages
 dist/
 .cake/
 TestResults/
+.vscode/
 /src/Meditu.Gui/electron.manifest.json
