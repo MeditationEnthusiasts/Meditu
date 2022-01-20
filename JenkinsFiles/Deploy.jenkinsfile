@@ -109,6 +109,9 @@ pipeline
                     }
                 }
 
+                // Need to do the following if on an older
+                // version of Raspbian:
+                // https://github.com/dotnet/dotnet-docker/issues/3253
                 stage( "Linux Arm32" )
                 {
                     agent
