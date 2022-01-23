@@ -29,6 +29,7 @@ namespace DevOps.Docker
     public sealed class PublishForDockerTask : DefaultTask
     {
         // ----------------- Functions -----------------
+
         public override void Run( MeditationLogContext context )
         {
             const string configuration = "Release";
@@ -43,7 +44,6 @@ namespace DevOps.Docker
                 Configuration = configuration,
                 OutputDirectory = publishDir,
                 MSBuildSettings = MsBuildHelpers.GetMsBuildSettings( configuration ),
-
             };
 
             context.DotNetCorePublish(

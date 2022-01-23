@@ -47,7 +47,7 @@ namespace DevOps.ElectronBuild
         {
             FilePath projectPath = this.context.GuiCsProject;
             DirectoryPath workingDirectory = projectPath.GetDirectory();
-            DirectoryPath outputDirectory = this.context.DistributionPath.Combine( target );
+            DirectoryPath outputDirectory = this.context.DesktopDistributionPath.Combine( target );
 
             var arguments = ProcessArgumentBuilder.FromStrings(
                 new string[]

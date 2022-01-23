@@ -42,6 +42,94 @@ def GetElectronPath()
     return X13PathCombine( pwd(), "electron", "electronize" );
 }
 
+def LinuxPipeline( boolean buildDocker, boolean buildDesktop, boolean runUnitTests, String rid )
+{
+    stages
+    {
+        stage( "prepare" )
+        {
+            steps
+            {
+                Prepare();
+            }
+        }
+        stage( "build" )
+        {
+            steps
+            {
+                Build();
+            }
+        }
+        stage( "unit_test" )
+        {
+            steps
+            {
+                RunUnitTests();
+            }
+            when
+            {
+                expression
+                {
+                    return runUnitTests;
+                }
+            }
+            post
+            {
+                always
+                {
+                    X13ParseMsTestResults(
+                        filePattern: "checkout/TestResults/UnitTests/*.xml",
+                        // Will already abort if the unit tests fail.
+                        abortOnFail: false
+                    );
+                }
+            }
+        }
+        stage( "build_desktop" )
+        {
+            steps
+            {
+                CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
+                sh "ls -la checkout/dist/linux";
+                // archiveArtifacts "checkout/dist/linux/*.deb";
+                //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+            }
+            when
+            {
+                expression
+                {
+                    return buildDesktop;
+                }
+            }
+        }
+        stage( "build_docker" )
+        {
+            steps
+            {
+                CallDevops( "--target=publish_for_docker" );
+                CallDevops( "--target=build_docker_linux_${rid}" );
+            }
+            when
+            {
+                expression
+                {
+                    return buildDocker;
+                }
+            }
+        }
+        // Publish devops so it can be run on Arm32
+        // and in the publish pipeline.
+        stage( "publish_devops" )
+        {
+            steps
+            {
+                CallDevops( "--target=devops_publish_linux_${rid}" );
+                archiveArtifacts: "checkout/dist/devops/linux-${rid}/*";
+            }
+        }
+    }
+}
+
 pipeline
 {
     agent none
@@ -53,7 +141,8 @@ pipeline
     parameters
     {
         booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
-        booleanParam( name: "BuildLinux", defaultValue: true, description: "Should we build for Linux?" );
+        booleanParam( name: "BuildLinuxX64", defaultValue: true, description: "Should we build for X64 Linux?" );
+        booleanParam( name: "BuildLinuxArm32", defaultValue: true, description: "Should we build for Arm32 Linux?" );
         booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "BuildDocker", defaultValue: true, description: "Should we build Docker Containers?" );
     }
@@ -65,13 +154,13 @@ pipeline
     }
     stages
     {
-        stage( "Build x64" )
+        stage( "Build" )
         {
             parallel
             {
                 // ---------------- Windows ----------------
 
-                stage( "Windows" )
+                stage( "Windows x64" )
                 {
                     agent
                     {
@@ -109,7 +198,6 @@ pipeline
                             steps
                             {
                                 Build();
-                                CallDevops( "--target=dump_version --output=\"${pwd()}\\${GetVersFile()}\"" );
                             }
                         }
                         stage( "unit_test" )
@@ -150,7 +238,7 @@ pipeline
                         {
                             steps
                             {
-                                echo "Windows does not support docker buildx command.  No Windows images will currently be made.";
+                                CallDevops( "--target=build_docker_windows_x64" );
                             }
                             when
                             {
@@ -158,6 +246,17 @@ pipeline
                                 {
                                     return params.BuildDocker;
                                 }
+                            }
+                        }
+
+                        // Publish devops so it can be run
+                        // and in the publish pipeline without re-building.
+                        stage( "publish_devops" )
+                        {
+                            steps
+                            {
+                                CallDevops( "--target=devops_publish_windows_x64" );
+                                archiveArtifacts: "checkout\\dist\\devops\\win-x64\\*";
                             }
                         }
                     }
@@ -170,9 +269,9 @@ pipeline
                     }
                 }  // End Windows
 
-                // ---------------- Linux ----------------
+                // ---------------- Linux X64 ----------------
 
-                stage( "Linux" )
+                stage( "Linux X64" )
                 {
                     agent
                     {
@@ -207,132 +306,65 @@ pipeline
                                     reuseNode true;
                                 }
                             }
-                            stages
-                            {
-                                stage( "prepare" )
-                                {
-                                    steps
-                                    {
-                                        Prepare();
-                                    }
-                                }
-                                stage( "build" )
-                                {
-                                    steps
-                                    {
-                                        Build();
-                                        CallDevops( "--target=dump_version --output=\"${pwd()}/${GetVersFile()}\"" );
-                                        stash includes: GetVersFile(), name: 'version'
-                                        archiveArtifacts GetVersFile();
-                                    }
-                                }
-                                stage( "unit_test" )
-                                {
-                                    steps
-                                    {
-                                        RunUnitTests();
-                                    }
-                                    when
-                                    {
-                                        expression
-                                        {
-                                            return params.RunUnitTests;
-                                        }
-                                    }
-                                    post
-                                    {
-                                        always
-                                        {
-                                            X13ParseMsTestResults(
-                                                filePattern: "checkout/TestResults/UnitTests/*.xml",
-                                                // Will already abort if the unit tests fail.
-                                                abortOnFail: false
-                                            );
-                                        }
-                                    }
-                                }
-                                // stage( "build_desktop" )
-                                // {
-                                //     steps
-                                //     {
-                                //         CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
-                                //         sh "ls -la checkout/dist/linux";
-                                //         // archiveArtifacts "checkout/dist/linux/*.deb";
-                                //         //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
-                                //     }
-                                // }
-                                stage( "build_docker" )
-                                {
-                                    steps
-                                    {
-                                        CallDevops( "--target=publish_for_docker" );
-                                        CallDevops( "--target=build_docker_linux_x64" );
-                                        stash includes: "checkout/Docker/bin/**/*", name: "linux_build";
-                                    }
-                                    when
-                                    {
-                                        expression
-                                        {
-                                            return params.BuildDocker;
-                                        }
-                                    }
-                                }
-                            }
+                            LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "x64" );
                         }
                     }
                     when
                     {
                         expression
                         {
-                            return params.BuildLinux;
+                            return params.BuildLinuxX64;
                         }
                     }
-                } // End Linux
+                } // End Linux X64
+
+                // ---------------- Linux ARM 32 ----------------
+
+                stage( "Linux Arm32" )
+                {
+                    agent
+                    {
+                        label "arm32 && docker && linux"
+                    }
+                    stages
+                    {
+                        stage( "clean" )
+                        {
+                            steps
+                            {
+                                cleanWs();
+                            }
+                        }
+                        stage( "checkout" )
+                        {
+                            steps
+                            {
+                                checkout scm;
+                            }
+                        }
+                        stage( "In .NET Docker" )
+                        {
+                            agent
+                            {
+                                docker
+                                {
+                                    image "mcr.microsoft.com/dotnet/sdk:6.0";
+                                    args "-e HOME='${env.WORKSPACE}'";
+                                    reuseNode true;
+                                }
+                            }
+                            LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "arm32" );
+                        }
+                    }
+                    when
+                    {
+                        expression
+                        {
+                            return params.BuildLinuxArm32;
+                        }
+                    }
+                } // End Linux Arm32
             } // End Parallel
-        } // End Build x64
-
-        // ---------------- Linux ARM ----------------
-
-        stage( "Linux Arm" )
-        {
-            agent
-            {
-                label "arm32 && docker && linux"
-            }
-            stages
-            {
-                stage( "clean" )
-                {
-                    steps
-                    {
-                        cleanWs();
-                    }
-                }
-                stage( "checkout" )
-                {
-                    steps
-                    {
-                        checkout scm;
-                        unstash "version";
-                        unstash "linux_build";
-                    }
-                }
-                stage( "Build Docker" )
-                {
-                    steps
-                    {
-                        sh "cd checkout/Docker && docker buildx build --platform linux/arm/v7,linux/arm/v6 --tag xforever1313/meditu --file server.dockerfile .";
-                        sh "docker tag xforever1313/meditu:latest xforever1313/meditu:${GetVersion}";
-                    }
-                }
-            }
-            when
-            {
-                expression
-                {
-                    return params.BuildLinux && params.BuildDocker;
-                }
-            }
-        }
+        } // End Build
     }
-}
+} // End Pipeline

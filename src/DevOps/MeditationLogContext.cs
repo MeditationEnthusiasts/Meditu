@@ -35,7 +35,12 @@ namespace DevOps
             this.SrcPath = this.RepoRoot.Combine( new DirectoryPath( "src" ) );
             this.SlnPath = this.SrcPath.CombineWithFilePath( new FilePath( "Meditu.sln" ) );
             this.DistributionPath = this.RepoRoot.Combine( new DirectoryPath( "dist" ) );
+            this.DesktopDistributionPath = this.DistributionPath.Combine( new DirectoryPath( "desktop" ) );
+            this.DevopsDistributionPath= this.DistributionPath.Combine( new DirectoryPath( "devops" ) );
             this.DockerPath = this.RepoRoot.Combine( new DirectoryPath( "Docker" ) );
+            this.DevopsCsProj = this.SrcPath.CombineWithFilePath(
+                new FilePath( "DevOps/DevOps.csproj" )
+            );
             this.GuiCsProject = this.SrcPath.CombineWithFilePath(
                 new FilePath( "Meditu.Gui/Meditu.Gui.csproj" )
             );
@@ -56,11 +61,17 @@ namespace DevOps
 
         public DirectoryPath DistributionPath { get; private set; }
 
+        public DirectoryPath DesktopDistributionPath { get; private set; }
+
+        public DirectoryPath DevopsDistributionPath { get; private set; }
+
         public DirectoryPath SrcPath { get; private set; }
 
         public DirectoryPath DockerPath { get; private set; }
 
         public FilePath SlnPath { get; private set; }
+
+        public FilePath DevopsCsProj { get; private set; }
 
         public FilePath GuiCsProject { get; private set; }
 

@@ -22,7 +22,7 @@ using Cake.Frosting;
 
 namespace DevOps.Docker
 {
-    [TaskName( "build_docker_windows" )]
+    [TaskName( "build_docker_windows_x64" )]
     [TaskDescription( "Builds the Docker image for Windows." )]
     public sealed class BuildWindowsX64DockerTask : DefaultTask
     {
