@@ -152,8 +152,8 @@ pipeline
                             steps
                             {
                                 CallDevops( "--target=build_windows --electronize_path=\"${GetElectronPath()}\"" );
-                                archiveArtifacts artifacts: "checkout/dist/win/*.exe";
-                                archiveArtifacts artifacts: "checkout/dist/win/*.exe.sha256";
+                                archiveArtifacts artifacts: "checkout/dist/desktop/win/*.exe";
+                                archiveArtifacts artifacts: "checkout/dist/desktop/win/*.exe.sha256";
                             }
                         }
                         stage( "build_docker" )
