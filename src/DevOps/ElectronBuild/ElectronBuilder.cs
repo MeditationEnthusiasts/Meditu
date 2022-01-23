@@ -55,6 +55,7 @@ namespace DevOps.ElectronBuild
                     "build",
                     $"/target {target}",
                     // $"/absolute-path \"{outputDirectory}\"", // <- Doesn't work.  Need to use the manifest file to specify this.
+                    $"/electron-params --publish=never", // <- Never publish, otherwise Jenkins tries to talk to GitHub.
                     $"/version {VersionInfo.VersionString}",
                     $"/p:Version={VersionInfo.VersionString}",
                     $"/p:AssemblyVersion={VersionInfo.VersionString}",
