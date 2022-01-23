@@ -320,6 +320,9 @@ pipeline
 
                 // ---------------- Linux ARM 32 ----------------
 
+                // Note: Follow the instructions here to enable Raspbian testing.
+                // We need some packages in the testing repository to use the dotnet SDK.
+                // https://github.com/dotnet/dotnet-docker/issues/3253
                 stage( "Linux Arm32" )
                 {
                     agent
