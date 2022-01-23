@@ -214,7 +214,7 @@ pipeline
                                     filename "linuxbuild.dockerfile";
                                     dir "checkout/Docker";
                                     label "meditu-linux-buildenv";
-                                    args "-e HOME='${env.WORKSPACE}'";
+                                    args "-e HOME='${env.WORKSPACE}' --mount type=bind,source='/usr/bin/docker',target='/usr/bin/docker' --mount type=bind,source='/var/run/docker.sock',target='/var/run/docker.sock'";
                                     reuseNode true;
                                 }
                             }
@@ -348,7 +348,7 @@ pipeline
                                 docker
                                 {
                                     image "mcr.microsoft.com/dotnet/sdk:6.0";
-                                    args "-e HOME='${env.WORKSPACE}'";
+                                    args "-e HOME='${env.WORKSPACE}' --mount type=bind,source='/usr/bin/docker',target='/usr/bin/docker' --mount type=bind,source='/var/run/docker.sock',target='/var/run/docker.sock'";
                                     reuseNode true;
                                 }
                             }
