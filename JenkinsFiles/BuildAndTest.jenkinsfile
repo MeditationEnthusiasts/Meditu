@@ -42,6 +42,16 @@ def GetElectronPath()
     return X13PathCombine( pwd(), "electron", "electronize" );
 }
 
+def GetDockerSocketUserString()
+{
+    // Need to pass this into our docker run command
+    // so we have permission to use the socket.
+    String currentId = sh( script: "id -u", returnStdout: true ).trim();
+    String socketGroupId = sh( script: "stat -c %g /var/run/docker.sock", returnStdout: true ).trim();
+
+    return "${currentId}:${socketGroupId}";
+}
+
 pipeline
 {
     agent none
@@ -214,7 +224,7 @@ pipeline
                                     filename "linuxbuild.dockerfile";
                                     dir "checkout/Docker";
                                     label "meditu-linux-buildenv";
-                                    args "-e HOME='${env.WORKSPACE}' --mount type=bind,source='/usr/bin/docker',target='/usr/bin/docker' --mount type=bind,source='/var/run/docker.sock',target='/var/run/docker.sock'";
+                                    args "-e HOME='${env.WORKSPACE}' --user ${GetDockerSocketUserString()} --mount type=bind,source='/usr/bin/docker',target='/usr/bin/docker' --mount type=bind,source='/var/run/docker.sock',target='/var/run/docker.sock'";
                                     reuseNode true;
                                 }
                             }
@@ -348,7 +358,7 @@ pipeline
                                 docker
                                 {
                                     image "mcr.microsoft.com/dotnet/sdk:6.0";
-                                    args "-e HOME='${env.WORKSPACE}' --mount type=bind,source='/usr/bin/docker',target='/usr/bin/docker' --mount type=bind,source='/var/run/docker.sock',target='/var/run/docker.sock'";
+                                    args "-e HOME='${env.WORKSPACE}' --user ${GetDockerSocketUserString()} --mount type=bind,source='/usr/bin/docker',target='/usr/bin/docker' --mount type=bind,source='/var/run/docker.sock',target='/var/run/docker.sock'";
                                     reuseNode true;
                                 }
                             }
