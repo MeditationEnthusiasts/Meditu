@@ -122,6 +122,7 @@ namespace DevOps.ElectronBuild
         ""oneClick"": false,
         ""artifactName"": ""${{productName}} Setup.${{ext}}""
     }},
+    ""publish"": [],
     ""extraResources"": [
       {{
         ""from"": ""./bin"",
