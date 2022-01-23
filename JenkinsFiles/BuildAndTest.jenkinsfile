@@ -142,8 +142,8 @@ pipeline
                             steps
                             {
                                 CallDevops( "--target=build_windows --electronize_path=\"${GetElectronPath()}\"" );
-                                archiveArtifacts "checkout/dist/win/*.exe";
-                                archiveArtifacts "checkout/dist/win/*.exe.sha256";
+                                archiveArtifacts artifacts: "checkout/dist/win/*.exe";
+                                archiveArtifacts artifacts: "checkout/dist/win/*.exe.sha256";
                             }
                         }
                         stage( "build_docker" )
@@ -168,7 +168,7 @@ pipeline
                             steps
                             {
                                 CallDevops( "--target=devops_publish_windows_x64" );
-                                archiveArtifacts: "checkout\\dist\\devops\\win-x64\\*";
+                                archiveArtifacts artifacts: "checkout\\dist\\devops\\win-x64\\*";
                             }
                         }
                     }
@@ -265,8 +265,8 @@ pipeline
                                     {
                                         CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
                                         sh "ls -la checkout/dist/linux";
-                                        // archiveArtifacts "checkout/dist/linux/*.deb";
-                                        //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+                                        // archiveArtifacts artifacts: "checkout/dist/linux/*.deb";
+                                        // archiveArtifacts artifacts: "checkout/dist/linux/*.exe.sha256";
                                     }
                                     when
                                     {
@@ -299,7 +299,7 @@ pipeline
                                     steps
                                     {
                                         CallDevops( "--target=devops_publish_linux_x64" );
-                                        archiveArtifacts: "checkout/dist/devops/linux-x64/*";
+                                        archiveArtifacts artifacts: "checkout/dist/devops/linux-x64/*";
                                     }
                                 }
                             }
@@ -399,8 +399,8 @@ pipeline
                                     {
                                         CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
                                         sh "ls -la checkout/dist/linux";
-                                        // archiveArtifacts "checkout/dist/linux/*.deb";
-                                        //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+                                        // archiveArtifacts artifacts: "checkout/dist/linux/*.deb";
+                                        // archiveArtifacts artifacts: "checkout/dist/linux/*.exe.sha256";
                                     }
                                     when
                                     {
@@ -431,7 +431,7 @@ pipeline
                                     steps
                                     {
                                         CallDevops( "--target=devops_publish_linux_arm32" );
-                                        archiveArtifacts: "checkout/dist/devops/linux-arm32/*";
+                                        archiveArtifacts artifacts: "checkout/dist/devops/linux-arm32/*";
                                     }
                                 }
                             }
