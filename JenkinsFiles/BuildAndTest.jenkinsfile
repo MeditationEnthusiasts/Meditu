@@ -44,88 +44,85 @@ def GetElectronPath()
 
 def LinuxPipeline( boolean buildDocker, boolean buildDesktop, boolean runUnitTests, String rid )
 {
-    stages
+    stage( "prepare" )
     {
-        stage( "prepare" )
+        steps
         {
-            steps
+            Prepare();
+        }
+    }
+    stage( "build" )
+    {
+        steps
+        {
+            Build();
+        }
+    }
+    stage( "unit_test" )
+    {
+        steps
+        {
+            RunUnitTests();
+        }
+        when
+        {
+            expression
             {
-                Prepare();
+                return runUnitTests;
             }
         }
-        stage( "build" )
+        post
         {
-            steps
+            always
             {
-                Build();
+                X13ParseMsTestResults(
+                    filePattern: "checkout/TestResults/UnitTests/*.xml",
+                    // Will already abort if the unit tests fail.
+                    abortOnFail: false
+                );
             }
         }
-        stage( "unit_test" )
+    }
+    stage( "build_desktop" )
+    {
+        steps
         {
-            steps
+            CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
+            sh "ls -la checkout/dist/linux";
+            // archiveArtifacts "checkout/dist/linux/*.deb";
+            //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+        }
+        when
+        {
+            expression
             {
-                RunUnitTests();
-            }
-            when
-            {
-                expression
-                {
-                    return runUnitTests;
-                }
-            }
-            post
-            {
-                always
-                {
-                    X13ParseMsTestResults(
-                        filePattern: "checkout/TestResults/UnitTests/*.xml",
-                        // Will already abort if the unit tests fail.
-                        abortOnFail: false
-                    );
-                }
+                return buildDesktop;
             }
         }
-        stage( "build_desktop" )
+    }
+    stage( "build_docker" )
+    {
+        steps
         {
-            steps
+            CallDevops( "--target=publish_for_docker" );
+            CallDevops( "--target=build_docker_linux_${rid}" );
+        }
+        when
+        {
+            expression
             {
-                CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
-                sh "ls -la checkout/dist/linux";
-                // archiveArtifacts "checkout/dist/linux/*.deb";
-                //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
-            }
-            when
-            {
-                expression
-                {
-                    return buildDesktop;
-                }
+                return buildDocker;
             }
         }
-        stage( "build_docker" )
+    }
+    // Publish devops so it can be run on Arm32
+    // and in the publish pipeline.
+    stage( "publish_devops" )
+    {
+        steps
         {
-            steps
-            {
-                CallDevops( "--target=publish_for_docker" );
-                CallDevops( "--target=build_docker_linux_${rid}" );
-            }
-            when
-            {
-                expression
-                {
-                    return buildDocker;
-                }
-            }
-        }
-        // Publish devops so it can be run on Arm32
-        // and in the publish pipeline.
-        stage( "publish_devops" )
-        {
-            steps
-            {
-                CallDevops( "--target=devops_publish_linux_${rid}" );
-                archiveArtifacts: "checkout/dist/devops/linux-${rid}/*";
-            }
+            CallDevops( "--target=devops_publish_linux_${rid}" );
+            archiveArtifacts: "checkout/dist/devops/linux-${rid}/*";
         }
     }
 }
@@ -306,7 +303,10 @@ pipeline
                                     reuseNode true;
                                 }
                             }
-                            LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "x64" );
+                            stages
+                            {
+                                LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "x64" );
+                            }
                         }
                     }
                     when
@@ -356,7 +356,10 @@ pipeline
                                     reuseNode true;
                                 }
                             }
-                            LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "arm32" );
+                            stages
+                            {
+                                LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "arm32" );
+                            }
                         }
                     }
                     when
