@@ -30,8 +30,7 @@ namespace DevOps.Docker
 
         public override void Run( MeditationLogContext context )
         {
-            var builder = new DockerBuilder( context );
-            builder.Run( DockerConstants.WinX64Platform );
+            DockerBuilder.BuildPlatformImage( context, DockerConstants.WinX64Platform );
         }
     }
 
@@ -43,8 +42,7 @@ namespace DevOps.Docker
 
         public override void Run( MeditationLogContext context )
         {
-            var builder = new DockerBuilder( context );
-            builder.Run( DockerConstants.LinuxX64Platform );
+            DockerBuilder.BuildPlatformImage( context, DockerConstants.LinuxX64Platform );
         }
     }
 
@@ -56,8 +54,26 @@ namespace DevOps.Docker
 
         public override void Run( MeditationLogContext context )
         {
-            var builder = new DockerBuilder( context );
-            builder.Run( DockerConstants.LinuxArm32Platform );
+            DockerBuilder.BuildPlatformImage( context, DockerConstants.LinuxArm32Platform );
+        }
+    }
+
+    [TaskName( "build_docker_manifest" )]
+    [TaskDescription(
+        "Builds the Docker manifest image.  Assumes all platform images have been pushed."
+    )]
+    public sealed class BuildDockerManifestImage : DefaultTask
+    {
+        // ----------------- Functions -----------------
+
+        public override void Run( MeditationLogContext context )
+        {
+            DockerBuilder.BuildManifestImage(
+                context,
+                DockerConstants.WinX64Platform,
+                DockerConstants.LinuxX64Platform,
+                DockerConstants.LinuxArm32Platform
+            );
         }
     }
 }

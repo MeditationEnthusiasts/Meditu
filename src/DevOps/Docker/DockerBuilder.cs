@@ -16,11 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Cake.Common;
 using Cake.Core.IO;
 
@@ -29,6 +25,7 @@ namespace DevOps.Docker
     internal sealed class DockerBuilder
     {
         // ----------------- Fields -----------------
+
         private readonly MeditationLogContext context;
 
         // ----------------- Constructor -----------------
@@ -40,7 +37,13 @@ namespace DevOps.Docker
 
         // ----------------- Functions -----------------
 
-        public void Run( string platform )
+        public static void BuildPlatformImage( MeditationLogContext context, string platform )
+        {
+            var builder = new DockerBuilder( context );
+            builder.BuildPlatformImage( platform );
+        }
+
+        public void BuildPlatformImage( string platform )
         {
             FilePath dockerFile = "server.dockerfile";
 
@@ -57,6 +60,64 @@ namespace DevOps.Docker
                 throw new ApplicationException(
                     "Error when running docker to build.  Got error: " + exitCode
                 );
+            }
+        }
+
+        public static void BuildManifestImage( MeditationLogContext context, params string[] platforms )
+        {
+            var builder = new DockerBuilder( context );
+            builder.BuildManifestImage( platforms );
+        }
+
+        public void BuildManifestImage( params string[] platforms )
+        {
+            if( platforms.Any() == false )
+            {
+                throw new ArgumentException(
+                    $"{nameof( platforms )} can not be empty",
+                    nameof( platforms )
+                );
+            }
+
+            {
+                StringBuilder arguments = new StringBuilder();
+                arguments.Append( $"manifest create {DockerConstants.ImageName}:latest" );
+                foreach( string platform in platforms )
+                {
+                    arguments.Append( $" --amend {DockerConstants.GetPlatformImageName( platform )}" );
+                }
+
+                ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments.ToString() );
+                ProcessSettings settings = new ProcessSettings
+                {
+                    Arguments = argumentsBuilder
+                };
+
+                int exitCode = context.StartProcess( "docker", settings );
+                if( exitCode != 0 )
+                {
+                    throw new ApplicationException(
+                        "Error when running docker to build latest manifest image.  Got error: " + exitCode
+                    );
+                }
+            }
+
+            {
+                string arguments = $"tag {DockerConstants.ImageName}:latest {DockerConstants.ImageName}:{VersionInfo.Version}";
+
+                ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments.ToString() );
+                ProcessSettings settings = new ProcessSettings
+                {
+                    Arguments = argumentsBuilder
+                };
+
+                int exitCode = context.StartProcess( "docker", settings );
+                if( exitCode != 0 )
+                {
+                    throw new ApplicationException(
+                        "Error when running docker to build versioned manifest image.  Got error: " + exitCode
+                    );
+                }
             }
         }
     }

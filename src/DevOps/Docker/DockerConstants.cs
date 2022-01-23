@@ -16,18 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cake.Common;
-using Cake.Core.IO;
-
 namespace DevOps.Docker
 {
     internal static class DockerConstants
     {
+        // ---------------- Fields ----------------
+
         internal const string ImageName = "xforever1313/meditu";
 
         internal const string WinX64Platform = "win-x64";
@@ -35,5 +29,12 @@ namespace DevOps.Docker
         internal const string LinuxX64Platform = "linux-x64";
 
         internal const string LinuxArm32Platform = "linux-arm32";
+
+        // ---------------- Functions ----------------
+
+        public static string GetPlatformImageName( string platform )
+        {
+            return $"{ImageName}:{VersionInfo.VersionString}_{platform}";
+        }
     }
 }
