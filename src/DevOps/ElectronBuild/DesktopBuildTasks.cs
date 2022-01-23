@@ -32,8 +32,8 @@ namespace DevOps.ElectronBuild
             electronBuilder.Build( "win" );
 
             context.GenerateSha256(
-                context.DistributionPath.CombineWithFilePath( "win/Meditu Setup.exe" ),
-                context.DistributionPath.CombineWithFilePath( "win/Meditu Setup.exe.sha256" )
+                context.DesktopDistributionPath.CombineWithFilePath( "win/Meditu Setup.exe" ),
+                context.DesktopDistributionPath.CombineWithFilePath( "win/Meditu Setup.exe.sha256" )
             );
         }
     }
