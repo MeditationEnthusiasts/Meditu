@@ -42,91 +42,6 @@ def GetElectronPath()
     return X13PathCombine( pwd(), "electron", "electronize" );
 }
 
-def LinuxPipeline( boolean buildDocker, boolean buildDesktop, boolean runUnitTests, String rid )
-{
-    stage( "prepare" )
-    {
-        steps
-        {
-            Prepare();
-        }
-    }
-    stage( "build" )
-    {
-        steps
-        {
-            Build();
-        }
-    }
-    stage( "unit_test" )
-    {
-        steps
-        {
-            RunUnitTests();
-        }
-        when
-        {
-            expression
-            {
-                return runUnitTests;
-            }
-        }
-        post
-        {
-            always
-            {
-                X13ParseMsTestResults(
-                    filePattern: "checkout/TestResults/UnitTests/*.xml",
-                    // Will already abort if the unit tests fail.
-                    abortOnFail: false
-                );
-            }
-        }
-    }
-    stage( "build_desktop" )
-    {
-        steps
-        {
-            CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
-            sh "ls -la checkout/dist/linux";
-            // archiveArtifacts "checkout/dist/linux/*.deb";
-            //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
-        }
-        when
-        {
-            expression
-            {
-                return buildDesktop;
-            }
-        }
-    }
-    stage( "build_docker" )
-    {
-        steps
-        {
-            CallDevops( "--target=publish_for_docker" );
-            CallDevops( "--target=build_docker_linux_${rid}" );
-        }
-        when
-        {
-            expression
-            {
-                return buildDocker;
-            }
-        }
-    }
-    // Publish devops so it can be run on Arm32
-    // and in the publish pipeline.
-    stage( "publish_devops" )
-    {
-        steps
-        {
-            CallDevops( "--target=devops_publish_linux_${rid}" );
-            archiveArtifacts: "checkout/dist/devops/linux-${rid}/*";
-        }
-    }
-}
-
 pipeline
 {
     agent none
@@ -305,7 +220,88 @@ pipeline
                             }
                             stages
                             {
-                                LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "x64" );
+                                stage( "prepare" )
+                                {
+                                    steps
+                                    {
+                                        Prepare();
+                                    }
+                                }
+                                stage( "build" )
+                                {
+                                    steps
+                                    {
+                                        Build();
+                                    }
+                                }
+                                stage( "unit_test" )
+                                {
+                                    steps
+                                    {
+                                        RunUnitTests();
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return runUnitTests;
+                                        }
+                                    }
+                                    post
+                                    {
+                                        always
+                                        {
+                                            X13ParseMsTestResults(
+                                                filePattern: "checkout/TestResults/UnitTests/*.xml",
+                                                // Will already abort if the unit tests fail.
+                                                abortOnFail: false
+                                            );
+                                        }
+                                    }
+                                }
+                                stage( "build_desktop" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
+                                        sh "ls -la checkout/dist/linux";
+                                        // archiveArtifacts "checkout/dist/linux/*.deb";
+                                        //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            // Not yet.  Can't get it building on Linux.
+                                            return false;
+                                        }
+                                    }
+                                }
+                                stage( "build_docker" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=publish_for_docker" );
+                                        CallDevops( "--target=build_docker_linux_x64" );
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return params.BuildDocker;
+                                        }
+                                    }
+                                }
+                                // Publish devops so it can be run on Arm32
+                                // and in the publish pipeline.
+                                stage( "publish_devops" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=devops_publish_linux_x64" );
+                                        archiveArtifacts: "checkout/dist/devops/linux-x64/*";
+                                    }
+                                }
                             }
                         }
                     }
@@ -358,7 +354,86 @@ pipeline
                             }
                             stages
                             {
-                                LinuxPipeline( params.BuildDocker, false, params.RunUnitTests, "arm32" );
+                                stage( "prepare" )
+                                {
+                                    steps
+                                    {
+                                        Prepare();
+                                    }
+                                }
+                                stage( "build" )
+                                {
+                                    steps
+                                    {
+                                        Build();
+                                    }
+                                }
+                                stage( "unit_test" )
+                                {
+                                    steps
+                                    {
+                                        RunUnitTests();
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return runUnitTests;
+                                        }
+                                    }
+                                    post
+                                    {
+                                        always
+                                        {
+                                            X13ParseMsTestResults(
+                                                filePattern: "checkout/TestResults/UnitTests/*.xml",
+                                                // Will already abort if the unit tests fail.
+                                                abortOnFail: false
+                                            );
+                                        }
+                                    }
+                                }
+                                stage( "build_desktop" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=build_linux --electronize_path=\"${GetElectronPath()}\"" );
+                                        sh "ls -la checkout/dist/linux";
+                                        // archiveArtifacts "checkout/dist/linux/*.deb";
+                                        //archiveArtifacts "checkout/dist/linux/*.exe.sha256";
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            // Don't support ARM yet for desktop application.
+                                            return false;
+                                        }
+                                    }
+                                }
+                                stage( "build_docker" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=publish_for_docker" );
+                                        CallDevops( "--target=build_docker_linux_arm32" );
+                                    }
+                                    when
+                                    {
+                                        expression
+                                        {
+                                            return params.BuildDocker;
+                                        }
+                                    }
+                                }
+                                stage( "publish_devops" )
+                                {
+                                    steps
+                                    {
+                                        CallDevops( "--target=devops_publish_linux_arm32" );
+                                        archiveArtifacts: "checkout/dist/devops/linux-arm32/*";
+                                    }
+                                }
                             }
                         }
                     }
