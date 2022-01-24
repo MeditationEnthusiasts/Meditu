@@ -160,6 +160,7 @@ pipeline
                         {
                             steps
                             {
+                                CallDevops( "--target=publish_for_docker" );
                                 CallDevops( "--target=build_docker_windows_x64" );
                             }
                             when
