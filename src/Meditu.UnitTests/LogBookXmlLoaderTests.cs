@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Meditu.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -118,6 +119,63 @@ namespace Meditu.UnitTests
             Assert.AreEqual( 2, logs.Count );
             Assert.AreEqual( log0, logs[0] );
             Assert.AreEqual( log1, logs[1] );
+        }
+
+        [TestMethod]
+        public void Version1ToLogBookWithRefreshTest()
+        {
+            // Setup
+            const string xmlString =
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<logbook version=""1"">
+  <log Guid=""00299e35-d8b8-4357-9e84-5d5a9e472e01"" EditTime=""2021-12-30T19:45:46.4050000-05:00"" StartTime=""2021-12-30T19:27:18.7370000-05:00"" EndTime=""2021-12-30T19:45:15.1720000-05:00"" Comments=""Okay session after being back on vacation."" Technique=""Focus on Breath"" Latitude="""" Longitude="""" />
+</logbook>
+";
+            var log0 = new Log
+            {
+                Guid = Guid.Parse( "00299e35-d8b8-4357-9e84-5d5a9e472e01" ),
+                Comments = "Okay session after being back on vacation.",
+                // XML is in local time, but when it goes into our database and we refresh, we expect
+                // it to be in universal time, like the rest of the backend.
+                EditTime = new DateTime( 2021, 12, 30, 19, 45, 46, 405, DateTimeKind.Local ).ToUniversalTime(),
+                EndTime = new DateTime( 2021, 12, 30, 19, 45, 15, 172, DateTimeKind.Local ).ToUniversalTime(),
+                StartTime = new DateTime( 2021, 12, 30, 19, 27, 18, 737, DateTimeKind.Local ).ToUniversalTime(),
+                Latitude = null,
+                Longitude = null,
+                Technique = "Focus on Breath"
+            };
+
+            const string fileName = $"{nameof( Version1ToLogBookWithRefreshTest )}.db";
+            if( File.Exists( fileName ) )
+            {
+                File.Delete( fileName );
+            }
+
+            try
+            {
+                // Act
+                IList<Log> logs = LogBookXmlLoader.ParseLogbookXmlString( xmlString );
+                using( LogBook logbook = new LogBook( fileName ) )
+                {
+                    foreach( Log log in logs )
+                    {
+                        logbook.ImportLog( log );
+                    }
+
+                    logbook.Refresh();
+
+                    // Check
+                    Assert.AreEqual( 1, logbook.Count );
+                    Assert.AreEqual( log0, logbook[log0.Guid] );
+                }
+            }
+            finally
+            {
+                if( File.Exists( fileName ) )
+                {
+                    File.Delete( fileName );
+                }
+            }
         }
 
         [TestMethod]

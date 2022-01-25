@@ -403,7 +403,7 @@ namespace Meditu.Api
                     DateTimeExtensions.TimeStampFormatString,
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeLocal
-                ).DateTime;
+                ).LocalDateTime;
             }
 
             foreach( XmlAttribute attr in node.Attributes )
