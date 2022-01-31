@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Meditu.Api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Meditu.Gui.Controllers
@@ -30,7 +31,17 @@ namespace Meditu.Gui.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = $"About {nameof( Meditu )}";
-            return View();
+
+            IApiModel api = ApiBridge.Instance;
+            return View( api );
+        }
+
+        public IActionResult Server()
+        {
+            ViewData["Title"] = $"Server Information";
+
+            IApiModel api = ApiBridge.Instance;
+            return View( api );
         }
 
         public IActionResult License()

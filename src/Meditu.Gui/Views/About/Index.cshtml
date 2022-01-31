@@ -1,14 +1,20 @@
 ﻿@using System.Reflection;
+@using ElectronNET.API;
+@using Meditu.Api;
+@using Meditu.Gui
+
+@model IApiModel;
 
 @{
     Layout = "_Content";
 }
 
-<h2>Meditu</h2>
+<h2>Application Information</h2>
 
 <p>Version: @Assembly.GetExecutingAssembly().GetName().Version</p>
 
 <ul>
     <li><a href="/About/License">License</a></li>
     <li><a href="/About/Credits">View Credits</a></li>
+    <li><a href="/About/Server">Server Information</a></li>
 </ul>

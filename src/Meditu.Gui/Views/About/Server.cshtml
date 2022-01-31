@@ -1,0 +1,32 @@
+﻿@using System.Reflection;
+@using ElectronNET.API;
+@using Meditu.Api;
+@using Meditu.Gui
+
+@model IApiModel;
+
+@{
+    Layout = "_Content";
+}
+
+<h2>Server Information</h2>
+
+<p>Include this information if submitting a <a href="@WebHelpers.ExternalUrl( "https://github.com/MeditationEnthusiasts/Meditu/issues/", @Context.Request.Path)"> bug report.</a></p>
+
+<ul>
+    <li><strong>Version:</strong> @Assembly.GetExecutingAssembly().GetName().Version</li>
+    <li><strong>Operating System:</strong> @Environment.OSVersion.ToString()</li>
+    @if( HybridSupport.IsElectronActive )
+    {
+        <li><strong>GUI Version:</strong> Electron</li>
+    }
+    else
+    {
+        <li><strong>GUI Version:</strong> Web Browser</li>
+    }
+    <li><strong>Time Zone:</strong> @TimeZoneInfo.Local.DisplayName</li>
+    <li><strong>Hostname:</strong> @Environment.MachineName</li>
+    <li><strong>User Name:</strong> @Environment.UserName</li>
+    <li><strong>Logbook File Location:</strong> @Model.LogbookFileLocation</li>
+    <li><strong>Settings File Location:</strong> @Model.SettingsFileLocation</li>
+</ul>

@@ -23,6 +23,10 @@ namespace Meditu.Api
     /// </summary>
     public interface IApiModel
     {
+        string LogbookFileLocation { get; }
+
+        string SettingsFileLocation { get; }
+
         LogBook LogBook { get; }
 
         IReadOnlySettingsManager Settings { get; }

@@ -28,8 +28,6 @@ namespace Meditu.Api
     {
         // ---------------- Fields ----------------
 
-        private readonly string settingsFile;
-
         private Session? currentSession;
 
         private ApiState currentState;
@@ -46,10 +44,13 @@ namespace Meditu.Api
         {
             this.currentSession = null;
             this.currentState = ApiState.Idle;
-            this.LogBook = new LogBook( dbPath );
+
+            this.LogbookFileLocation = dbPath;
+
+            this.LogBook = new LogBook( this.LogbookFileLocation );
 
             this.Settings = new SettingsManager();
-            this.settingsFile = settingsFile;
+            this.SettingsFileLocation = settingsFile;
             this.Settings.OnUpdated += Settings_OnUpdated;
 
             this.currentStateLock = new object();
@@ -92,6 +93,10 @@ namespace Meditu.Api
             }
         }
 
+        public string SettingsFileLocation { get; private init; }
+
+        public string LogbookFileLocation { get; private init; }
+
         public LogBook LogBook { get; private set; }
         
         public SettingsManager Settings { get; private set; }
@@ -108,11 +113,11 @@ namespace Meditu.Api
 
         public void LoadSettings()
         {
-            lock( this.settingsFile )
+            lock( this.SettingsFileLocation )
             {
-                if( File.Exists( this.settingsFile ) )
+                if( File.Exists( this.SettingsFileLocation ) )
                 {
-                    this.Settings.LoadXmlFromFile( this.settingsFile );
+                    this.Settings.LoadXmlFromFile( this.SettingsFileLocation );
                 }
             }
         }
@@ -196,14 +201,14 @@ namespace Meditu.Api
         {
             this.Settings.OnUpdated -= this.Settings_OnUpdated;
             this.LogBook?.Dispose();
-            this.Settings.SaveXmlToFile( this.settingsFile );
+            this.Settings.SaveXmlToFile( this.SettingsFileLocation );
         }
 
         private void Settings_OnUpdated()
         {
-            lock( this.settingsFile )
+            lock( this.SettingsFileLocation )
             {
-                this.Settings.SaveXmlToFile( this.settingsFile );
+                this.Settings.SaveXmlToFile( this.SettingsFileLocation );
             }
         }
 
