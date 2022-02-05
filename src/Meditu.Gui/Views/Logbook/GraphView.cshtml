@@ -37,9 +37,9 @@
                         data: {
                             labels: [
                                 @for(
-                                    DateTime time = new DateTime(2000, 1, 1, 0, 0, 0);
-                                    time < new DateTime(2000, 1, 2, 0, 0, 0);
-                                    time += new TimeSpan(1, 0, 0)
+                                    DateTime time = new DateTime( 2000, 1, 1, 0, 0, 0 );
+                                    time < new DateTime( 2000, 1, 2, 0, 0, 0 );
+                                    time += new TimeSpan( 1, 0, 0 )
                                 )
                                 {
                                     TimeOnly timeOnly = TimeOnly.FromDateTime( time );
@@ -51,9 +51,12 @@
                                 backgroundColor: 'rgb(255, 99, 132)',
                                 borderColor: 'rgb(255, 99, 132)',
                                 data: [
-                                    @foreach(int count in logBook.StartTimeBucket)
+                                    @foreach(
+                                        KeyValuePair<int, int> startTime in 
+                                        logBook.StartTimesToLocalTime( dateTimeSettings ).OrderBy( kv => kv.Key )
+                                    )
                                     {
-                                        @:@(count),
+                                        @:@(startTime.Value),
                                     }
                                 ],
                             }]

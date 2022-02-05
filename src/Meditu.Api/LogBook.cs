@@ -487,5 +487,70 @@ namespace Meditu.Api
 
             return doc;
         }
+
+        /// <summary>
+        /// Converts the <see cref="LogBook.StartTimeBucket"/>
+        /// from UTC to local time.
+        /// </summary>
+        /// <returns>
+        /// A dictionary whose key is the local time's hour,
+        /// and value is the number of start times that started
+        /// within that hour.
+        /// </returns>
+        public static IDictionary<int, int> StartTimesToLocalTime(
+            this LogBook logbook,
+            DateTimeSettings dateTimeSettings
+        )
+        {
+            var dic = new Dictionary<int, int>();
+
+            for( int i = 0; i < logbook.StartTimeBucket.Count; ++i )
+            {
+                DateTime date = new DateTime( 2022, 6, 13, i, 0, 0, DateTimeKind.Utc );
+                date = date.ToTimeZoneTime( dateTimeSettings );
+                dic[date.Hour] = logbook.StartTimeBucket[i];
+            }
+
+            return dic;
+        }
+
+        /// <returns>
+        /// -1 if no sessions are recorded, otherwise
+        /// returns the hour that contains the most sessions
+        /// in UTC.
+        /// </returns>
+        public static int GetFavoriteStartTimeUtc(
+            this LogBook logbook
+        )
+        {
+            if( logbook.TotalSessions == 0 )
+            {
+                return -1;
+            }
+
+            // Must use ToList() as IReadOnlyList doesn't implement IndexOf.
+            return logbook.StartTimeBucket.ToList().IndexOf( logbook.StartTimeBucket.Max() );
+        }
+
+        /// <returns>
+        /// -1 if no sessions are recorded, otherwise
+        /// returns the hour that contains the most sessions
+        /// in local time.
+        /// </returns>
+        public static int GetFavoriteStartTimeInLocalTime(
+            this LogBook logbook,
+            DateTimeSettings dateTimeSettings
+        )
+        {
+            int utcHour = GetFavoriteStartTimeUtc( logbook );
+            if( utcHour == -1 )
+            {
+                return -1;
+            }
+
+            DateTime date = new DateTime( 2022, 6, 13, utcHour, 0, 0, DateTimeKind.Utc );
+            date = date.ToTimeZoneTime( dateTimeSettings );
+            return date.Hour;
+        }
     }
 }

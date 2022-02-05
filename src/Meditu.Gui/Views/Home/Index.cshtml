@@ -82,8 +82,7 @@
                 }
                 else
                 {
-                    // Must use ToList() as IReadOnlyList doesn't implement IndexOf.
-                    int hour = @Model.LogBook.StartTimeBucket.ToList().IndexOf( Model.LogBook.StartTimeBucket.Max() );
+                    int hour = Model.LogBook.GetFavoriteStartTimeInLocalTime( Model.Settings.DateTimeSettings );
                     TimeOnly time = new TimeOnly( hour, 0 );
                     <h4>@time.ToSettingsString( Model.Settings.DateTimeSettings )</h4>
                 }
