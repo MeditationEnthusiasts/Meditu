@@ -1,6 +1,7 @@
 ﻿@using System.Reflection;
 @using ElectronNET.API;
 @using Meditu.Api;
+@using Meditu.Constants
 @using Meditu.Gui
 
 @model IApiModel;
@@ -11,7 +12,9 @@
 
 <h2>Server Information</h2>
 
-<p>Include this information if submitting a <a href="@WebHelpers.ExternalUrl( "https://github.com/MeditationEnthusiasts/Meditu/issues/", @Context.Request.Path)"> bug report.</a></p>
+<p>Information about the computer that is running the application.</p>
+
+<p>Include this information if submitting a <a href="@WebHelpers.ExternalUrl( @MedituConstants.IssueTracker, @Context.Request.Path)"> bug report.</a></p>
 
 <ul>
     <li><strong>Version:</strong> @Assembly.GetExecutingAssembly().GetName().Version</li>
@@ -26,7 +29,7 @@
     }
     <li><strong>Time Zone:</strong> @TimeZoneInfo.Local.DisplayName</li>
     <li><strong>Hostname:</strong> @Environment.MachineName</li>
-    <li><strong>User Name:</strong> @Environment.UserName</li>
+    <li><strong>Process User Name:</strong> @Environment.UserName</li>
     <li><strong>Logbook File Location:</strong> @Model.LogbookFileLocation</li>
     <li><strong>Settings File Location:</strong> @Model.SettingsFileLocation</li>
 </ul>

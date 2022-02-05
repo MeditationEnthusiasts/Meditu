@@ -1,4 +1,5 @@
-﻿@using Meditu.Gui;
+﻿@using Meditu.Constants
+@using Meditu.Gui;
 
 @{
     Layout = "_Layout";
@@ -97,13 +98,13 @@
                     <a href="#"><i class="fa fa-users"></i>Follow Us!<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="@WebHelpers.ExternalUrl("https://www.meditationenthusiasts.org/", Context.Request.Path)"><i class="fa fa-globe"></i>Visit Site</a>
+                            <a href="@WebHelpers.ExternalUrl(MedituConstants.Website, Context.Request.Path)"><i class="fa fa-globe"></i>Visit Site</a>
                         </li>
                         <li>
                             <a href="@WebHelpers.ExternalUrl("https://www.facebook.com/pages/meditation-enthusiasts/143258385684557", Context.Request.Path)"><i class="fab fa-facebook"></i>Facebook</a>
                         </li>
                         <li>
-                            <a href="@WebHelpers.ExternalUrl("https://github.com/meditationenthusiasts", Context.Request.Path)"><i class="fab fa-github"></i>GitHub</a>
+                            <a href="@WebHelpers.ExternalUrl(MedituConstants.Github, Context.Request.Path)"><i class="fab fa-github"></i>GitHub</a>
                         </li>
                         <li>
                             <a href="@WebHelpers.ExternalUrl("https://plus.google.com/117876768528391812008/", Context.Request.Path)"><i class="fab fa-google-plus"></i>Google+</a>
@@ -149,11 +150,11 @@
     <!-- Footer -->
     <div id="footer-sec">
         <div>
-            Visit Meditation Enthusiasts: <a href="@WebHelpers.ExternalUrl("https://www.meditationenthuisasts.org", Context.Request.Path)">https://www.meditationenthuisasts.org</a>
+            Visit Meditation Enthusiasts: <a href="@WebHelpers.ExternalUrl(MedituConstants.Website, Context.Request.Path)">@MedituConstants.Website</a>
         </div>
         <div>
-            &copy; @DateTime.Now.Year <a href="@WebHelpers.ExternalUrl("https://shendrick.net", Context.Request.Path)">Seth Hendrick</a> | Design By : <a href="@WebHelpers.ExternalUrl("http://www.binarytheme.com/", Context.Request.Path)">BinaryTheme.com</a> |
-            <span>Page generated on @(DateTime.UtcNow.ToString( "R" ))</span>
+            @MedituConstants.CopyrightString | Design By : <a href="@WebHelpers.ExternalUrl("http://www.binarytheme.com/", Context.Request.Path)">BinaryTheme.com</a> |
+            <span>Page generated on @(DateTime.Now.ToString( "R" ))</span>
         </div>
     </div>
 </div>
