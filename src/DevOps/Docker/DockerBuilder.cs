@@ -19,6 +19,7 @@
 using System.Text;
 using Cake.Common;
 using Cake.Core.IO;
+using Meditu.Constants;
 
 namespace DevOps.Docker
 {
@@ -47,7 +48,7 @@ namespace DevOps.Docker
         {
             FilePath dockerFile = "server.dockerfile";
 
-            string arguments = $"build --tag {DockerConstants.ImageName}:{VersionInfo.VersionString}_{platform} --file {dockerFile} .";
+            string arguments = $"build --tag {DockerConstants.ImageName}:{MedituConstants.VersionString}_{platform} --file {dockerFile} .";
             ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );
             ProcessSettings settings = new ProcessSettings
             {
@@ -103,7 +104,7 @@ namespace DevOps.Docker
             }
 
             {
-                string arguments = $"tag {DockerConstants.ImageName}:latest {DockerConstants.ImageName}:{VersionInfo.Version}";
+                string arguments = $"tag {DockerConstants.ImageName}:latest {DockerConstants.ImageName}:{MedituConstants.Version}";
 
                 ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments.ToString() );
                 ProcessSettings settings = new ProcessSettings

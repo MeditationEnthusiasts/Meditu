@@ -1,6 +1,6 @@
 // ---------------- Includes ----------------
 
-#load src/DevOps/VersionInfo.cs
+#load src/Meditu.Constants/MedituConstants.cs
 #load src/DevOps/MsBuildHelpers.cs
 
 // ---------------- Constants ----------------

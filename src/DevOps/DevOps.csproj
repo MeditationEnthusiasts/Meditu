@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj" />
+    <ProjectReference Include="..\Meditu.Constants\Meditu.Constants.csproj" />
   </ItemGroup>
 
   <ItemGroup>

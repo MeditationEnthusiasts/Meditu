@@ -19,6 +19,7 @@
 using Cake.ArgumentBinder;
 using Cake.Common.Diagnostics;
 using Cake.Frosting;
+using Meditu.Constants;
 
 namespace DevOps.VersionDump
 {
@@ -32,11 +33,11 @@ namespace DevOps.VersionDump
         {
             var args = context.CreateFromArguments<VersionDumpArguments>();
 
-            context.Information( $"Writing version '{VersionInfo.VersionString}' to file '{args.OutputFile}'." );
+            context.Information( $"Writing version '{MedituConstants.VersionString}' to file '{args.OutputFile}'." );
 
             File.WriteAllText(
                 args.OutputFile.ToString(),
-                VersionInfo.VersionString
+                MedituConstants.VersionString
             );
         }
     }

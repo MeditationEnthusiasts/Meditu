@@ -1,4 +1,4 @@
-//
+﻿//
 // Meditu - A way to track Meditation Sessions.
 // Copyright (C) 2017-2022 Meditation Enthusiasts.
 // 
@@ -18,19 +18,22 @@
 
 #if CAKE
 #else
-
-namespace DevOps
+namespace Meditu.Constants
 {
 #endif
-    public static class VersionInfo
+    public static class MedituConstants
     {
-        // ---------------- Fields ----------------
-
         public static readonly Version Version = new Version( 0, 4, 0 );
 
         public static readonly string VersionString = Version.ToString( 3 );
 
-        internal const string CopyrightString = "Copyright (C) 2017-2022 Meditation Enthusiasts.";
+        public static readonly string CopyrightString = "Copyright (C) 2017-2022 Meditation Enthusiasts.";
+
+        public static readonly string Website = "https://meditationenthusiasts.org";
+
+        public static readonly string Github = "https://github.com/MeditationEnthusiasts/Meditu";
+
+        public static readonly string IssueTracker = "https://github.com/MeditationEnthusiasts/Meditu/issues/";
     }
 #if CAKE
 #else

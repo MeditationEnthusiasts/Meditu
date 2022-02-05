@@ -18,6 +18,7 @@
 
 using Cake.Common;
 using Cake.Core.IO;
+using Meditu.Constants;
 
 namespace DevOps.Docker
 {
@@ -68,7 +69,7 @@ namespace DevOps.Docker
 
         public void PushManifest()
         {
-            foreach( string version in new string[] { "latest", VersionInfo.VersionString } )
+            foreach( string version in new string[] { "latest", MedituConstants.VersionString } )
             {
                 string arguments = $"push {DockerConstants.ImageName}:{version}";
                 ProcessArgumentBuilder argumentsBuilder = ProcessArgumentBuilder.FromString( arguments );

@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\SethCS\LibSethCS\LibSethCS.csproj" />
     <ProjectReference Include="..\Meditu.Api\Meditu.Api.csproj" />
+    <ProjectReference Include="..\Meditu.Constants\Meditu.Constants.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">

@@ -16,6 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+using Meditu.Constants;
+
 namespace DevOps.Docker
 {
     internal static class DockerConstants
@@ -34,7 +36,7 @@ namespace DevOps.Docker
 
         public static string GetPlatformImageName( string platform )
         {
-            return $"{ImageName}:{VersionInfo.VersionString}_{platform}";
+            return $"{ImageName}:{MedituConstants.VersionString}_{platform}";
         }
     }
 }

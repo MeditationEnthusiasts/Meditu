@@ -48,7 +48,15 @@ namespace DevOps
 
         public static DotNetCoreMSBuildSettings GetMsBuildSettings( string configuration )
         {
-            string versString = VersionInfo.VersionString;
+            // No idea why, but we can't have the using Meditu.Constants
+            // up above without cake freaking out.
+            // Need to do this weirdness instead.
+#if CAKE
+            string versString = MedituConstants.VersionString;
+#else
+            string versString = Meditu.Constants.MedituConstants.VersionString;
+#endif
+
             var msBuildSettings = new DotNetCoreMSBuildSettings
             {
             }

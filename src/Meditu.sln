@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevOps", "DevOps\DevOps.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seth.CakeLib", "..\SethCS\Seth.CakeLib\Seth.CakeLib.csproj", "{D71DD268-3419-445C-9A98-874DE33F4339}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meditu.Constants", "Meditu.Constants\Meditu.Constants.csproj", "{1EE5C186-BEC3-4351-B7D4-A4F9E1FE8237}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\SethCS\SethCS\SethCS.projitems*{52089274-b9a2-4a47-a221-c321dee1ce7f}*SharedItemsImports = 13
@@ -57,6 +59,10 @@ Global
 		{D71DD268-3419-445C-9A98-874DE33F4339}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D71DD268-3419-445C-9A98-874DE33F4339}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D71DD268-3419-445C-9A98-874DE33F4339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EE5C186-BEC3-4351-B7D4-A4F9E1FE8237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EE5C186-BEC3-4351-B7D4-A4F9E1FE8237}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EE5C186-BEC3-4351-B7D4-A4F9E1FE8237}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EE5C186-BEC3-4351-B7D4-A4F9E1FE8237}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

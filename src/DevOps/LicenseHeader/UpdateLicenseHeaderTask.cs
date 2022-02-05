@@ -20,6 +20,7 @@ using Cake.Common.Solution;
 using Cake.Core.IO;
 using Cake.Frosting;
 using Cake.LicenseHeaderUpdater;
+using Meditu.Constants;
 using Seth.CakeLib;
 
 namespace DevOps.LicenseHeader
@@ -29,10 +30,10 @@ namespace DevOps.LicenseHeader
     {
         // ---------------- Fields ----------------
 
-        private const string currentLicense =
+        private static readonly string currentLicense =
 @$"//
 // Meditu - A way to track Meditation Sessions.
-// {VersionInfo.CopyrightString}
+// {MedituConstants.CopyrightString}
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published

@@ -20,6 +20,7 @@ using Cake.ArgumentBinder;
 using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Core.IO;
+using Meditu.Constants;
 
 namespace DevOps.ElectronBuild
 {
@@ -56,10 +57,10 @@ namespace DevOps.ElectronBuild
                     $"/target {target}",
                     // $"/absolute-path \"{outputDirectory}\"", // <- Doesn't work.  Need to use the manifest file to specify this.
                     $"/electron-params --publish=never", // <- Never publish, otherwise Jenkins tries to talk to GitHub.
-                    $"/version {VersionInfo.VersionString}",
-                    $"/p:Version={VersionInfo.VersionString}",
-                    $"/p:AssemblyVersion={VersionInfo.VersionString}",
-                    $"/p:FileVersion={VersionInfo.VersionString}"
+                    $"/version {MedituConstants.VersionString}",
+                    $"/p:Version={MedituConstants.VersionString}",
+                    $"/p:AssemblyVersion={MedituConstants.VersionString}",
+                    $"/p:FileVersion={MedituConstants.VersionString}"
                 }
             );
 
@@ -108,8 +109,8 @@ namespace DevOps.ElectronBuild
   ""build"": {{
     ""appId"": ""com.{medituExeName}.app"",
     ""productName"": ""Meditu"",
-    ""copyright"": ""{VersionInfo.CopyrightString}"",
-    ""buildVersion"": ""{VersionInfo.VersionString}"",
+    ""copyright"": ""{MedituConstants.CopyrightString}"",
+    ""buildVersion"": ""{MedituConstants.VersionString}"",
     ""compression"": ""maximum"",
     ""directories"": {{
       ""output"": ""{outputDir}""
