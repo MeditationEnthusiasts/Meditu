@@ -2,6 +2,11 @@
 
 @{
     Layout = "_Layout";
+    #if DEBUG
+        const string logoUrl = "/static/img/debuglogo.png";
+    #else
+        const string logoUrl = "/static/img/reallogo.png";
+    #endif
 }
 
 @section scripts{
@@ -35,7 +40,9 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="main-menu">
                 <li>
-                    <a href="/Home"><img class="image avatar" src="/static/img/logo.png" width="240" height="240" /></a>
+                    <a href="/Home">
+                        <img class="image avatar" src="@logoUrl" width="240" height="240" />
+                    </a>
                 </li>
                 <li>
                     <a href="/Home"><i class="fa fa-home"></i>Home</a>
