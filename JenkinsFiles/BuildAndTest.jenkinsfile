@@ -422,12 +422,11 @@ pipeline
                                         }
                                     }
                                 }
-                                stage( "build_docker" )
+                                stage( "publish_docker" )
                                 {
                                     steps
                                     {
                                         CallDevops( "--target=publish_for_docker" );
-                                        CallDevops( "--target=build_docker_linux_arm64" );
                                     }
                                     when
                                     {
@@ -445,6 +444,13 @@ pipeline
                                         archiveArtifacts artifacts: "checkout/dist/devops/linux-arm64/*";
                                     }
                                 }
+                            }
+                        }
+                        stage( "Build Docker Image" )
+                        {
+                            dir( "Docker" )
+                            {
+                                sh "docker build --tag xforever1313/meditu:${GetVersion()}_arm64 --file server.dockerfile";
                             }
                         }
                     }
