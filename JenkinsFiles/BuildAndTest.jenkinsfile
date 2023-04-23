@@ -452,7 +452,7 @@ pipeline
                     {
                         expression
                         {
-                            return params.BuildLinuxArm32;
+                            return params.BuildLinuxArm64;
                         }
                     }
                 } // End Linux Arm64
