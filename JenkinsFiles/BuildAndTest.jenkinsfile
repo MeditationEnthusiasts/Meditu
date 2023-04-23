@@ -436,14 +436,6 @@ pipeline
                                         }
                                     }
                                 }
-                                stage( "publish_devops" )
-                                {
-                                    steps
-                                    {
-                                        CallDevops( "--target=devops_publish_linux_arm64" );
-                                        archiveArtifacts artifacts: "checkout/dist/devops/linux-arm64/*";
-                                    }
-                                }
                             }
                         }
                         stage( "Build Docker Image" )
