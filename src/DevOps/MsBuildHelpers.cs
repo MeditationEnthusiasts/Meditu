@@ -18,9 +18,9 @@
 
 #if CAKE
 #else
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Build;
-using Cake.Common.Tools.DotNetCore.MSBuild;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -35,18 +35,18 @@ namespace DevOps
         /// <param name="configuration">The configuration to use (e.g. Debug, Release, etc.).</param>
         public static void DoMsBuild( ICakeContext context, FilePath sln, string configuration )
         {
-            DotNetCoreMSBuildSettings msBuildSettings = GetMsBuildSettings( configuration );
+            DotNetMSBuildSettings msBuildSettings = GetMsBuildSettings( configuration );
             msBuildSettings.WorkingDirectory = sln.GetDirectory().ToString();
 
-            var settings = new DotNetCoreBuildSettings
+            var settings = new DotNetBuildSettings
             {
                 MSBuildSettings = msBuildSettings
             };
 
-            context.DotNetCoreBuild( sln.ToString(), settings );
+            context.DotNetBuild( sln.ToString(), settings );
         }
 
-        public static DotNetCoreMSBuildSettings GetMsBuildSettings( string configuration )
+        public static DotNetMSBuildSettings GetMsBuildSettings( string configuration )
         {
             // No idea why, but we can't have the using Meditu.Constants
             // up above without cake freaking out.
@@ -57,7 +57,7 @@ namespace DevOps
             string versString = Meditu.Constants.MedituConstants.VersionString;
 #endif
 
-            var msBuildSettings = new DotNetCoreMSBuildSettings
+            var msBuildSettings = new DotNetMSBuildSettings
             {
             }
             .WithProperty( "Version", versString )

@@ -13,7 +13,7 @@ def CallDevops( String arguments )
 def Prepare()
 {
     X13Cmd( "dotnet tool update electronnet.cli --tool-path electron" );
-    X13Cmd( "dotnet tool update Cake.Tool --tool-path Cake" );
+    X13Cmd( "dotnet tool update Cake.Tool --tool-path Cake --version 3.0.0" );
     CallCake( "--showdescription" );
 }
 

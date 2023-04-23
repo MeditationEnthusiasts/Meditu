@@ -17,8 +17,8 @@
 //
 
 using Cake.Common.IO;
-using Cake.Common.Tools.DotNetCore;
-using Cake.Common.Tools.DotNetCore.Publish;
+using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Publish;
 
 namespace DevOps.DevopsPublish
 {
@@ -61,7 +61,7 @@ namespace DevOps.DevopsPublish
             context.EnsureDirectoryExists( publishDir );
             context.CleanDirectory( publishDir );
 
-            var publishSettings = new DotNetCorePublishSettings
+            var publishSettings = new DotNetPublishSettings
             {
                 Configuration = configuration,
                 OutputDirectory = publishDir,
@@ -73,7 +73,7 @@ namespace DevOps.DevopsPublish
                 Runtime = rid
             };
 
-            context.DotNetCorePublish(
+            context.DotNetPublish(
                 context.DevopsCsProj.ToString(),
                 publishSettings
             );
