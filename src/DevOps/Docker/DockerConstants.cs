@@ -32,6 +32,8 @@ namespace DevOps.Docker
 
         internal const string LinuxArm32Platform = "linux-arm32";
 
+        internal const string LinuxArm64Platform = "linux-arm64";
+
         // ---------------- Functions ----------------
 
         public static string GetPlatformImageName( string platform )

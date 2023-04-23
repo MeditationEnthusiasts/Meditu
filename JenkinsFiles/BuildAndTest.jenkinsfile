@@ -303,7 +303,7 @@ pipeline
                                         }
                                     }
                                 }
-                                // Publish devops so it can be run on Arm32
+                                // Publish devops so it can be run on Arm
                                 // and in the publish pipeline.
                                 stage( "publish_devops" )
                                 {
@@ -427,7 +427,7 @@ pipeline
                                     steps
                                     {
                                         CallDevops( "--target=publish_for_docker" );
-                                        CallDevops( "--target=build_docker_linux_arm32" );
+                                        CallDevops( "--target=build_docker_linux_arm64" );
                                     }
                                     when
                                     {
@@ -441,8 +441,8 @@ pipeline
                                 {
                                     steps
                                     {
-                                        CallDevops( "--target=devops_publish_linux_arm32" );
-                                        archiveArtifacts artifacts: "checkout/dist/devops/linux-arm32/*";
+                                        CallDevops( "--target=devops_publish_linux_arm64" );
+                                        archiveArtifacts artifacts: "checkout/dist/devops/linux-arm64/*";
                                     }
                                 }
                             }

@@ -58,6 +58,18 @@ namespace DevOps.Docker
         }
     }
 
+    [TaskName( "build_docker_linux_arm64" )]
+    [TaskDescription( "Builds the Docker image for Linux arm32." )]
+    public sealed class BuildLinuxArm64DockerTask : DefaultTask
+    {
+        // ----------------- Functions -----------------
+
+        public override void Run( MeditationLogContext context )
+        {
+            DockerBuilder.BuildPlatformImage( context, DockerConstants.LinuxArm64Platform );
+        }
+    }
+
     [TaskName( "build_docker_manifest" )]
     [TaskDescription(
         "Builds the Docker manifest image.  Assumes all platform images have been pushed."
@@ -72,7 +84,8 @@ namespace DevOps.Docker
                 context,
                 DockerConstants.WinX64Platform,
                 DockerConstants.LinuxX64Platform,
-                DockerConstants.LinuxArm32Platform
+                DockerConstants.LinuxArm32Platform,
+                DockerConstants.LinuxArm64Platform
             );
         }
     }
