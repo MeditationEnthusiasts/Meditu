@@ -64,7 +64,7 @@ pipeline
     {
         booleanParam( name: "BuildWindows", defaultValue: true, description: "Should we build for Windows?" );
         booleanParam( name: "BuildLinuxX64", defaultValue: true, description: "Should we build for X64 Linux?" );
-        booleanParam( name: "BuildLinuxArm32", defaultValue: true, description: "Should we build for Arm32 Linux?" );
+        booleanParam( name: "BuildLinuxArm64", defaultValue: true, description: "Should we build for Arm64 Linux?" );
         booleanParam( name: "RunUnitTests", defaultValue: true, description: "Should unit tests be run?" );
         booleanParam( name: "BuildDocker", defaultValue: true, description: "Should we build Docker Containers?" );
     }
@@ -330,11 +330,11 @@ pipeline
                 // Note: Follow the instructions here to enable Raspbian testing.
                 // We need some packages in the testing repository to use the dotnet SDK.
                 // https://github.com/dotnet/dotnet-docker/issues/3253
-                stage( "Linux Arm32" )
+                stage( "Linux Arm64" )
                 {
                     agent
                     {
-                        label "arm32 && docker && linux"
+                        label "arm64 && docker && linux"
                     }
                     stages
                     {
@@ -455,7 +455,7 @@ pipeline
                             return params.BuildLinuxArm32;
                         }
                     }
-                } // End Linux Arm32
+                } // End Linux Arm64
             } // End Parallel
         } // End Build
     }
