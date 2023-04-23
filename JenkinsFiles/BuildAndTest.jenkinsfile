@@ -448,9 +448,12 @@ pipeline
                         }
                         stage( "Build Docker Image" )
                         {
-                            dir( "Docker" )
+                            steps
                             {
-                                sh "docker build --tag xforever1313/meditu:${GetVersion()}_arm64 --file server.dockerfile";
+                                dir( "Docker" )
+                                {
+                                    sh "docker build --tag xforever1313/meditu:${GetVersion()}_arm64 --file server.dockerfile";
+                                }
                             }
                         }
                     }
